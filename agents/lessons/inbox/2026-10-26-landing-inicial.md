@@ -34,6 +34,8 @@ Sesión de construcción de la landing, 26 oct 2026. Medición en `scripts/check
 
 Ya está volcado en `standards/02-diseno.md`, `standards/04-imagenes.md` y en el propio `scripts/verify.sh`. Falta que una persona lo apruebe y saque esta ficha de `inbox/`.
 
+Activar GitHub Pages no se pudo: `POST /repos/fervaldezjr/sitio-landing/pages` respondió 403. El workflow en `main` pasa `verify` y sube el artefacto; `deploy` falla con 404 hasta que alguien ponga Source = GitHub Actions en los ajustes del repo y relance el workflow.
+
 ## Caso de eval
 
 Sin el tope de 1920, `public/media/hero/` tendría un derivado de 2400. Sin el alfa 0.66, el muestreo de «secondary on glass 0.66» no existiría y el texto secundario dependería del 0.62 justo. `bash scripts/verify.sh` cubre ambos.
