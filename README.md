@@ -2,9 +2,9 @@
 
 Landing de **sitio**: con una foto de tu espacio, la app genera un espejo, una versión ordenada, con lo que sobra y lo que falta.
 
-Publicación prevista: <https://fervaldezjr.github.io/sitio-landing/>
+Publicada en <https://fervaldezjr.github.io/sitio-landing/>.
 
-El workflow `.github/workflows/pages.yml` despliega desde `main` con base `/sitio-landing/`. Pages tiene que estar en **Source: GitHub Actions** ([ajustes](https://github.com/fervaldezjr/sitio-landing/settings/pages)). Sin ese permiso el job `deploy` no puede crear el sitio y la URL responde 404. El build y la subida del artefacto sí pasan.
+El workflow `.github/workflows/pages.yml` despliega desde `main` con base `/sitio-landing/`. Pages tiene que seguir en **Source: GitHub Actions** ([ajustes](https://github.com/fervaldezjr/sitio-landing/settings/pages)).
 
 ## Desarrollo
 

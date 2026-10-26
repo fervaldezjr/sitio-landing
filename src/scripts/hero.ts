@@ -1,5 +1,4 @@
-const DESKTOP = { rest: 0.5, lean: 0.08, end: 0.92 };
-const MOBILE = { rest: 0.4, lean: 0.12, end: 0.9 };
+import { DESKTOP, MOBILE, wipeFrame } from "../lib/wipe";
 
 function easeInOutSine(t: number): number {
   return -(Math.cos(Math.PI * t) - 1) / 2;
@@ -12,10 +11,10 @@ function profile() {
 export function initHero(): void {
   const runway = document.querySelector<HTMLElement>("[data-hero-runway]");
   const stage = document.querySelector<HTMLElement>("[data-hero-stage]");
-  const line = document.querySelector<HTMLElement>("[data-wipe-line]");
+  const stroke = document.querySelector<SVGLineElement>("[data-wipe-stroke]");
   const handle = document.querySelector<HTMLButtonElement>("[data-wipe-handle]");
   const espejo = document.querySelectorAll<HTMLElement>("[data-espejo]");
-  if (!runway || !stage || !line || !handle || espejo.length === 0) return;
+  if (!runway || !stage || !stroke || !handle || espejo.length === 0) return;
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let override: number | null = null;
@@ -24,24 +23,18 @@ export function initHero(): void {
   let dragging = false;
 
   const place = (p: number) => {
-    const { lean } = profile();
-    const top = Math.min(0.97, Math.max(0.03, p + lean / 2));
-    const bottom = Math.min(0.97, Math.max(0.03, p - lean / 2));
-    stage.style.setProperty("--split-top", top.toFixed(4));
-    stage.style.setProperty("--split-bottom", bottom.toFixed(4));
-    const clip = `polygon(${top * 100}% 0, 100% 0, 100% 100%, ${bottom * 100}% 100%)`;
+    const frame = wipeFrame(p, profile().lean);
+    stage.style.setProperty("--split-top", String(frame.top));
+    stage.style.setProperty("--split-bottom", String(frame.bottom));
     espejo.forEach((node) => {
-      node.style.clipPath = clip;
+      node.style.clipPath = frame.clip;
     });
-    const width = stage.clientWidth;
-    const height = stage.clientHeight;
-    const dx = (bottom - top) * width;
-    const length = Math.hypot(dx, height);
-    const angle = Math.atan2(dx, height);
-    line.style.left = `${top * 100}%`;
-    line.style.height = `${length}px`;
-    line.style.transform = `translateX(-50%) rotate(${angle}rad)`;
-    handle.style.left = `${((top + bottom) / 2) * 100}%`;
+    stroke.setAttribute("x1", String(frame.line.x1));
+    stroke.setAttribute("y1", String(frame.line.y1));
+    stroke.setAttribute("x2", String(frame.line.x2));
+    stroke.setAttribute("y2", String(frame.line.y2));
+    handle.style.left = `${frame.handle.x * 100}%`;
+    handle.style.top = `${frame.handle.y * 100}%`;
     handle.setAttribute("aria-valuenow", String(Math.round(p * 100)));
   };
 

@@ -13,6 +13,9 @@ npm test
 echo "== build =="
 npm run build
 
+echo "== wipe =="
+node scripts/check-wipe.mjs
+
 echo "== links =="
 node scripts/check-links.mjs
 
