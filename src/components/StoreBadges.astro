@@ -1,0 +1,34 @@
+---
+import { site } from "../content/site";
+import { publicUrl } from "../lib/paths";
+
+/*
+ * The official App Store and Google Play badges, untouched (docs/assets/credits.json). Until
+ * site.stores has a URL for a store, its badge is an image, not a link, under «Próximamente en».
+ */
+const { stores } = site;
+const soon = !stores.appStore.href || !stores.googlePlay.href;
+const badges = [
+  { ...stores.appStore, src: publicUrl("media/badges/app-store.svg"), width: 120, height: 40, name: "app-store" },
+  { ...stores.googlePlay, src: publicUrl("media/badges/google-play.png"), width: 135, height: 40, name: "google-play" },
+];
+---
+
+<div class="stores">
+  {soon && <p class="stores-soon">{stores.soon}</p>}
+  <p class="stores-row">
+    {
+      badges.map((badge) =>
+        badge.href ? (
+          <a class={`store-badge store-${badge.name}`} href={badge.href} rel="noopener noreferrer">
+            <img src={badge.src} alt={badge.alt} width={badge.width} height={badge.height} />
+          </a>
+        ) : (
+          <span class={`store-badge store-${badge.name}`}>
+            <img src={badge.src} alt={badge.alt} width={badge.width} height={badge.height} />
+          </span>
+        ),
+      )
+    }
+  </p>
+</div>

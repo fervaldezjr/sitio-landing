@@ -1,21 +1,27 @@
 /**
- * Builds hero srcsets and object crops from media/source.
+ * Builds the photo srcsets and the product cutouts from media/source.
  * Wide masters are capped at 1920px: the 2400px JPEGs are an upscale and look soft.
  * No neural rescaler is available in this environment, so we downsample with
  * lanczos3 and a light unsharp. We do not invent detail above the source.
+ * Every master gets the same soft grade (GRADE), so a pair still matches for the wipe.
  */
-import { mkdir, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
 const root = path.resolve(import.meta.dirname, "..");
 const source = path.join(root, "media/source");
 const heroOut = path.join(root, "public/media/hero");
-const thingOut = path.join(root, "public/media/things");
+const productSource = path.join(root, "media/source/products");
+const badgeSource = path.join(root, "media/source/badges");
+const badgeOut = path.join(root, "public/media/badges");
+const productOut = path.join(root, "public/media/products");
 const proofOut = path.join(root, "media/proof");
 
 const wideWidths = [640, 960, 1280, 1920];
 const tallWidths = [432, 648, 864];
+/** The site's one grade (docs/identity.md, dial 3): slightly less saturated, same for every frame. */
+const GRADE = { saturation: 0.86 };
 
 async function masterWide(name) {
   const input = path.join(source, name);
@@ -25,6 +31,7 @@ async function masterWide(name) {
     .rotate()
     .resize({ width: 1920, height: Math.round((meta.height / meta.width) * 1920), kernel: "lanczos3", fit: "fill" })
     .sharpen({ sigma: 0.6, m1: 0.4, m2: 0.25 })
+    .modulate(GRADE)
     .toColorspace("srgb");
 }
 
@@ -33,6 +40,7 @@ async function masterTall(name) {
     .rotate()
     .resize({ width: 864, kernel: "lanczos3" })
     .sharpen({ sigma: 0.4, m1: 0.3, m2: 0.2 })
+    .modulate(GRADE)
     .toColorspace("srgb");
 }
 
@@ -73,38 +81,30 @@ async function gridProof(buffer, fileName, step = 0.1) {
   await sharp(composed).resize({ width: 900 }).jpeg({ quality: 70 }).toFile(path.join(proofOut, fileName));
 }
 
-/** Fractions of the source frame: [left, top, width, height]. Tuned by eye on the proof grid. */
-const crops = [
-  { id: "portatil", file: "wide-espejo.jpg", box: [0.22, 0.55, 0.18, 0.22] },
-  { id: "papeles", file: "wide-antes.jpg", box: [0.02, 0.62, 0.16, 0.16] },
-  { id: "vasos", file: "wide-antes.jpg", box: [0.16, 0.6, 0.18, 0.16] },
-  { id: "cables", file: "wide-antes.jpg", box: [0.42, 0.78, 0.16, 0.18] },
-  { id: "caja", file: "tall-antes.png", box: [0.0, 0.72, 0.2, 0.2] },
-  { id: "mochila", file: "tall-antes.png", box: [0.2, 0.78, 0.26, 0.18] },
-  { id: "bandeja", file: "wide-espejo.jpg", box: [0.4, 0.62, 0.18, 0.16] },
-  { id: "taza", file: "wide-espejo.jpg", box: [0.4, 0.55, 0.11, 0.12] },
-  { id: "libreta", file: "wide-espejo.jpg", box: [0.52, 0.64, 0.16, 0.14] },
-];
+/**
+ * Product cutouts for the proposals: stock photos (docs/assets/credits.json) whose subject was
+ * lifted with Apple Vision into media/source/products/*.png. Transparent edges are trimmed and
+ * each one is served at most 720px on its long side, with alpha, in AVIF, WebP and PNG.
+ */
+const PRODUCT = 720;
 
-async function cropThing(id, file, box) {
-  const isWide = file.startsWith("wide");
-  const master = isWide ? await masterWide(file) : await masterTall(file);
-  const buffer = await master.png().toBuffer();
-  const meta = await sharp(buffer).metadata();
-  const w = meta.width ?? 1;
-  const h = meta.height ?? 1;
-  const left = Math.max(0, Math.round(box[0] * w));
-  const top = Math.max(0, Math.round(box[1] * h));
-  const width = Math.min(w - left, Math.round(box[2] * w));
-  const height = Math.min(h - top, Math.round(box[3] * h));
-  const tile = 640;
-  const extracted = await sharp(buffer)
-    .extract({ left, top, width, height })
-    .resize({ width: tile, height: tile, fit: "contain", background: { r: 236, g: 236, b: 238, alpha: 1 } })
-    .toBuffer();
-  await sharp(extracted).avif({ quality: 50, effort: 4 }).toFile(path.join(thingOut, `${id}.avif`));
-  await sharp(extracted).webp({ quality: 72 }).toFile(path.join(thingOut, `${id}.webp`));
-  await sharp(extracted).jpeg({ quality: 76, mozjpeg: true }).toFile(path.join(thingOut, `${id}.jpg`));
+async function writeProduct(file) {
+  const id = path.basename(file, ".png");
+  const trimmed = await sharp(path.join(productSource, file)).trim({ threshold: 1 }).png().toBuffer();
+  const sized = await sharp(trimmed).resize({ width: PRODUCT, height: PRODUCT, fit: "inside", withoutEnlargement: true, kernel: "lanczos3" }).png().toBuffer();
+  await sharp(sized).avif({ quality: 56, effort: 4 }).toFile(path.join(productOut, `${id}.avif`));
+  await sharp(sized).webp({ quality: 78, alphaQuality: 90 }).toFile(path.join(productOut, `${id}.webp`));
+  await sharp(sized).png({ compressionLevel: 9, palette: true, quality: 92 }).toFile(path.join(productOut, `${id}.png`));
+}
+
+/**
+ * Store badges, official artwork from Apple and Google (docs/assets/credits.json). The App Store
+ * SVG is copied untouched; the Google Play PNG only loses the transparent clear space it ships
+ * with, so both badges share a height and the gap between them is set in CSS.
+ */
+async function writeBadges() {
+  await copyFile(path.join(badgeSource, "app-store.svg"), path.join(badgeOut, "app-store.svg"));
+  await sharp(path.join(badgeSource, "google-play.png")).trim({ threshold: 1 }).png({ compressionLevel: 9 }).toFile(path.join(badgeOut, "google-play.png"));
 }
 
 async function alignmentNote() {
@@ -128,16 +128,17 @@ async function alignmentNote() {
 }
 
 await mkdir(heroOut, { recursive: true });
-await mkdir(thingOut, { recursive: true });
+await mkdir(productOut, { recursive: true });
+await mkdir(badgeOut, { recursive: true });
 await mkdir(proofOut, { recursive: true });
 
-const cropsOnly = process.argv.includes("--crops-only");
+const productsOnly = process.argv.includes("--products-only");
 
 const wideAntesBuf = await masterWide("wide-antes.jpg").then((p) => p.png().toBuffer());
 const tallAntesBuf = await masterTall("tall-antes.png").then((p) => p.png().toBuffer());
 const tallEspejoBuf = await masterTall("tall-espejo.png").then((p) => p.png().toBuffer());
 
-if (!cropsOnly) {
+if (!productsOnly) {
   const wideEspejoBuf = await masterWide("wide-espejo.jpg").then((p) => p.png().toBuffer());
   await writeSet(sharp(wideAntesBuf), wideWidths, "wide-antes");
   await writeSet(sharp(wideEspejoBuf), wideWidths, "wide-espejo");
@@ -145,15 +146,16 @@ if (!cropsOnly) {
   await writeSet(sharp(tallEspejoBuf), tallWidths, "tall-espejo");
 }
 
-if (!cropsOnly) {
+if (!productsOnly) {
   await gridProof(wideAntesBuf, "grid-wide-antes.jpg");
   await gridProof(tallAntesBuf, "grid-tall-antes.jpg");
   await gridProof(tallEspejoBuf, "grid-tall-espejo.jpg");
 }
 
-for (const crop of crops) {
-  await cropThing(crop.id, crop.file, crop.box);
+for (const file of (await readdir(productSource)).filter((name) => name.endsWith(".png"))) {
+  await writeProduct(file);
 }
+await writeBadges();
 
 const note = await alignmentNote();
 await writeFile(path.join(proofOut, "alignment.txt"), `${note}\n`, "utf8");

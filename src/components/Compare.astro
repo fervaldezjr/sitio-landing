@@ -1,0 +1,137 @@
+---
+import { site } from "../content/site";
+import { publicUrl } from "../lib/paths";
+
+const wide = [640, 960, 1280, 1920];
+const tall = [432, 648, 864];
+
+function srcset(name: string, widths: number[], ext: string): string {
+  return widths.map((width) => `${publicUrl(`media/hero/${name}-${width}.${ext}`)} ${width}w`).join(", ");
+}
+
+const { compare } = site;
+const rows = compare.rows;
+---
+
+<section class="hero-runway" id={compare.id} aria-label={compare.bar.lead} data-hero-runway>
+  <div class="hero">
+    <div class="hero-stage" data-hero-stage>
+      <p class="sr-only">{site.compare.comparison}</p>
+      <picture class="frame antes">
+        <source media="(max-width: 760px)" type="image/avif" sizes="100vw" srcset={srcset("tall-antes", tall, "avif")} />
+        <source media="(max-width: 760px)" type="image/webp" sizes="100vw" srcset={srcset("tall-antes", tall, "webp")} />
+        <source media="(max-width: 760px)" sizes="100vw" srcset={srcset("tall-antes", tall, "jpg")} />
+        <source media="(min-width: 761px)" type="image/avif" sizes="100vw" srcset={srcset("wide-antes", wide, "avif")} />
+        <source media="(min-width: 761px)" type="image/webp" sizes="100vw" srcset={srcset("wide-antes", wide, "webp")} />
+        <img
+          src={publicUrl("media/hero/wide-antes-1280.jpg")}
+          alt={site.compare.antesAlt}
+          width="1920"
+          height="1080"
+          loading="lazy"
+          decoding="async"
+        />
+      </picture>
+      <picture class="frame espejo" data-espejo>
+        <source media="(max-width: 760px)" type="image/avif" sizes="100vw" srcset={srcset("tall-espejo", tall, "avif")} />
+        <source media="(max-width: 760px)" type="image/webp" sizes="100vw" srcset={srcset("tall-espejo", tall, "webp")} />
+        <source media="(max-width: 760px)" sizes="100vw" srcset={srcset("tall-espejo", tall, "jpg")} />
+        <source media="(min-width: 761px)" type="image/avif" sizes="100vw" srcset={srcset("wide-espejo", wide, "avif")} />
+        <source media="(min-width: 761px)" type="image/webp" sizes="100vw" srcset={srcset("wide-espejo", wide, "webp")} />
+        <img
+          src={publicUrl("media/hero/wide-espejo-1280.jpg")}
+          alt=""
+          width="1920"
+          height="1080"
+          loading="lazy"
+          decoding="async"
+        />
+      </picture>
+      <div class="gradual" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <svg class="wipe-line" data-wipe-line viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <line data-wipe-stroke x1="54" y1="0" x2="46" y2="100" />
+      </svg>
+      <button
+        class="handle"
+        type="button"
+        data-wipe-handle
+        role="slider"
+        aria-label={site.compare.slider}
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow="50"
+        aria-valuetext={site.compare.sliderValue}
+      >
+        <svg viewBox="0 0 22 22" aria-hidden="true">
+          <path d="M8 6 L4 11 L8 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M14 6 L18 11 L14 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </button>
+      <p class="pill pill-antes">{site.compare.antes}</p>
+      <p class="pill pill-espejo">{site.compare.espejo}</p>
+      <article class="glass-card" aria-label={site.compare.cardTitle}>
+        <div class="card-head">
+          <p class="card-title">{site.compare.cardTitle}</p>
+          <p class="card-meta">{site.compare.cardMeta}</p>
+        </div>
+        {
+          rows.map((row) => (
+            <div class="mirror-row">
+              <span class="mirror-icon" aria-hidden="true">
+                {row.icon === "remove" && (
+                  <svg viewBox="0 0 14 14">
+                    <path d="M3 7 H11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
+                  </svg>
+                )}
+                {row.icon === "add" && (
+                  <svg viewBox="0 0 14 14">
+                    <path d="M7 3 V11 M3 7 H11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
+                  </svg>
+                )}
+                {row.icon === "lock" && (
+                  <svg viewBox="0 0 14 14">
+                    <rect x="3" y="6" width="8" height="6" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.4"></rect>
+                    <path d="M5 6 V4.5 a2 2 0 0 1 4 0 V6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"></path>
+                  </svg>
+                )}
+              </span>
+              <p>
+                <strong>{row.title}</strong>
+                <span>{row.detail}</span>
+              </p>
+            </div>
+          ))
+        }
+      </article>
+      <p class="sitio-bar">
+        <strong>{compare.bar.lead}</strong>
+        <span aria-hidden="true">·</span>
+        <span>{compare.bar.rest}</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initCompare } from "../scripts/compare";
+  initCompare();
+</script>
+
+<style>
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>

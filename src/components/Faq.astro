@@ -1,0 +1,24 @@
+---
+import { site } from "../content/site";
+
+const { faq } = site;
+---
+
+<section class="section" id={faq.id} aria-labelledby="preguntas-titulo">
+  <div class="wrap faq-grid">
+    <h2 id="preguntas-titulo" class="title title-l" data-lines>{faq.title}</h2>
+    <div class="faq" data-reveal-group>
+      {
+        faq.items.map((item) => (
+          <details class="qa" name="preguntas">
+            <summary>
+              <span>{item.q}</span>
+              <span class="qa-mark" aria-hidden="true" />
+            </summary>
+            <p>{item.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>

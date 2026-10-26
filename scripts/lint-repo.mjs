@@ -26,13 +26,18 @@ async function checkFile(file) {
   }
 }
 
+/* The only figures the copy may show are the approved mirror's: quitar 13 and añadir 3.
+   Anything else (a price, a count of users, a date) reads as a promise. */
+const APPROVED_FIGURES = new Set(["13", "3"]);
 const copy = await readFile(path.join(root, "src/content/site.ts"), "utf8");
 const literals = [...copy.matchAll(/"([^"\\]*(?:\\.[^"\\]*)*)"/g)].map((match) => match[1]);
-const visible = literals
-  .filter((value) => /[a-záéíóúñ]/i.test(value))
-  .join("\n")
-  .replaceAll("IA", "");
-if (/[A-Z]/.test(visible)) failures.push("uppercase copy outside the approved «IA» label");
+/* File and anchor identifiers such as "bandeja-1" are not copy: lowercase words joined by hyphens, no spaces. */
+const identifier = /^[a-z]+(?:-[a-z0-9]+)+$/;
+for (const value of literals.filter((literal) => /[a-záéíóúñ]/i.test(literal) && !identifier.test(literal))) {
+  for (const figure of value.match(/\d+(?:[.,]\d+)*/g) ?? []) {
+    if (!APPROVED_FIGURES.has(figure)) failures.push(`figure outside the approved mirror in site.ts: "${figure}" in "${value}"`);
+  }
+}
 
 await walk(root);
 

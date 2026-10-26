@@ -10,3 +10,4 @@ media/proof/
 *.otf
 *.ttf
 .DS_Store
+reference/

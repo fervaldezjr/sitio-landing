@@ -1,0 +1,158 @@
+{
+  "$note": "Brief de material de la landing de Sitio. Una entrada por pieza. Estados: have, have-stock, code, pending. La materia es el producto: el móvil con la app, objetos recortados sobre peana gris y la foto a sangre (docs/identity.md, dial 3).",
+  "project": "Sitio · landing",
+  "date": "2026-10-26",
+  "palette": {
+    "background": "#ffffff",
+    "foreground": "#1b1b1b",
+    "secondary_text": "#5e5e5e",
+    "tile": "#f7f7f7",
+    "rule": "El color lo ponen las fotos; la interfaz es neutra. Los objetos van sin fondo sobre #f7f7f7 con la misma sombra suave. Las fotos llevan el mismo revelado (saturación 0.86); los dos fotogramas de un par, exactamente el mismo."
+  },
+  "global_style": {
+    "look": "El producto funcionando: un móvil dibujado en CSS con la interfaz de la app, objetos de catálogo recortados y la foto del espacio a sangre.",
+    "prompt_suffix": "studio product photograph, single object centered, seamless very light grey background, soft diffused light from the top left, gentle contact shadow, 50mm, no text, no logo, no watermark",
+    "negative_prompt": "people, hands, logos, brand names, text, props, flowers, busy background, colored background, harsh shadows, illustration, 3d render look, oversaturated",
+    "consistency_rule": "Recorte con Vision (scripts de la sesión: VNGenerateForegroundInstanceMaskRequest) y la sombra la pone el CSS (drop-shadow), igual para todos."
+  },
+  "assets": [
+    {
+      "id": "tall-pair",
+      "block": "A · producto",
+      "priority": 1,
+      "status": "have",
+      "purpose": "La pantalla del móvil en el escenario: la foto, el barrido y el espejo.",
+      "used_in": [
+        "home / escenario"
+      ],
+      "deliverable": {
+        "format": "avif + webp + jpg",
+        "width": 864,
+        "height": 1152,
+        "aspect": "3:4, recortado a la pantalla con object-fit"
+      },
+      "source_file": "media/source/tall-antes.png + media/source/tall-espejo.png"
+    },
+    {
+      "id": "wide-pair",
+      "block": "A · producto",
+      "priority": 1,
+      "status": "have",
+      "purpose": "«Compruébalo tú»: el barrido a pantalla completa con el tirador.",
+      "used_in": [
+        "home / compruébalo tú"
+      ],
+      "deliverable": {
+        "format": "avif + webp + jpg",
+        "width": 1920,
+        "height": 1080,
+        "aspect": "16:9"
+      },
+      "constraints": [
+        "Tope de 1920 px: el original de 2400 es una ampliación."
+      ],
+      "source_file": "media/source/wide-antes.jpg + media/source/wide-espejo.jpg"
+    },
+    {
+      "id": "products",
+      "block": "A · stock",
+      "priority": 1,
+      "status": "have-stock",
+      "purpose": "Las propuestas: tres bandejas de madera, tres tazas y tres libretas, sin fondo.",
+      "used_in": [
+        "home / escenario (fichas y lista del móvil)",
+        "home / propuestas",
+        "home / pie"
+      ],
+      "deliverable": {
+        "format": "avif + webp + png con alfa",
+        "width": 720,
+        "height": 720,
+        "aspect": "libre, recortado al objeto"
+      },
+      "constraints": [
+        "Sin logotipos visibles (se descartó una libreta que lo llevaba).",
+        "Se dice en la página que son fotos de ejemplo."
+      ],
+      "sources": {
+        "stock_free": [
+          "https://unsplash.com · ver docs/assets/credits.json"
+        ]
+      },
+      "source_file": "media/source/products/*.png"
+    },
+    {
+      "id": "store-badges",
+      "block": "C · marcas",
+      "priority": 1,
+      "status": "have",
+      "purpose": "Badges oficiales de App Store y Google Play.",
+      "used_in": [
+        "home / escenario",
+        "home / beta"
+      ],
+      "deliverable": {
+        "format": "svg (Apple) y png (Google)",
+        "height": "40 px (34 en la entrada móvil)"
+      },
+      "constraints": [
+        "No se alteran: ni color, ni proporción, ni texto.",
+        "Sin enlace hasta que la app esté publicada; mientras, «Próximamente en».",
+        "Aviso de marcas en el pie."
+      ],
+      "sources": {
+        "official": [
+          "https://developer.apple.com/app-store/marketing/guidelines/",
+          "https://partnermarketinghub.withgoogle.com/brands/google-play/visual-identity/badge-guidelines/"
+        ]
+      },
+      "notes": "Pendiente: la versión española del de Apple (Descárgalo en el App Store) desde tools.applemarketingtools.com, que no respondió desde la sesión, y la de Google (es_badge_web_generic.png) para que casen.",
+      "source_file": "media/source/badges/"
+    },
+    {
+      "id": "product-renders",
+      "block": "A · producto",
+      "priority": 2,
+      "status": "pending",
+      "purpose": "Si hay catálogo propio: renders o fotos de estudio de los objetos que la app propone, para sustituir el stock sin tocar el diseño.",
+      "deliverable": {
+        "format": "png con alfa o jpg sobre gris claro",
+        "width": 1600,
+        "height": 1600,
+        "aspect": "1:1"
+      },
+      "sources": {
+        "generate": {
+          "prompt": "<objeto>, {{prompt_suffix}}",
+          "negative_prompt": "{{negative_prompt}}"
+        }
+      },
+      "notes": "Mismo nombre de fichero que el que sustituyen en media/source/products/; después, npm run images."
+    },
+    {
+      "id": "more-spaces",
+      "block": "A · producto",
+      "priority": 3,
+      "status": "pending",
+      "purpose": "Otros pares antes/espejo (encimera, estantería, entrada) para enseñar más de un espacio.",
+      "deliverable": {
+        "format": "jpg o png",
+        "width": 2400,
+        "height": 1800,
+        "aspect": "4:3 o 3:4"
+      },
+      "constraints": [
+        "Generados con la propia app sobre fotos reales, con el espejo etiquetado como generado con IA.",
+        "Sin caras, menores ni pantallas legibles."
+      ],
+      "notes": "Los consigue Fernando con la app."
+    },
+    {
+      "id": "phone-fonts-og",
+      "block": "D · lo hace el código",
+      "priority": 0,
+      "status": "code",
+      "purpose": "El móvil y su interfaz en CSS (Story.astro); Switzer por el CDN de Fontshare; favicon SVG que ya había; imagen OG = el espejo 16:9 a 1280."
+    }
+  ]
+}

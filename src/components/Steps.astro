@@ -1,15 +1,18 @@
 ---
 import { site } from "../content/site";
+import Title from "./Title.astro";
+
+const { steps } = site;
 ---
 
-<section class="section" id={site.steps.id} aria-labelledby="como-funciona-titulo">
-  <div class="section-inner">
-    <h2 id="como-funciona-titulo">{site.steps.title}</h2>
-    <ol class="steps">
+<section class="section" id={steps.id} aria-labelledby="como-funciona-titulo">
+  <div class="wrap">
+    <Title id="como-funciona-titulo" heading={steps.title} />
+    <ol class="steps" data-reveal-group>
       {
-        site.steps.items.map((item, index) => (
+        steps.items.map((item, index) => (
           <li class="step">
-            <p class="step-index">{index + 1}</p>
+            <span class="step-n">{String(index + 1).padStart(2, "0")}</span>
             <h3>{item.title}</h3>
             <p>{item.body}</p>
           </li>

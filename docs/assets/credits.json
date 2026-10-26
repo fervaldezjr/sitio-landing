@@ -1,0 +1,115 @@
+{
+  "$note": "Créditos y licencias del material de terceros. Fotos de producto: licencia de Unsplash (uso comercial sin atribución obligatoria; se guarda igual). Badges: guías de marca de Apple y de Google, que no permiten alterarlos.",
+  "items": [
+    {
+      "file": "media/source/products/bandeja-1.png",
+      "published": "public/media/products/bandeja-1.*",
+      "source": "https://unsplash.com/photos/wooden-oval-tray-surrounded-by-vibrant-red-flowers-bKUzpEuqh08",
+      "site": "unsplash",
+      "license": "https://unsplash.com/license",
+      "photographer": null,
+      "treatment": "recortado con Vision (VNGenerateForegroundInstanceMaskRequest) sobre la foto original; sin otro retoque",
+      "fetched": "2026-10-26"
+    },
+    {
+      "file": "media/source/products/bandeja-2.png",
+      "published": "public/media/products/bandeja-2.*",
+      "source": "https://unsplash.com/photos/an-oval-wooden-tray-surrounded-by-vibrant-red-carnations-lJbcapa3D9s",
+      "site": "unsplash",
+      "license": "https://unsplash.com/license",
+      "photographer": null,
+      "treatment": "recortado con Vision (VNGenerateForegroundInstanceMaskRequest) sobre la foto original; sin otro retoque",
+      "fetched": "2026-10-26"
+    },
+    {
+      "file": "media/source/products/bandeja-3.png",
+      "published": "public/media/products/bandeja-3.*",
+      "source": "https://unsplash.com/photos/two-long-oval-wooden-serving-trays-on-a-white-background-MzJ6pzgLtC0",
+      "site": "unsplash",
+      "license": "https://unsplash.com/license",
+      "photographer": null,
+      "treatment": "recortado con Vision (VNGenerateForegroundInstanceMaskRequest) sobre la foto original; sin otro retoque",
+      "fetched": "2026-10-26"
+    },
+    {
+      "file": "media/source/products/taza-1.png",
+      "published": "public/media/products/taza-1.*",
+      "source": "https://unsplash.com/photos/a-white-cup-sitting-on-top-of-a-wooden-table-mF6CE_mBXLI",
+      "site": "unsplash",
+      "license": "https://unsplash.com/license",
+      "photographer": null,
+      "treatment": "recortado con Vision (VNGenerateForegroundInstanceMaskRequest) sobre la foto original; sin otro retoque",
+      "fetched": "2026-10-26"
+    },
+    {
+      "file": "media/source/products/taza-2.png",
+      "published": "public/media/products/taza-2.*",
+      "source": "https://unsplash.com/photos/white-ceramic-mug-nDd3dIkkOLo",
+      "site": "unsplash",
+      "license": "https://unsplash.com/license",
+      "photographer": null,
+      "treatment": "recortado con Vision (VNGenerateForegroundInstanceMaskRequest) sobre la foto original; sin otro retoque",
+      "fetched": "2026-10-26"
+    },
+    {
+      "file": "media/source/products/taza-3.png",
+      "published": "public/media/products/taza-3.*",
+      "source": "https://unsplash.com/photos/a-small-cup-on-a-table-zezjhEcHN2w",
+      "site": "unsplash",
+      "license": "https://unsplash.com/license",
+      "photographer": null,
+      "treatment": "recortado con Vision (VNGenerateForegroundInstanceMaskRequest) sobre la foto original; sin otro retoque",
+      "fetched": "2026-10-26"
+    },
+    {
+      "file": "media/source/products/libreta-1.png",
+      "published": "public/media/products/libreta-1.*",
+      "source": "https://unsplash.com/photos/notebook-and-pen-on-white-IZj7vckPGiw",
+      "site": "unsplash",
+      "license": "https://unsplash.com/license",
+      "photographer": null,
+      "treatment": "recortado con Vision (VNGenerateForegroundInstanceMaskRequest) sobre la foto original; sin otro retoque",
+      "fetched": "2026-10-26"
+    },
+    {
+      "file": "media/source/products/libreta-2.png",
+      "published": "public/media/products/libreta-2.*",
+      "source": "https://unsplash.com/photos/white-notebook-with-pen-on-top-1ixT36dfuSQ",
+      "site": "unsplash",
+      "license": "https://unsplash.com/license",
+      "photographer": null,
+      "treatment": "recortado con Vision (VNGenerateForegroundInstanceMaskRequest) sobre la foto original; sin otro retoque",
+      "fetched": "2026-10-26"
+    },
+    {
+      "file": "media/source/products/libreta-3.png",
+      "published": "public/media/products/libreta-3.*",
+      "source": "https://unsplash.com/photos/white-spiral-notebook-on-brown-wooden-table-dgVSuJu58C0",
+      "site": "unsplash",
+      "license": "https://unsplash.com/license",
+      "photographer": null,
+      "treatment": "recortado con Vision (VNGenerateForegroundInstanceMaskRequest) sobre la foto original; sin otro retoque",
+      "fetched": "2026-10-26"
+    },
+    {
+      "file": "media/source/badges/app-store.svg",
+      "published": "public/media/badges/app-store.svg",
+      "source": "https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg",
+      "site": "apple",
+      "license": "https://developer.apple.com/app-store/marketing/guidelines/",
+      "photographer": null,
+      "treatment": "ninguno: se publica tal cual (las guías de Apple no permiten alterarlo). Versión en inglés: la española (tools.applemarketingtools.com) no se pudo descargar desde la sesión",
+      "fetched": "2026-10-26"
+    },
+    {
+      "file": "media/source/badges/google-play.png",
+      "published": "public/media/badges/google-play.png",
+      "source": "https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png",
+      "site": "google",
+      "license": "https://partnermarketinghub.withgoogle.com/brands/google-play/visual-identity/badge-guidelines/",
+      "photographer": null,
+      "treatment": "solo se recorta el margen transparente; el badge no se modifica",
+      "fetched": "2026-10-26"
+    }
+  ]
+}

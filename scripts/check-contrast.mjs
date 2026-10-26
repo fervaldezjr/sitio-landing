@@ -19,8 +19,12 @@ const pairs = [
   ["secondary on surface", "#5e5e5e", "#ffffff", 4.5],
   ["minimum text on surface", "#6a6a6a", "#ffffff", 4.5],
   ["white on ink button", "#ffffff", "#1b1b1b", 4.5],
-  ["input border on surface", "#8f8f92", "#ffffff", 3],
+  ["ink on the product tiles", "#1b1b1b", "#f7f7f7", 4.5],
+  ["placeholder on the email field", "#6a6a6a", "#f7f7f7", 4.5],
   ["grabber on surface", "#8f8f92", "#ffffff", 3],
+  ["white on the proposals band", "#ffffff", "#1b1b1b", 4.5],
+  ["second voice on the proposals band", "#b4b4b4", "#1b1b1b", 4.5],
+  ["ink on the white chip over a tile", "#1b1b1b", "#ffffff", 4.5],
 ];
 
 for (const [name, fg, bg, minimum] of pairs) {
@@ -72,6 +76,9 @@ const samples = [
   ["wide espejo pill", "public/media/hero/wide-espejo-1280.jpg", [0.7, 0.01, 0.28, 0.08], 0.62, white],
   ["wide card", "public/media/hero/wide-espejo-1280.jpg", [0.62, 0.06, 0.34, 0.42], 0.66, hexToRgb("#ececec")],
   ["wide bar", "public/media/hero/wide-antes-1280.jpg", [0.01, 0.84, 0.4, 0.12], 0.66, white],
+  ["phone pills", "public/media/hero/tall-antes-864.jpg", [0.12, 0.12, 0.62, 0.1], 0.62, white],
+  ["phone status", "public/media/hero/tall-antes-864.jpg", [0.25, 0.42, 0.5, 0.12], 0.66, white],
+  ["phone card", "public/media/hero/tall-espejo-864.jpg", [0.14, 0.6, 0.62, 0.38], 0.66, hexToRgb("#ececec")],
   ["tall antes pill", "public/media/hero/tall-antes-864.jpg", [0.01, 0.01, 0.22, 0.08], 0.62, white],
   ["tall card", "public/media/hero/tall-espejo-864.jpg", [0.04, 0.62, 0.92, 0.28], 0.66, hexToRgb("#ececec")],
   ["tall bar", "public/media/hero/tall-antes-864.jpg", [0.04, 0.9, 0.92, 0.08], 0.66, white],

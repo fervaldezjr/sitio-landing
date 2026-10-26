@@ -64,9 +64,11 @@ try {
     await settle(page);
     for (const fraction of [0, 0.35, 0.7, 1]) {
       await page.evaluate((value) => {
+        /* The wipe is no longer the first section: scroll within its own runway. */
         const runway = document.querySelector("[data-hero-runway]");
+        const top = runway.getBoundingClientRect().top + window.scrollY;
         const total = runway.offsetHeight - window.innerHeight;
-        window.scrollTo(0, total * value);
+        window.scrollTo(0, top + total * value);
       }, fraction);
       await settle(page);
       await record(page, failures, `${viewport.width}x${viewport.height} scroll ${fraction}`);
@@ -83,7 +85,7 @@ try {
   await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 1 });
   await page.goto(url, { waitUntil: "domcontentloaded" });
   await page.waitForSelector("[data-wipe-handle]");
-  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await page.evaluate(() => document.querySelector("[data-hero-runway]").scrollIntoView());
   await settle(page);
   await record(page, failures, "1440x900 reduced-motion");
 } finally {
