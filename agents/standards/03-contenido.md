@@ -4,7 +4,7 @@
 
 ## Regla
 
-Todo el texto visible sale de `src/content/site.ts`. No inventes cifras, precios, testimonios ni garantías. Las únicas cifras permitidas son las de la tarjeta del espejo ya aprobada: quitar 9, añadir 3, y el portátil fijado.
+Todo el texto visible sale de `src/content/site.ts`. No inventes cifras, precios, testimonios ni garantías. Las únicas cifras permitidas son las de la tarjeta del espejo ya aprobada: quitar 13, añadir 3, y el portátil fijado.
 
 ## Por qué
 

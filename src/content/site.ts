@@ -41,8 +41,8 @@ export const site = {
     rows: [
       {
         icon: "remove" as const,
-        title: "quitar 9 cosas",
-        detail: "papeles, cables, vasos, botella, mochila…",
+        title: "quitar 13 cosas",
+        detail: "papeles, cables, vasos, botella, libros, mochila…",
       },
       {
         icon: "add" as const,
