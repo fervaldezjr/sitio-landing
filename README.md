@@ -39,7 +39,7 @@ Todos los textos visibles están en `src/content/site.ts`, en español e inglés
 
 ## Imágenes
 
-El par antes/espejo es una composición: `node scripts/compose-pair.mjs` toma la foto base de Pexels y le añade los objetos de `docs/assets/scene.json` (recortes de Unsplash), y saca un 16:9 y un 4:3 de la misma composición. `npm run images` aplica el revelado común y genera AVIF, WebP y JPG (16:9 hasta 2560 px, 4:3 hasta 1440) y las fotos de producto sin fondo. Todos los créditos están en `docs/assets/credits.json`.
+El móvil del escenario usa el par vertical del escritorio frente al mar (generado con IA, 864 px). El par del barrido «Compruébalo tú» es una composición: `node scripts/compose-pair.mjs` toma la foto base de Pexels y le añade los objetos de `docs/assets/scene.json` (recortes de Unsplash), y saca un 16:9 y un 4:3 de la misma composición. `npm run images` aplica el revelado común y genera AVIF, WebP y JPG (16:9 hasta 2560 px, 4:3 hasta 1440) y las fotos de producto sin fondo. Todos los créditos están en `docs/assets/credits.json`.
 
 ## Tiendas
 

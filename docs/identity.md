@@ -90,8 +90,10 @@ Una pantalla blanca corta con «Sitio» y una barra de progreso hasta que las fu
 
 ## Material
 
-- Materia: el producto. El móvil se dibuja en CSS con la interfaz clara de la app: cabecera «Sitio», la foto como tarjeta 4:3 a lo ancho, un *skeleton* mientras genera, la tarjeta del espejo y la lista. La escena es horizontal, así que nunca se recorta en vertical: el 16:9 va a pantalla completa en escritorio y el 4:3, dentro del móvil y en el barrido en móvil.
-- El par antes/espejo se compone con `scripts/compose-pair.mjs` desde `docs/assets/scene.json`: una foto base real (Pexels, 3466×5199) y objetos recortados con Vision, a su tamaño real según la profundidad, con sombra de contacto y reajuste de luz. En el barrido de la landing el espejo dice «Espejo · ejemplo»; en la interfaz simulada del móvil, «generado con IA», que es lo que hará la app. El pie lo explica.
+- Materia: el producto. El móvil se dibuja en CSS con la foto del escritorio frente al mar a pantalla completa (el par vertical `tall-*`, generado con IA), y encima la interfaz de la app: píldoras, recuadros de detección mientras genera, *skeleton*, tarjeta del espejo y lista.
+- Alrededor del móvil, para que el escenario no quede vacío: tres píldoras que flotan en la entrada (quitar 13, añadir 3, portátil fijado), un halo de color de la propia foto detrás del móvil que cambia al espejo, y en escritorio una inclinación suave del móvil hacia el puntero.
+- El barrido «Compruébalo tú» usa otro par, compuesto y nítido: el 16:9 a pantalla completa en escritorio y el 4:3 centrado en móvil.
+- El par antes/espejo se compone con `scripts/compose-pair.mjs` desde `docs/assets/scene.json`: una foto base real (Pexels, 3466×5199) y objetos recortados con Vision, a su tamaño real según la profundidad, con sombra de contacto y reajuste de luz. En el barrido de la landing el espejo dice «Espejo · ejemplo»; el del móvil es un espejo generado con IA y lo dice. El pie explica las dos fotos.
 - Los objetos propuestos son fotos de producto de stock recortadas con la segmentación de macOS (Vision) y puestas sobre `#f7f7f7`.
 - Badges de App Store y Google Play: los oficiales, sin alterar, en la entrada del escenario y en la beta. Mientras la app no esté publicada, bajo «Próximamente en» y sin enlace (`site.stores`). Van en inglés porque la versión española de Apple no se pudo descargar desde la sesión; cambiarlos es sustituir `media/source/badges/` y regenerar.
 - Piezas y créditos: `docs/assets/brief.json` y `docs/assets/credits.json`.

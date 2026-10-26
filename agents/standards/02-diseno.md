@@ -21,7 +21,8 @@ Cuatro de las cinco referencias usan una grotesca neutra en regular y fondo blan
 
 - Titulares en Switzer 400, grandes y apretados: de 40 a 92 px, tracking -4 a -4.5 %, interlineado 0.96 a 1.0. `Title.astro` pinta las dos voces (`lead` en tinta, `rest` en gris).
 - Interfaz y rótulos en 500 a 13–15 px. Casi sin tamaños intermedios: o es titular o es interfaz.
-- El móvil se dibuja en CSS (`Story.astro`) con la interfaz clara de la app: cabecera «Sitio», la foto como tarjeta 4:3 a lo ancho, *skeleton* mientras genera, tarjeta del espejo y lista. Las medidas van en `cqw` (la pantalla es un contenedor) para que la interfaz escale con el móvil. La foto no se recorta en vertical: la escena es horizontal.
+- El móvil se dibuja en CSS (`Story.astro`) con la foto del escritorio frente al mar a pantalla completa (`tall-*`) y la interfaz de la app encima: píldoras, recuadros de detección mientras genera, *skeleton* en cristal, tarjeta del espejo y lista. Las medidas van en `cqw` (la pantalla es un contenedor) para que la interfaz escale con el móvil.
+- Para que el escenario no quede vacío: tres píldoras blancas que flotan en la entrada (`story.hints`, se van con la intro), un halo de la foto detrás del móvil (`.phone-glow`, cambia al espejo con el barrido; oculto en móvil) y, en escritorio con ratón, el móvil se inclina hacia el puntero y el halo y las píldoras se desplazan (`gsap.quickTo`, solo propiedades que el scroll no anima).
 - El barrido a pantalla completa usa el 16:9 en escritorio; en móvil, el 4:3 centrado en la pantalla oscura y sin la tarjeta (ya está en el móvil del escenario).
 - Los objetos van sin fondo, con `filter: drop-shadow(...)`, sobre `#F7F7F7` con radio de 20–22 px.
 
@@ -43,7 +44,7 @@ Trampas ya vistas:
 - Una regla para el texto de una fila (`.mirror-row span`) también alcanza al icono si el icono es otro `span`, y lo saca de su círculo: el texto va con `p span`.
 
 - Si el CSS pone `transform: translateY(…)` en algo que GSAP anima con `yPercent`, GSAP lee el `translateY` como píxeles y los suma: la hoja de la lista no subía. En el `fromTo`, pon `y: 0` explícito.
-- No pongas `transition: transform` en un elemento que anima GSAP: al recalcular, GSAP lee el valor a medio camino y se queda ahí.
+- No pongas `transition: transform` en un elemento que anima GSAP: al recalcular, GSAP lee el valor a medio camino y se queda ahí. Si no se puede evitar (el botón de la beta tiene su pulsación), la animación termina con `clearProps: "transform"`: el botón de la entrada se quedaba 24 px abajo, encima de los badges.
 - Algo que se mueve desde un punto y está centrado con `translate(-50%, -50%)` va en dos elementos: el exterior lo mueve GSAP, el interior se centra.
 
 ## Cómo se comprueba

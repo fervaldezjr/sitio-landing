@@ -6,7 +6,7 @@
 
 Todo el texto visible sale de `src/content/site.ts`, en español (`es`, en `/`) y en inglés (`en`, en `/en/`), siempre con mayúscula inicial. Los dos tienen la misma forma (`Copy`): un texto nuevo va en los dos idiomas o no compila. No inventes cifras, precios, testimonios, fechas ni garantías. Las únicas cifras permitidas son las de la tarjeta del espejo ya aprobada: quitar 13, añadir 3, y el portátil fijado. Los números de los pasos («01») los ponen los componentes a partir del orden.
 
-Los nombres no cambian: **Sitio** (producto, con mayúscula), **espejo** (en minúscula dentro de la frase) y las tres acciones **Quitar**, **Añadir** y **Fijado**; en inglés, **mirror**, **Remove**, **Add** y **Pinned**. En la interfaz simulada de la app, el espejo va con «generado con IA»; el de la landing es una composición y dice «ejemplo».
+Los nombres no cambian: **Sitio** (producto, con mayúscula), **espejo** (en minúscula dentro de la frase) y las tres acciones **Quitar**, **Añadir** y **Fijado**; en inglés, **mirror**, **Remove**, **Add** y **Pinned**. El espejo del móvil (escritorio frente al mar) es un ejemplo generado con IA y lo dice; el del barrido «Compruébalo tú» es una composición y dice «ejemplo». El pie explica las dos fotos.
 
 Las fotos de producto son de stock: la sección de propuestas y el pie dicen que son de ejemplo. Ninguna lleva marca, nombre comercial ni precio. El antes y el espejo de la página son una composición (foto de Pexels + objetos de Unsplash) y el pie lo dice. Enlazar propuestas a productos reales es cosa del producto, no de la landing.
 
