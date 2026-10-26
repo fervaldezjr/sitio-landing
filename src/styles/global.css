@@ -389,6 +389,13 @@ html.motion .story-stage {
   color: var(--fg-2);
 }
 
+/* a column: the inline-flex button does not get a line box of its own height inside a block */
+.story-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 .story-intro .pill-button {
   margin-top: 32px;
 }
@@ -473,9 +480,7 @@ html.motion .story-step {
   height: 100%;
   overflow: hidden;
   border-radius: calc(var(--phone-w) * 0.13);
-  /* the app's own canvas, with the photo as a card on it */
-  background: var(--canvas);
-  --photo-top: 13%;
+  background: #101010;
   font-family: var(--font);
   container-type: inline-size;
   color: var(--on-glass);
@@ -483,29 +488,6 @@ html.motion .story-step {
 
 /* the photo sits at full width like in a real app: the desk is a wide scene, a full-screen
    portrait crop would be mostly wall */
-.screen-header {
-  position: absolute;
-  top: 7.4%;
-  left: 0;
-  right: 0;
-  text-align: center;
-  font-size: 4.6cqw;
-  font-weight: 600;
-  color: var(--ink);
-}
-
-.screen-photo {
-  position: absolute;
-  z-index: 1;
-  left: 4%;
-  right: 4%;
-  top: var(--photo-top);
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-  border-radius: 5cqw;
-  background: var(--tile);
-}
-
 .screen-layer,
 .screen-layer img {
   position: absolute;
@@ -516,6 +498,7 @@ html.motion .story-step {
 
 .screen-layer img {
   object-fit: cover;
+  object-position: 42% center;
 }
 
 html.motion .screen-espejo {
@@ -557,10 +540,15 @@ html.motion .screen-espejo {
   visibility: hidden;
 }
 
-.screen-frame {
+.screen-camera {
   position: absolute;
   z-index: 3;
-  inset: 12% 7%;
+  inset: 0;
+}
+
+.screen-frame {
+  position: absolute;
+  inset: 22% 9% 26%;
   --c: rgba(255, 255, 255, 0.85);
   --l: 7cqw;
   background:
@@ -576,13 +564,12 @@ html.motion .screen-espejo {
 
 .screen-shutter {
   position: absolute;
-  z-index: 3;
-  bottom: 8%;
+  bottom: 7%;
   left: calc(50% - 9cqw);
   width: 18cqw;
   height: 18cqw;
   border-radius: var(--radius-full);
-  border: 3px solid var(--ink);
+  border: 3px solid #fff;
   display: grid;
   place-items: center;
 }
@@ -591,21 +578,24 @@ html.motion .screen-espejo {
   width: 13.5cqw;
   height: 13.5cqw;
   border-radius: var(--radius-full);
-  background: var(--ink);
+  background: #fff;
 }
 
-/* the card's place while the mirror is generated: the app's own loading state */
+/* the card's place while the mirror is generated: the app's own loading state, in glass */
 .screen-skeleton {
   position: absolute;
-  z-index: 3;
+  z-index: 4;
   left: 4%;
   right: 4%;
-  top: calc(var(--photo-top) + 69cqw + 5cqw);
+  bottom: 4%;
   display: grid;
   gap: 3cqw;
   padding: 5.4cqw;
   border-radius: 6.5cqw;
-  background: var(--surface);
+  background: rgba(var(--glass-tint), var(--glass-sheet));
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 0.5px solid var(--stroke);
   opacity: 0;
   visibility: hidden;
 }
@@ -613,7 +603,7 @@ html.motion .screen-espejo {
 .screen-skeleton span {
   height: 3.6cqw;
   border-radius: var(--radius-full);
-  background: linear-gradient(90deg, var(--tile) 0%, #f7f7f7 50%, var(--tile) 100%);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.32) 50%, rgba(255, 255, 255, 0.12) 100%);
   background-size: 200% 100%;
   animation: skeleton-shine 1.4s linear infinite;
 }
@@ -633,15 +623,39 @@ html.motion .screen-espejo {
   }
 }
 
-html:not(.motion) [data-screen-camera],
+html:not(.motion) .screen-camera,
 html:not(.motion) .screen-pill-left {
   display: none;
+}
+
+/* what the app spots while it generates: one box per thing that goes */
+.screen-boxes li {
+  position: absolute;
+  z-index: 3;
+  border: 1.5px solid rgba(255, 255, 255, 0.92);
+  border-radius: 2.4cqw;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.screen-boxes span {
+  position: absolute;
+  left: -1.5px;
+  bottom: calc(100% + 1.2cqw);
+  padding: 0.8cqw 2.2cqw;
+  border-radius: var(--radius-full);
+  background: #fff;
+  color: var(--ink);
+  font-size: 3.2cqw;
+  line-height: 1.2;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 .screen-pill {
   position: absolute;
   z-index: 4;
-  top: 5%;
+  top: 15%;
   padding: 1.8cqw 3.8cqw;
   border-radius: var(--radius-full);
   background: rgba(var(--glass-tint), var(--glass-strong));
@@ -655,11 +669,11 @@ html:not(.motion) .screen-pill-left {
 }
 
 .screen-pill-left {
-  left: 4%;
+  left: 5%;
 }
 
 .screen-pill-right {
-  right: 4%;
+  right: 5%;
 }
 
 html.motion .screen-pill-right {
@@ -668,7 +682,7 @@ html.motion .screen-pill-right {
 }
 
 .screen-status {
-  top: 42%;
+  top: 36%;
   left: 0;
   right: 0;
   width: max-content;
@@ -684,8 +698,7 @@ html.motion .screen-pill-right {
   z-index: 4;
   left: 4%;
   right: 4%;
-  /* under the photo: its top plus its 4:3 height (75 % of 92 % of the screen width) */
-  top: calc(var(--photo-top) + 69cqw + 5cqw);
+  bottom: 4%;
   padding: 5.4cqw;
   border-radius: 6.5cqw;
   background: rgba(var(--glass-tint), var(--glass-sheet));
@@ -873,6 +886,141 @@ html.motion .screen-card {
 [data-screen-button-added] {
   opacity: 0;
   visibility: hidden;
+}
+
+/* a soft halo of the photo behind the phone: depth on a white page */
+.phone-glow {
+  position: absolute;
+  z-index: 0;
+  left: calc(50% - var(--phone-w) * 0.72);
+  top: calc(50% - var(--phone-h) * 0.4 + 20px);
+  width: calc(var(--phone-w) * 1.44);
+  height: calc(var(--phone-h) * 0.8);
+  pointer-events: none;
+  filter: blur(60px) saturate(1.35);
+  opacity: 0.3;
+}
+
+.phone-glow img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+html.motion .phone-glow [data-glow-espejo] {
+  opacity: 0;
+}
+
+/* three pills around the phone on the first screen: what the app will tell you */
+.story-hint {
+  position: absolute;
+  z-index: 3;
+}
+
+.story-hint span {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px 10px 10px;
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow:
+    0 12px 32px -12px rgba(0, 0, 0, 0.22),
+    0 0 0 1px rgba(27, 27, 27, 0.06);
+}
+
+html.motion .story-hint span {
+  animation: hint-float 6s var(--ease-sine) infinite alternate;
+}
+
+.story-hint-1 {
+  left: calc(50% - var(--phone-w) / 2 - 110px);
+  top: 80%;
+}
+
+.story-hint-2 {
+  left: calc(50% + var(--phone-w) / 2 - 24px);
+  top: 26%;
+}
+
+.story-hint-2 span {
+  animation-delay: -2s;
+}
+
+.story-hint-3 {
+  left: calc(50% + var(--phone-w) / 2 + 40px);
+  top: 66%;
+}
+
+.story-hint-3 span {
+  animation-delay: -4s;
+}
+
+.hint-icon {
+  position: relative;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-full);
+  background: var(--ink);
+  flex: none;
+}
+
+.hint-icon::before,
+.hint-icon::after {
+  content: "";
+  position: absolute;
+  left: 30%;
+  right: 30%;
+  top: calc(50% - 0.75px);
+  height: 1.5px;
+  background: #fff;
+}
+
+.hint-icon[data-icon="remove"]::after {
+  display: none;
+}
+
+.hint-icon[data-icon="add"]::after {
+  transform: rotate(90deg);
+}
+
+.hint-icon[data-icon="lock"]::before {
+  left: 34%;
+  right: 34%;
+  top: 46%;
+  height: 28%;
+  border-radius: 2px;
+}
+
+.hint-icon[data-icon="lock"]::after {
+  left: 39%;
+  right: 39%;
+  top: 30%;
+  height: 22%;
+  background: none;
+  border: 1.5px solid #fff;
+  border-bottom: 0;
+  border-radius: 6px 6px 0 0;
+}
+
+@keyframes hint-float {
+  from {
+    transform: translateY(-7px);
+  }
+  to {
+    transform: translateY(7px);
+  }
+}
+
+html:not(.motion) .story-hints {
+  display: none;
 }
 
 .story-removed li {
@@ -1788,7 +1936,9 @@ html.motion .handle:not(.is-touched)::after {
     bottom: calc(56px + var(--phone-h) * 0.4);
   }
 
-  .product-name {
+  .product-name,
+  .story-hints,
+  .phone-glow {
     display: none;
   }
 

@@ -146,9 +146,11 @@ async function preload(): Promise<void> {
   ]);
   gsap.to(overlay, { autoAlpha: 0, duration: 0.5, ease: "power2.out", onComplete: () => overlay.remove() });
   const intro = $$("[data-story-intro] > *");
-  if (intro.length) gsap.from(intro, { y: 24, autoAlpha: 0, duration: 0.9, ease: EASE, stagger: 0.08, delay: 0.15 });
+  /* clearProps: the button has a CSS transform transition (its press); leaving GSAP's inline transform
+     behind would freeze it mid-way and block the press */
+  if (intro.length) gsap.from(intro, { y: 24, autoAlpha: 0, duration: 0.9, ease: EASE, stagger: 0.08, delay: 0.15, clearProps: "transform,opacity,visibility" });
   const phone = document.querySelector("[data-phone]");
-  if (phone) gsap.from(phone, { autoAlpha: 0, duration: 0.9, ease: EASE, delay: 0.3 });
+  if (phone) gsap.from(phone, { autoAlpha: 0, duration: 0.9, ease: EASE, delay: 0.3, clearProps: "opacity,visibility" });
   lenis?.start();
 }
 

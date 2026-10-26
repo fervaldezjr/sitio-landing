@@ -1,8 +1,8 @@
 /**
  * Builds the photo srcsets and the product cutouts from media/source.
  * The pair comes from scripts/compose-pair.mjs on a real 3466 px photo, so the wide frame is
- * served up to 2560 px and the 4:3 frame (inside the phone, and the wipe on phones) up to 1440 px,
- * downsampled with lanczos3 only.
+ * served up to 2560 px and the 4:3 frame (the wipe on phones) up to 1440 px, downsampled with
+ * lanczos3 only. The phone in the first screen keeps the earlier portrait pair (tall-*), at 864.
  * Every master gets the same soft grade (GRADE), so a pair still matches for the wipe.
  */
 import { copyFile, mkdir, readdir, writeFile } from "node:fs/promises";
@@ -20,6 +20,8 @@ const proofOut = path.join(root, "media/proof");
 
 const wideWidths = [640, 960, 1280, 1920, 2560];
 const frameWidths = [480, 720, 960, 1440];
+/* the phone in the first screen keeps its own portrait pair (the desk by the sea), at its native 864 px */
+const tallWidths = [432, 648, 864];
 /** The site's one grade (docs/identity.md, dial 3): slightly less saturated, same for every frame. */
 const GRADE = { saturation: 0.86 };
 
@@ -27,6 +29,14 @@ async function masterWide(name) {
   return sharp(path.join(source, name))
     .rotate()
     .resize({ width: wideWidths.at(-1), kernel: "lanczos3" })
+    .modulate(GRADE)
+    .toColorspace("srgb");
+}
+
+async function masterTall(name) {
+  return sharp(path.join(source, name))
+    .rotate()
+    .resize({ width: tallWidths.at(-1), kernel: "lanczos3", withoutEnlargement: true })
     .modulate(GRADE)
     .toColorspace("srgb");
 }
@@ -133,6 +143,8 @@ const productsOnly = process.argv.includes("--products-only");
 const wideAntesBuf = await masterWide("wide-antes.jpg").then((p) => p.png().toBuffer());
 const frameAntesBuf = await masterFrame("frame-antes.jpg").then((p) => p.png().toBuffer());
 const frameEspejoBuf = await masterFrame("frame-espejo.jpg").then((p) => p.png().toBuffer());
+const tallAntesBuf = await masterTall("tall-antes.png").then((p) => p.png().toBuffer());
+const tallEspejoBuf = await masterTall("tall-espejo.png").then((p) => p.png().toBuffer());
 
 if (!productsOnly) {
   const wideEspejoBuf = await masterWide("wide-espejo.jpg").then((p) => p.png().toBuffer());
@@ -140,6 +152,8 @@ if (!productsOnly) {
   await writeSet(sharp(wideEspejoBuf), wideWidths, "wide-espejo");
   await writeSet(sharp(frameAntesBuf), frameWidths, "frame-antes");
   await writeSet(sharp(frameEspejoBuf), frameWidths, "frame-espejo");
+  await writeSet(sharp(tallAntesBuf), tallWidths, "tall-antes");
+  await writeSet(sharp(tallEspejoBuf), tallWidths, "tall-espejo");
 }
 
 if (!productsOnly) {
