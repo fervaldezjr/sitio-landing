@@ -1,0 +1,55 @@
+---
+import { site } from "../content/site";
+import { publicUrl } from "../lib/paths";
+import "../styles/global.css";
+
+const fontHref =
+  "https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap";
+const title = site.meta.title;
+const description = site.meta.description;
+const canonical = new URL(publicUrl(""), Astro.site).href;
+const image = new URL(publicUrl("media/hero/wide-espejo-1280.jpg"), Astro.site).href;
+---
+
+<!doctype html>
+<html lang={site.meta.locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#f7f7f7" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <meta property="og:locale" content="es" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href={publicUrl("favicon.svg")} type="image/svg+xml" />
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+    <link rel="stylesheet" href={fontHref} />
+    <link
+      rel="preload"
+      as="image"
+      href={publicUrl("media/hero/wide-antes-1280.avif")}
+      type="image/avif"
+      media="(min-width: 761px)"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href={publicUrl("media/hero/tall-antes-648.avif")}
+      type="image/avif"
+      media="(max-width: 760px)"
+      fetchpriority="high"
+    />
+  </head>
+  <body>
+    <a class="skip" href="#contenido">saltar al contenido</a>
+    <slot />
+  </body>
+</html>

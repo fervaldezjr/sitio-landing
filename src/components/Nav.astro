@@ -1,0 +1,11 @@
+---
+import { site } from "../content/site";
+import { hashHref } from "../lib/paths";
+---
+
+<div class="nav-wrap">
+  <nav class="pill-nav" aria-label={site.nav.label}>
+    <a class="brand" href={hashHref("top")}>{site.nav.brand}</a>
+    {site.nav.links.map((link) => <a href={hashHref(link.href)}>{link.label}</a>)}
+  </nav>
+</div>

@@ -1,0 +1,20 @@
+---
+import { site } from "../content/site";
+---
+
+<section class="section" id={site.steps.id} aria-labelledby="como-funciona-titulo">
+  <div class="section-inner">
+    <h2 id="como-funciona-titulo">{site.steps.title}</h2>
+    <ol class="steps">
+      {
+        site.steps.items.map((item, index) => (
+          <li class="step">
+            <p class="step-index">{index + 1}</p>
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

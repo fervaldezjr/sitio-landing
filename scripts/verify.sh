@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# One command: lint, tests, build, links, contrast.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+export ASTRO_TELEMETRY_DISABLED=1
+
+echo "== lint =="
+npm run lint
+
+echo "== test =="
+npm test
+
+echo "== build =="
+npm run build
+
+echo "== links =="
+node scripts/check-links.mjs
+
+echo "== contrast =="
+node scripts/check-contrast.mjs
+
+echo "verify ok"

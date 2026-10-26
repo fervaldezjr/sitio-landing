@@ -1,0 +1,27 @@
+---
+import { site } from "../content/site";
+---
+
+<section class="section" id={site.beta.id} aria-labelledby="beta-titulo">
+  <div class="section-inner">
+    <h2 id="beta-titulo">{site.beta.title}</h2>
+    <div class="beta-card">
+      <p>{site.beta.body}</p>
+      <form class="beta-form" data-beta novalidate>
+        <label for="correo">{site.beta.label}</label>
+        <input id="correo" name="email" type="email" inputmode="email" autocomplete="email" placeholder={site.beta.placeholder} />
+        <button class="button" type="submit">{site.beta.button}</button>
+        <p class="form-status" id="beta-status" role="status" data-beta-status></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script define:vars={{ betaStatus: site.beta.status }}>
+  const form = document.querySelector("[data-beta]");
+  const note = document.querySelector("[data-beta-status]");
+  form?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (note) note.textContent = betaStatus;
+  });
+</script>

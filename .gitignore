@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.astro/
+media/proof/
+.env
+.env.*
+*.pem
+*.woff
+*.woff2
+*.otf
+*.ttf
+.DS_Store
