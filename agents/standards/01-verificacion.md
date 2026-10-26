@@ -19,7 +19,7 @@ Reglas del comando: uno solo, determinista, y el resumen cabe en la terminal.
 ## Antes de cerrar
 
 1. `bash scripts/verify.sh` en verde, o dicho qué falla y por qué.
-2. Para un cambio visible: captura de escritorio (1440×900) y de móvil (390×844), no solo el build. El escenario fijo se revisa en varios puntos de su recorrido (inicio, foto, generando, barrido, tarjeta, lista), esperando a que el scrub llegue. Las entradas solo se ven haciendo scroll de verdad: una captura de página entera sale con titulares escondidos.
+2. Para un cambio visible: captura de escritorio (1440×900) y de móvil (390×844), en español (`/`) y en inglés (`/en/`), no solo el build. El escenario fijo se revisa en varios puntos de su recorrido (inicio, foto, generando, barrido, tarjeta, lista), esperando a que el scrub llegue. Las entradas solo se ven haciendo scroll de verdad: una captura de página entera sale con titulares escondidos.
 3. No se borra un paso del script para que pase.
 
 ## Lo que no vale

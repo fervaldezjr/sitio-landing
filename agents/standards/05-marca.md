@@ -23,10 +23,12 @@
 | Rótulos | ninguno encima de los titulares; números `01 02 03` solo en pasos | `check-brand.mjs` rechaza `text-transform: uppercase` |
 | Curvas | página `power3.out`; barrido easeInOutSine; hojas easeOutQuint 320 ms; nunca rebote | revisión del diff |
 | Dependencias | solo `gsap` y `lenis` en `dependencies` | `check-brand.mjs` |
+| Idiomas | español en `/`, inglés en `/en/`; todo texto, en los dos | TypeScript (`Copy`) en `astro check` |
 
 ## Material
 
-- Una materia: el producto. El móvil y su interfaz se dibujan en CSS; dentro va el par 3:4. La foto a sangre es el par 16:9.
+- Una materia: el producto. El móvil y su interfaz clara se dibujan en CSS; dentro va la foto 4:3. El barrido a pantalla completa es el 16:9 (en móvil, el 4:3).
+- El par antes/espejo se compone con `scripts/compose-pair.mjs` sobre una foto real; no se sustituye por una ampliación ni por una imagen generada sin decirlo.
 - Las propuestas son fotos de producto de Unsplash, sin fondo (Vision), sobre `#F7F7F7`, con la misma sombra del CSS. Cada fichero, su crédito en `docs/assets/credits.json`. La página dice que son de ejemplo.
 - Badges de App Store y Google Play: los oficiales, **sin tocar** (ni color, ni proporción, ni texto). Mientras `site.stores.*.href` sea `null`, salen bajo «Próximamente en» y no son enlaces. El aviso de marcas va en el pie.
 
