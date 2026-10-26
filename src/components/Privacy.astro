@@ -1,19 +1,10 @@
 ---
 import { site } from "../content/site";
-import Folio from "./Folio.astro";
 import Title from "./Title.astro";
-
-interface Props {
-  n: number;
-}
-
-const { n } = Astro.props;
-const { privacy } = site;
 ---
 
-<section class="chapter band" id={privacy.id} aria-labelledby="privacidad-titulo">
-  <div class="wrap grid">
-    <Folio n={n} label={privacy.label} />
-    <Title id="privacidad-titulo" heading={privacy.title} class="title-wide" />
+<section class="section" id={site.privacy.id} aria-labelledby="privacidad-titulo">
+  <div class="wrap">
+    <Title id="privacidad-titulo" heading={site.privacy.title} class="title-privacy" />
   </div>
 </section>

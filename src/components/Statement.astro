@@ -1,0 +1,10 @@
+---
+import { site } from "../content/site";
+import Title from "./Title.astro";
+---
+
+<section class="section statement" aria-labelledby="statement-titulo">
+  <div class="wrap">
+    <Title id="statement-titulo" heading={site.statement.title} size="xl" />
+  </div>
+</section>

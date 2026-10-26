@@ -1,30 +1,25 @@
 ---
 import { site } from "../content/site";
-import Folio from "./Folio.astro";
+import StoreBadges from "./StoreBadges.astro";
 import Title from "./Title.astro";
 
-interface Props {
-  n: number;
-}
-
-const { n } = Astro.props;
 const { beta } = site;
 ---
 
-<section class="chapter" id={beta.id} aria-labelledby="beta-titulo">
-  <div class="wrap grid">
-    <Folio n={n} label={beta.label} />
-    <Title id="beta-titulo" heading={beta.title} />
+<section class="section beta-section" id={beta.id} aria-labelledby="beta-titulo">
+  <div class="wrap">
+    <Title id="beta-titulo" heading={beta.title} size="xl" />
     <div class="beta" data-reveal>
       <p class="lede">{beta.body}</p>
       <form class="beta-form" data-beta novalidate>
         <label for="correo">{beta.field}</label>
         <div class="beta-row">
           <input id="correo" name="email" type="email" inputmode="email" autocomplete="email" placeholder={beta.placeholder} />
-          <button class="button" type="submit">{beta.button}</button>
+          <button class="pill-button" type="submit">{beta.button}</button>
         </div>
         <p class="form-status" id="beta-status" role="status" data-beta-status></p>
       </form>
+      <StoreBadges />
     </div>
   </div>
 </section>

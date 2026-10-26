@@ -1,18 +1,21 @@
 /**
- * Builds hero srcsets and the list thumbnails from media/source.
+ * Builds the photo srcsets and the product cutouts from media/source.
  * Wide masters are capped at 1920px: the 2400px JPEGs are an upscale and look soft.
  * No neural rescaler is available in this environment, so we downsample with
  * lanczos3 and a light unsharp. We do not invent detail above the source.
  * Every master gets the same soft grade (GRADE), so a pair still matches for the wipe.
  */
-import { mkdir, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
 const root = path.resolve(import.meta.dirname, "..");
 const source = path.join(root, "media/source");
 const heroOut = path.join(root, "public/media/hero");
-const thumbOut = path.join(root, "public/media/lists");
+const productSource = path.join(root, "media/source/products");
+const badgeSource = path.join(root, "media/source/badges");
+const badgeOut = path.join(root, "public/media/badges");
+const productOut = path.join(root, "public/media/products");
 const proofOut = path.join(root, "media/proof");
 
 const wideWidths = [640, 960, 1280, 1920];
@@ -79,29 +82,29 @@ async function gridProof(buffer, fileName, step = 0.1) {
 }
 
 /**
- * Square thumbnails for the list example, cut from the 3:4 mirror at its native 864px.
- * center and side are fractions of the frame width (y of the height). No padding bands:
- * the crop is square, and the upscale stays under 1.5x.
+ * Product cutouts for the proposals: stock photos (docs/assets/credits.json) whose subject was
+ * lifted with Apple Vision into media/source/products/*.png. Transparent edges are trimmed and
+ * each one is served at most 720px on its long side, with alpha, in AVIF, WebP and PNG.
  */
-const thumbs = [
-  { id: "bandeja", center: [0.505, 0.545], side: 0.2 },
-  { id: "taza", center: [0.497, 0.52], side: 0.125 },
-  { id: "libreta", center: [0.643, 0.552], side: 0.2 },
-];
-const THUMB = 160;
+const PRODUCT = 720;
 
-async function cropThumb(buffer, { id, center, side }) {
-  const meta = await sharp(buffer).metadata();
-  const w = meta.width ?? 1;
-  const h = meta.height ?? 1;
-  const size = Math.round(side * w);
-  const left = Math.min(w - size, Math.max(0, Math.round(center[0] * w - size / 2)));
-  const top = Math.min(h - size, Math.max(0, Math.round(center[1] * h - size / 2)));
-  if (THUMB / size > 1.5) throw new Error(`${id}: crop of ${size}px would be upscaled more than 1.5x`);
-  const square = await sharp(buffer).extract({ left, top, width: size, height: size }).resize({ width: THUMB, height: THUMB, kernel: "lanczos3" }).toBuffer();
-  await sharp(square).avif({ quality: 52, effort: 4 }).toFile(path.join(thumbOut, `${id}.avif`));
-  await sharp(square).webp({ quality: 74 }).toFile(path.join(thumbOut, `${id}.webp`));
-  await sharp(square).jpeg({ quality: 78, mozjpeg: true }).toFile(path.join(thumbOut, `${id}.jpg`));
+async function writeProduct(file) {
+  const id = path.basename(file, ".png");
+  const trimmed = await sharp(path.join(productSource, file)).trim({ threshold: 1 }).png().toBuffer();
+  const sized = await sharp(trimmed).resize({ width: PRODUCT, height: PRODUCT, fit: "inside", withoutEnlargement: true, kernel: "lanczos3" }).png().toBuffer();
+  await sharp(sized).avif({ quality: 56, effort: 4 }).toFile(path.join(productOut, `${id}.avif`));
+  await sharp(sized).webp({ quality: 78, alphaQuality: 90 }).toFile(path.join(productOut, `${id}.webp`));
+  await sharp(sized).png({ compressionLevel: 9, palette: true, quality: 92 }).toFile(path.join(productOut, `${id}.png`));
+}
+
+/**
+ * Store badges, official artwork from Apple and Google (docs/assets/credits.json). The App Store
+ * SVG is copied untouched; the Google Play PNG only loses the transparent clear space it ships
+ * with, so both badges share a height and the gap between them is set in CSS.
+ */
+async function writeBadges() {
+  await copyFile(path.join(badgeSource, "app-store.svg"), path.join(badgeOut, "app-store.svg"));
+  await sharp(path.join(badgeSource, "google-play.png")).trim({ threshold: 1 }).png({ compressionLevel: 9 }).toFile(path.join(badgeOut, "google-play.png"));
 }
 
 async function alignmentNote() {
@@ -125,16 +128,17 @@ async function alignmentNote() {
 }
 
 await mkdir(heroOut, { recursive: true });
-await mkdir(thumbOut, { recursive: true });
+await mkdir(productOut, { recursive: true });
+await mkdir(badgeOut, { recursive: true });
 await mkdir(proofOut, { recursive: true });
 
-const thumbsOnly = process.argv.includes("--thumbs-only");
+const productsOnly = process.argv.includes("--products-only");
 
 const wideAntesBuf = await masterWide("wide-antes.jpg").then((p) => p.png().toBuffer());
 const tallAntesBuf = await masterTall("tall-antes.png").then((p) => p.png().toBuffer());
 const tallEspejoBuf = await masterTall("tall-espejo.png").then((p) => p.png().toBuffer());
 
-if (!thumbsOnly) {
+if (!productsOnly) {
   const wideEspejoBuf = await masterWide("wide-espejo.jpg").then((p) => p.png().toBuffer());
   await writeSet(sharp(wideAntesBuf), wideWidths, "wide-antes");
   await writeSet(sharp(wideEspejoBuf), wideWidths, "wide-espejo");
@@ -142,15 +146,16 @@ if (!thumbsOnly) {
   await writeSet(sharp(tallEspejoBuf), tallWidths, "tall-espejo");
 }
 
-if (!thumbsOnly) {
+if (!productsOnly) {
   await gridProof(wideAntesBuf, "grid-wide-antes.jpg");
   await gridProof(tallAntesBuf, "grid-tall-antes.jpg");
   await gridProof(tallEspejoBuf, "grid-tall-espejo.jpg");
 }
 
-for (const thumb of thumbs) {
-  await cropThumb(tallEspejoBuf, thumb);
+for (const file of (await readdir(productSource)).filter((name) => name.endsWith(".png"))) {
+  await writeProduct(file);
 }
+await writeBadges();
 
 const note = await alignmentNote();
 await writeFile(path.join(proofOut, "alignment.txt"), `${note}\n`, "utf8");

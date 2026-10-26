@@ -1,27 +1,18 @@
 ---
 import { site } from "../content/site";
-import Folio from "./Folio.astro";
 import Title from "./Title.astro";
 
-interface Props {
-  n: number;
-}
-
-const { n } = Astro.props;
 const { steps } = site;
 ---
 
-<section class="chapter" id={steps.id} aria-labelledby="como-funciona-titulo">
-  <div class="wrap grid">
-    <Folio n={n} label={steps.label} />
+<section class="section" id={steps.id} aria-labelledby="como-funciona-titulo">
+  <div class="wrap">
     <Title id="como-funciona-titulo" heading={steps.title} />
     <ol class="steps" data-reveal-group>
       {
         steps.items.map((item, index) => (
           <li class="step">
-            <p class="step-n">
-              {steps.stepLabel} {index + 1}
-            </p>
+            <span class="step-n">{String(index + 1).padStart(2, "0")}</span>
             <h3>{item.title}</h3>
             <p>{item.body}</p>
           </li>

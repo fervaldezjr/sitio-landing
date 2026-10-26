@@ -1,6 +1,7 @@
 /**
  * Page motion (docs/identity.md, dial 5): Lenis for the scroll, GSAP for the rest.
- * The hero wipe lives in hero.ts and only listens to the scroll, so it works with or without Lenis.
+ * The pinned first screen lives in story.ts and the full-screen wipe in compare.ts; both only
+ * listen to the scroll, so they work with or without Lenis.
  * Progressive enhancement: without JavaScript everything is visible; with
  * prefers-reduced-motion nothing moves and the scroll stays native.
  */
@@ -12,8 +13,8 @@ import { SplitText } from "gsap/SplitText";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
-/** easeOutQuint, the same curve as the app's sheets: cubic-bezier(0.22, 1, 0.36, 1). */
-const EASE = "power4.out";
+/** easeOutCubic, the same curve as the app's pills: cubic-bezier(0.33, 1, 0.68, 1). */
+const EASE = "power3.out";
 const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const $$ = <T extends Element = HTMLElement>(selector: string, root: ParentNode = document) => [...root.querySelectorAll<T>(selector)];
 
@@ -75,20 +76,6 @@ function lines(): void {
   });
 }
 
-/** Photos and the app card uncover from the bottom up: the same gesture as the hero wipe. */
-function unveil(): void {
-  if (reduce) return;
-  $$("[data-unveil]").forEach((box) => {
-    const image = box.querySelector("img");
-    /* The dot scales in; the button around it keeps its own CSS hover transform. */
-    const spots = $$(".spot-dot", box);
-    const timeline = gsap.timeline({ scrollTrigger: { trigger: box, start: "top 82%", once: true } });
-    timeline.fromTo(box, { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.2, ease: EASE });
-    if (image) timeline.fromTo(image, { scale: 1.08 }, { scale: 1, duration: 1.6, ease: EASE }, 0);
-    if (spots.length) timeline.from(spots, { autoAlpha: 0, scale: 0.6, duration: 0.5, ease: "power3.out", stagger: 0.05 }, 0.7);
-  });
-}
-
 function reveals(): void {
   if (reduce) return;
   $$("[data-reveal]").forEach((node) => {
@@ -106,23 +93,6 @@ function reveals(): void {
   });
 }
 
-/** The footer wordmark spans the content width, capped at 75 % of the viewport height. */
-function fit(): void {
-  $$("[data-fit]").forEach((node) => {
-    const box = node.parentElement;
-    if (!box) return;
-    const target = box.clientWidth * parseFloat(node.dataset.fit ?? "1");
-    const byHeight = (window.innerHeight * 0.75) / 0.8;
-    /* Text width is not quite linear in font size (hinting at small sizes), so measure twice. */
-    let size = 100;
-    for (let pass = 0; pass < 2; pass++) {
-      node.style.fontSize = `${size}px`;
-      size = (size * target) / (node.getBoundingClientRect().width || 1);
-    }
-    node.style.fontSize = `${Math.max(48, Math.min(size, byHeight))}px`;
-  });
-}
-
 function faq(): void {
   $$<HTMLDetailsElement>(".qa").forEach((item) => item.addEventListener("toggle", () => ScrollTrigger.refresh()));
 }
@@ -132,22 +102,12 @@ function boot(): void {
   anchors();
   faq();
   const start = () => {
-    fit();
     lines();
-    unveil();
     reveals();
     ScrollTrigger.refresh();
   };
   if (document.fonts?.ready) document.fonts.ready.then(start);
   else start();
-  let frame = 0;
-  window.addEventListener("resize", () => {
-    cancelAnimationFrame(frame);
-    frame = requestAnimationFrame(() => {
-      fit();
-      ScrollTrigger.refresh();
-    });
-  });
 }
 
 boot();

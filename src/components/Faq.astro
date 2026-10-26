@@ -1,20 +1,12 @@
 ---
 import { site } from "../content/site";
-import Folio from "./Folio.astro";
-import Title from "./Title.astro";
 
-interface Props {
-  n: number;
-}
-
-const { n } = Astro.props;
 const { faq } = site;
 ---
 
-<section class="chapter" id={faq.id} aria-labelledby="preguntas-titulo">
-  <div class="wrap grid">
-    <Folio n={n} label={faq.label} />
-    <Title id="preguntas-titulo" heading={faq.title} size="l" />
+<section class="section" id={faq.id} aria-labelledby="preguntas-titulo">
+  <div class="wrap faq-grid">
+    <h2 id="preguntas-titulo" class="title title-l" data-lines>{faq.title}</h2>
     <div class="faq" data-reveal-group>
       {
         faq.items.map((item) => (

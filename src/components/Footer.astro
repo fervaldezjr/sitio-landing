@@ -1,19 +1,40 @@
 ---
 import { site } from "../content/site";
-import { hashHref } from "../lib/paths";
+import { hashHref, publicUrl } from "../lib/paths";
+
+const { footer } = site;
+const still = ["bandeja-1", "taza-1", "libreta-1"];
+const product = (id: string, ext: string) => publicUrl(`media/products/${id}.${ext}`);
 ---
 
 <footer class="footer">
   <div class="wrap">
-    <div class="footer-grid">
-      <p class="footer-ai">{site.footer.ai}</p>
-      <p class="footer-credit">
-        {site.footer.credit}
-        <span aria-hidden="true">·</span>
-        <a href={site.footer.linkHref} rel="noopener noreferrer">{site.footer.linkLabel}</a>
+    <div class="footer-hero">
+      <p class="footer-title" data-lines>
+        <span class="voice-1">{footer.title.lead}</span> <span class="voice-2">{footer.title.rest}</span>
       </p>
-      <a class="footer-top" href={hashHref("top")}>{site.footer.top}</a>
+      <div class="footer-still" aria-hidden="true">
+        {
+          still.map((id) => (
+            <picture class={`footer-object footer-${id}`}>
+              <source srcset={product(id, "avif")} type="image/avif" />
+              <source srcset={product(id, "webp")} type="image/webp" />
+              <img src={product(id, "png")} alt="" width="720" height="720" loading="lazy" decoding="async" />
+            </picture>
+          ))
+        }
+      </div>
     </div>
-    <p class="wordmark" aria-hidden="true"><span data-fit="1">{site.footer.wordmark}</span></p>
+    <div class="footer-row">
+      <p class="footer-brand">{footer.brand}</p>
+      <p class="footer-ai">{footer.ai}</p>
+      <p class="footer-credit">
+        {footer.credit}
+        <span aria-hidden="true">·</span>
+        <a href={footer.linkHref} rel="noopener noreferrer">{footer.linkLabel}</a>
+      </p>
+      <a class="footer-top" href={hashHref("top")}>{footer.top}</a>
+      <p class="footer-legal">{site.stores.legal}</p>
+    </div>
   </div>
 </footer>

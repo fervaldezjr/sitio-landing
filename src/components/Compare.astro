@@ -1,6 +1,6 @@
 ---
 import { site } from "../content/site";
-import { hashHref, publicUrl } from "../lib/paths";
+import { publicUrl } from "../lib/paths";
 
 const wide = [640, 960, 1280, 1920];
 const tall = [432, 648, 864];
@@ -9,13 +9,14 @@ function srcset(name: string, widths: number[], ext: string): string {
   return widths.map((width) => `${publicUrl(`media/hero/${name}-${width}.${ext}`)} ${width}w`).join(", ");
 }
 
-const rows = site.hero.rows;
+const { compare } = site;
+const rows = compare.rows;
 ---
 
-<section class="hero-runway" data-hero-runway>
+<section class="hero-runway" id={compare.id} aria-label={compare.bar.lead} data-hero-runway>
   <div class="hero">
     <div class="hero-stage" data-hero-stage>
-      <p class="sr-only">{site.hero.comparison}</p>
+      <p class="sr-only">{site.compare.comparison}</p>
       <picture class="frame antes">
         <source media="(max-width: 760px)" type="image/avif" sizes="100vw" srcset={srcset("tall-antes", tall, "avif")} />
         <source media="(max-width: 760px)" type="image/webp" sizes="100vw" srcset={srcset("tall-antes", tall, "webp")} />
@@ -24,10 +25,10 @@ const rows = site.hero.rows;
         <source media="(min-width: 761px)" type="image/webp" sizes="100vw" srcset={srcset("wide-antes", wide, "webp")} />
         <img
           src={publicUrl("media/hero/wide-antes-1280.jpg")}
-          alt={site.hero.antesAlt}
+          alt={site.compare.antesAlt}
           width="1920"
           height="1080"
-          fetchpriority="high"
+          loading="lazy"
           decoding="async"
         />
       </picture>
@@ -42,6 +43,7 @@ const rows = site.hero.rows;
           alt=""
           width="1920"
           height="1080"
+          loading="lazy"
           decoding="async"
         />
       </picture>
@@ -59,23 +61,23 @@ const rows = site.hero.rows;
         type="button"
         data-wipe-handle
         role="slider"
-        aria-label={site.hero.slider}
+        aria-label={site.compare.slider}
         aria-valuemin="0"
         aria-valuemax="100"
         aria-valuenow="50"
-        aria-valuetext={site.hero.sliderValue}
+        aria-valuetext={site.compare.sliderValue}
       >
         <svg viewBox="0 0 22 22" aria-hidden="true">
           <path d="M8 6 L4 11 L8 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
           <path d="M14 6 L18 11 L14 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
       </button>
-      <p class="pill pill-antes">{site.hero.antes}</p>
-      <p class="pill pill-espejo">{site.hero.espejo}</p>
-      <article class="glass-card" aria-label={site.hero.cardTitle}>
+      <p class="pill pill-antes">{site.compare.antes}</p>
+      <p class="pill pill-espejo">{site.compare.espejo}</p>
+      <article class="glass-card" aria-label={site.compare.cardTitle}>
         <div class="card-head">
-          <p class="card-title">{site.hero.cardTitle}</p>
-          <p class="card-meta">{site.hero.cardMeta}</p>
+          <p class="card-title">{site.compare.cardTitle}</p>
+          <p class="card-meta">{site.compare.cardMeta}</p>
         </div>
         {
           rows.map((row) => (
@@ -106,19 +108,18 @@ const rows = site.hero.rows;
           ))
         }
       </article>
-      <h1 class="sitio-bar">
-        <strong>{site.hero.heading}</strong>
+      <p class="sitio-bar">
+        <strong>{compare.bar.lead}</strong>
         <span aria-hidden="true">·</span>
-        <span>{site.hero.tagline}</span>
-      </h1>
-      <a class="pill pill-cta" href={hashHref(site.hero.cta.href)}>{site.hero.cta.label}</a>
+        <span>{compare.bar.rest}</span>
+      </p>
     </div>
   </div>
 </section>
 
 <script>
-  import { initHero } from "../scripts/hero";
-  initHero();
+  import { initCompare } from "../scripts/compare";
+  initCompare();
 </script>
 
 <style>

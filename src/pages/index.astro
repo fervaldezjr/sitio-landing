@@ -1,12 +1,11 @@
 ---
 import Base from "../layouts/Base.astro";
-import Hero from "../components/Hero.astro";
 import Nav from "../components/Nav.astro";
-import Idea from "../components/Idea.astro";
+import Story from "../components/Story.astro";
+import Statement from "../components/Statement.astro";
+import Compare from "../components/Compare.astro";
 import Steps from "../components/Steps.astro";
-import Things from "../components/Things.astro";
-import Lists from "../components/Lists.astro";
-import Surfaces from "../components/Surfaces.astro";
+import Proposals from "../components/Proposals.astro";
 import Privacy from "../components/Privacy.astro";
 import Faq from "../components/Faq.astro";
 import Beta from "../components/Beta.astro";
@@ -14,19 +13,16 @@ import Footer from "../components/Footer.astro";
 ---
 
 <Base>
+  <Nav />
   <main id="contenido">
-    <div id="top">
-      <Hero />
-    </div>
-    <Nav />
-    <Idea n={1} />
-    <Steps n={2} />
-    <Things n={3} />
-    <Lists n={4} />
-    <Surfaces n={5} />
-    <Privacy n={6} />
-    <Faq n={7} />
-    <Beta n={8} />
+    <Story />
+    <Statement />
+    <Compare />
+    <Steps />
+    <Proposals />
+    <Privacy />
+    <Faq />
+    <Beta />
   </main>
   <Footer />
 </Base>

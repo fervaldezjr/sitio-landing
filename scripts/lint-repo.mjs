@@ -31,7 +31,9 @@ async function checkFile(file) {
 const APPROVED_FIGURES = new Set(["13", "3"]);
 const copy = await readFile(path.join(root, "src/content/site.ts"), "utf8");
 const literals = [...copy.matchAll(/"([^"\\]*(?:\\.[^"\\]*)*)"/g)].map((match) => match[1]);
-for (const value of literals.filter((literal) => /[a-záéíóúñ]/i.test(literal))) {
+/* File and anchor identifiers such as "bandeja-1" are not copy: lowercase words joined by hyphens, no spaces. */
+const identifier = /^[a-z]+(?:-[a-z0-9]+)+$/;
+for (const value of literals.filter((literal) => /[a-záéíóúñ]/i.test(literal) && !identifier.test(literal))) {
   for (const figure of value.match(/\d+(?:[.,]\d+)*/g) ?? []) {
     if (!APPROVED_FIGURES.has(figure)) failures.push(`figure outside the approved mirror in site.ts: "${figure}" in "${value}"`);
   }

@@ -60,8 +60,8 @@ test("the removed css rotation left the handle off the painted line", () => {
 
 test("the wipe markup and type scale cannot drift back", async () => {
   const css = await readFile(new URL("../src/styles/global.css", import.meta.url), "utf8");
-  const hero = await readFile(new URL("../src/components/Hero.astro", import.meta.url), "utf8");
-  const script = await readFile(new URL("../src/scripts/hero.ts", import.meta.url), "utf8");
+  const hero = await readFile(new URL("../src/components/Compare.astro", import.meta.url), "utf8");
+  const script = await readFile(new URL("../src/scripts/compare.ts", import.meta.url), "utf8");
 
   const rule = (selector) => {
     const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

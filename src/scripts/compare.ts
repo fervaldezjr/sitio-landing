@@ -8,7 +8,8 @@ function profile() {
   return window.matchMedia("(max-width: 760px)").matches ? MOBILE : DESKTOP;
 }
 
-export function initHero(): void {
+/** The full-screen before/mirror wipe: scroll drives it, the handle overrides it. */
+export function initCompare(): void {
   const runway = document.querySelector<HTMLElement>("[data-hero-runway]");
   const stage = document.querySelector<HTMLElement>("[data-hero-stage]");
   const stroke = document.querySelector<SVGLineElement>("[data-wipe-stroke]");
