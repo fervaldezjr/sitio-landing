@@ -1,0 +1,17 @@
+---
+import type { Heading } from "../content/site";
+
+/** Two-voice headline: the lead in ink, the rest in grey italic. Enters line by line (motion.ts). */
+interface Props {
+  heading: Heading;
+  id: string;
+  size?: "xl" | "l" | "m";
+  class?: string;
+}
+
+const { heading, id, size = "xl", class: extra } = Astro.props;
+---
+
+<h2 id={id} class:list={["title", `title-${size}`, extra]} data-lines>
+  <span class="voice-1">{heading.lead}</span>{heading.rest ? " " : ""}{heading.rest && <em class="voice-2">{heading.rest}</em>}
+</h2>

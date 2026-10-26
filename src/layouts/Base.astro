@@ -3,8 +3,11 @@ import { site } from "../content/site";
 import { publicUrl } from "../lib/paths";
 import "../styles/global.css";
 
-const fontHref =
-  "https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap";
+/* One request per family: with both in one URL the Fontshare API returned only the first. */
+const fonts = [
+  "https://api.fontshare.com/v2/css?f[]=boska@300,301,400&display=swap",
+  "https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap",
+];
 const title = site.meta.title;
 const description = site.meta.description;
 const canonical = new URL(publicUrl(""), Astro.site).href;
@@ -16,6 +19,7 @@ const image = new URL(publicUrl("media/hero/wide-espejo-1280.jpg"), Astro.site).
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>document.documentElement.classList.add("js");</script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -30,7 +34,7 @@ const image = new URL(publicUrl("media/hero/wide-espejo-1280.jpg"), Astro.site).
     <link rel="icon" href={publicUrl("favicon.svg")} type="image/svg+xml" />
     <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
     <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
-    <link rel="stylesheet" href={fontHref} />
+    {fonts.map((href) => <link rel="stylesheet" href={href} />)}
     <link
       rel="preload"
       as="image"
@@ -49,7 +53,10 @@ const image = new URL(publicUrl("media/hero/wide-espejo-1280.jpg"), Astro.site).
     />
   </head>
   <body>
-    <a class="skip" href="#contenido">saltar al contenido</a>
+    <a class="skip" href="#contenido">{site.meta.skip}</a>
     <slot />
+    <script>
+      import "../scripts/motion";
+    </script>
   </body>
 </html>

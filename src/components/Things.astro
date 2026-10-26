@@ -1,50 +1,105 @@
 ---
-import { site } from "../content/site";
+import { site, type Frame } from "../content/site";
 import { publicUrl } from "../lib/paths";
+import Folio from "./Folio.astro";
+import Title from "./Title.astro";
+
+interface Props {
+  n: number;
+}
+
+const { n } = Astro.props;
+const { things } = site;
+const frames: Frame[] = ["antes", "espejo"];
+const tall = [432, 648, 864];
+
+function srcset(frame: Frame, ext: string): string {
+  return tall.map((width) => `${publicUrl(`media/hero/tall-${frame}-${width}.${ext}`)} ${width}w`).join(", ");
+}
+
+const pad = (value: number) => String(value).padStart(2, "0");
+const sizes = "(min-width: 761px) 40vw, 100vw";
 ---
 
-<section class="section" id={site.things.id} aria-labelledby="mis-cosas-titulo">
-  <div class="section-inner">
-    <h2 id="mis-cosas-titulo">{site.things.title}</h2>
-    <p class="lede">{site.things.intro}</p>
-    <div class="things-grid">
+<section class="chapter" id={things.id} aria-labelledby="mis-cosas-titulo">
+  <div class="wrap grid">
+    <Folio n={n} label={things.label} />
+    <Title id="mis-cosas-titulo" heading={things.title} />
+    <p class="lede things-intro" data-reveal>{things.intro}</p>
+    <div class="spread">
       {
-        site.things.items.map((item, index) => (
-          <button
-            class:list={["thing", index === 0 && "thing-featured"]}
-            type="button"
-            data-thing
-            data-name={item.name}
-            data-action={item.action}
-            data-detail={item.detail}
-            aria-haspopup="dialog"
-            aria-label={`${item.name}, ${item.action}. ${site.things.openHint}`}
-          >
-            <span class="thing-media">
-              <picture>
-                <source srcset={publicUrl(`media/things/${item.id}.avif`)} type="image/avif" />
-                <source srcset={publicUrl(`media/things/${item.id}.webp`)} type="image/webp" />
-                <img src={publicUrl(`media/things/${item.id}.jpg`)} alt={item.alt} width="640" height="640" loading="lazy" decoding="async" />
-              </picture>
-            </span>
-            <span class="thing-copy">
-              <strong>{item.name}</strong>
-              <span>{item.action}</span>
-            </span>
-          </button>
-        ))
+        frames.map((frame) => {
+          const items = things.items.filter((item) => item.frame === frame);
+          const copy = things.frames[frame];
+          return (
+            <figure class:list={["plate", `plate-${frame}`]}>
+              <div class="plate-media" data-unveil>
+                <picture>
+                  <source type="image/avif" sizes={sizes} srcset={srcset(frame, "avif")} />
+                  <source type="image/webp" sizes={sizes} srcset={srcset(frame, "webp")} />
+                  <img
+                    src={publicUrl(`media/hero/tall-${frame}-648.jpg`)}
+                    srcset={srcset(frame, "jpg")}
+                    sizes={sizes}
+                    alt={copy.alt}
+                    width="864"
+                    height="1152"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
+                {items.map((item, index) => (
+                  <button
+                    class="spot"
+                    type="button"
+                    tabindex="-1"
+                    aria-hidden="true"
+                    style={`--x: ${item.x * 100}%; --y: ${item.y * 100}%`}
+                    data-thing={item.id}
+                  >
+                    <span class="spot-dot">{index + 1}</span>
+                  </button>
+                ))}
+              </div>
+              <figcaption>{copy.caption}</figcaption>
+              <p class="index-title">{copy.list}</p>
+              <ol class="index">
+                {items.map((item, index) => (
+                  <li>
+                    <button
+                      class="index-row"
+                      type="button"
+                      data-thing={item.id}
+                      data-name={item.name}
+                      data-action={things.actions[item.action]}
+                      data-detail={item.detail}
+                      data-proposals={item.action === "añadir" ? things.proposals : ""}
+                      aria-haspopup="dialog"
+                      aria-label={`${item.name}, ${things.actions[item.action]}. ${things.openHint}`}
+                    >
+                      <span class="index-n">{pad(index + 1)}</span>
+                      <span class="index-name">{item.name}</span>
+                      <span class="index-action">{things.actions[item.action]}</span>
+                    </button>
+                  </li>
+                ))}
+              </ol>
+            </figure>
+          );
+        })
       }
     </div>
   </div>
 </section>
 
-<dialog class="sheet" data-sheet aria-labelledby="sheet-title">
+<dialog class="sheet" data-sheet aria-labelledby="sheet-title" data-lenis-prevent>
   <div class="sheet-panel">
     <div class="grabber" aria-hidden="true"></div>
     <h3 id="sheet-title" data-sheet-title></h3>
     <p class="sheet-action" data-sheet-action></p>
     <p data-sheet-detail></p>
-    <button class="button" type="button" data-sheet-close>{site.things.close}</button>
+    <p class="sheet-note" data-sheet-note hidden></p>
+    <button class="sheet-button" type="button" data-sheet-close>{things.close}</button>
   </div>
 </dialog>
 
@@ -53,20 +108,40 @@ import { publicUrl } from "../lib/paths";
   const title = document.querySelector<HTMLElement>("[data-sheet-title]");
   const action = document.querySelector<HTMLElement>("[data-sheet-action]");
   const detail = document.querySelector<HTMLElement>("[data-sheet-detail]");
+  const note = document.querySelector<HTMLElement>("[data-sheet-note]");
   const close = document.querySelector<HTMLButtonElement>("[data-sheet-close]");
+  const rows = new Map<string, HTMLButtonElement>();
+  document.querySelectorAll<HTMLButtonElement>(".index-row[data-thing]").forEach((row) => rows.set(row.dataset.thing ?? "", row));
 
+  const lock = (locked: boolean) => document.dispatchEvent(new CustomEvent("sitio:scroll-lock", { detail: { locked } }));
+
+  const open = (row: HTMLButtonElement) => {
+    if (!dialog || !title || !action || !detail || !note) return;
+    title.textContent = row.dataset.name ?? "";
+    action.textContent = row.dataset.action ?? "";
+    detail.textContent = row.dataset.detail ?? "";
+    note.textContent = row.dataset.proposals ?? "";
+    note.hidden = !row.dataset.proposals;
+    dialog.showModal();
+    lock(true);
+  };
+
+  /* Both the number on the photo and the row in the index open the same sheet; the row carries the copy. */
   document.querySelectorAll<HTMLButtonElement>("[data-thing]").forEach((button) => {
+    const id = button.dataset.thing ?? "";
     button.addEventListener("click", () => {
-      if (!dialog || !title || !action || !detail) return;
-      title.textContent = button.dataset.name ?? "";
-      action.textContent = button.dataset.action ?? "";
-      detail.textContent = button.dataset.detail ?? "";
-      dialog.showModal();
+      const row = rows.get(id);
+      if (row) open(row);
     });
+    const light = (on: boolean) => document.querySelectorAll(`[data-thing="${id}"]`).forEach((node) => node.classList.toggle("is-lit", on));
+    button.addEventListener("pointerenter", () => light(true));
+    button.addEventListener("pointerleave", () => light(false));
+    button.addEventListener("focus", () => light(true));
+    button.addEventListener("blur", () => light(false));
   });
 
   close?.addEventListener("click", () => dialog?.close());
-
+  dialog?.addEventListener("close", () => lock(false));
   dialog?.addEventListener("click", (event) => {
     if (event.target === dialog) dialog.close();
   });

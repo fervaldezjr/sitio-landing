@@ -1,0 +1,14 @@
+---
+/** Magazine folio: the section number on a 1px rule, then its name. */
+interface Props {
+  n: number;
+  label: string;
+}
+
+const { n, label } = Astro.props;
+---
+
+<p class="folio">
+  <span class="folio-n">{String(n).padStart(2, "0")}</span>
+  <span class="folio-label">{label}</span>
+</p>

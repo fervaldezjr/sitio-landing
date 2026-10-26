@@ -1,6 +1,6 @@
 ---
 import { site } from "../content/site";
-import { publicUrl } from "../lib/paths";
+import { hashHref, publicUrl } from "../lib/paths";
 
 const wide = [640, 960, 1280, 1920];
 const tall = [432, 648, 864];
@@ -111,6 +111,7 @@ const rows = site.hero.rows;
         <span aria-hidden="true">·</span>
         <span>{site.hero.tagline}</span>
       </h1>
+      <a class="pill pill-cta" href={hashHref(site.hero.cta.href)}>{site.hero.cta.label}</a>
     </div>
   </div>
 </section>

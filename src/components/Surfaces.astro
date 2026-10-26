@@ -1,0 +1,19 @@
+---
+import { site } from "../content/site";
+import Folio from "./Folio.astro";
+import Title from "./Title.astro";
+
+interface Props {
+  n: number;
+}
+
+const { n } = Astro.props;
+const { surfaces } = site;
+---
+
+<section class="chapter chapter-quiet" id={surfaces.id} aria-labelledby="superficies-titulo">
+  <div class="wrap grid">
+    <Folio n={n} label={surfaces.label} />
+    <Title id="superficies-titulo" heading={surfaces.title} class="title-wide" />
+  </div>
+</section>

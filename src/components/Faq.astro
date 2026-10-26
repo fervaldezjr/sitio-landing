@@ -1,0 +1,32 @@
+---
+import { site } from "../content/site";
+import Folio from "./Folio.astro";
+import Title from "./Title.astro";
+
+interface Props {
+  n: number;
+}
+
+const { n } = Astro.props;
+const { faq } = site;
+---
+
+<section class="chapter" id={faq.id} aria-labelledby="preguntas-titulo">
+  <div class="wrap grid">
+    <Folio n={n} label={faq.label} />
+    <Title id="preguntas-titulo" heading={faq.title} size="l" />
+    <div class="faq" data-reveal-group>
+      {
+        faq.items.map((item) => (
+          <details class="qa" name="preguntas">
+            <summary>
+              <span>{item.q}</span>
+              <span class="qa-mark" aria-hidden="true" />
+            </summary>
+            <p>{item.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>

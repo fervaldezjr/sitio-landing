@@ -1,8 +1,9 @@
 /**
- * Builds hero srcsets and object crops from media/source.
+ * Builds hero srcsets and the list thumbnails from media/source.
  * Wide masters are capped at 1920px: the 2400px JPEGs are an upscale and look soft.
  * No neural rescaler is available in this environment, so we downsample with
  * lanczos3 and a light unsharp. We do not invent detail above the source.
+ * Every master gets the same soft grade (GRADE), so a pair still matches for the wipe.
  */
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -11,11 +12,13 @@ import sharp from "sharp";
 const root = path.resolve(import.meta.dirname, "..");
 const source = path.join(root, "media/source");
 const heroOut = path.join(root, "public/media/hero");
-const thingOut = path.join(root, "public/media/things");
+const thumbOut = path.join(root, "public/media/lists");
 const proofOut = path.join(root, "media/proof");
 
 const wideWidths = [640, 960, 1280, 1920];
 const tallWidths = [432, 648, 864];
+/** The site's one grade (docs/identity.md, dial 3): slightly less saturated, same for every frame. */
+const GRADE = { saturation: 0.86 };
 
 async function masterWide(name) {
   const input = path.join(source, name);
@@ -25,6 +28,7 @@ async function masterWide(name) {
     .rotate()
     .resize({ width: 1920, height: Math.round((meta.height / meta.width) * 1920), kernel: "lanczos3", fit: "fill" })
     .sharpen({ sigma: 0.6, m1: 0.4, m2: 0.25 })
+    .modulate(GRADE)
     .toColorspace("srgb");
 }
 
@@ -33,6 +37,7 @@ async function masterTall(name) {
     .rotate()
     .resize({ width: 864, kernel: "lanczos3" })
     .sharpen({ sigma: 0.4, m1: 0.3, m2: 0.2 })
+    .modulate(GRADE)
     .toColorspace("srgb");
 }
 
@@ -73,38 +78,30 @@ async function gridProof(buffer, fileName, step = 0.1) {
   await sharp(composed).resize({ width: 900 }).jpeg({ quality: 70 }).toFile(path.join(proofOut, fileName));
 }
 
-/** Fractions of the source frame: [left, top, width, height]. Tuned by eye on the proof grid. */
-const crops = [
-  { id: "portatil", file: "wide-espejo.jpg", box: [0.22, 0.55, 0.18, 0.22] },
-  { id: "papeles", file: "wide-antes.jpg", box: [0.02, 0.62, 0.16, 0.16] },
-  { id: "vasos", file: "wide-antes.jpg", box: [0.16, 0.6, 0.18, 0.16] },
-  { id: "cables", file: "wide-antes.jpg", box: [0.42, 0.78, 0.16, 0.18] },
-  { id: "caja", file: "tall-antes.png", box: [0.0, 0.72, 0.2, 0.2] },
-  { id: "mochila", file: "tall-antes.png", box: [0.2, 0.78, 0.26, 0.18] },
-  { id: "bandeja", file: "wide-espejo.jpg", box: [0.4, 0.62, 0.18, 0.16] },
-  { id: "taza", file: "wide-espejo.jpg", box: [0.4, 0.55, 0.11, 0.12] },
-  { id: "libreta", file: "wide-espejo.jpg", box: [0.52, 0.64, 0.16, 0.14] },
+/**
+ * Square thumbnails for the list example, cut from the 3:4 mirror at its native 864px.
+ * center and side are fractions of the frame width (y of the height). No padding bands:
+ * the crop is square, and the upscale stays under 1.5x.
+ */
+const thumbs = [
+  { id: "bandeja", center: [0.505, 0.545], side: 0.2 },
+  { id: "taza", center: [0.497, 0.52], side: 0.125 },
+  { id: "libreta", center: [0.643, 0.552], side: 0.2 },
 ];
+const THUMB = 160;
 
-async function cropThing(id, file, box) {
-  const isWide = file.startsWith("wide");
-  const master = isWide ? await masterWide(file) : await masterTall(file);
-  const buffer = await master.png().toBuffer();
+async function cropThumb(buffer, { id, center, side }) {
   const meta = await sharp(buffer).metadata();
   const w = meta.width ?? 1;
   const h = meta.height ?? 1;
-  const left = Math.max(0, Math.round(box[0] * w));
-  const top = Math.max(0, Math.round(box[1] * h));
-  const width = Math.min(w - left, Math.round(box[2] * w));
-  const height = Math.min(h - top, Math.round(box[3] * h));
-  const tile = 640;
-  const extracted = await sharp(buffer)
-    .extract({ left, top, width, height })
-    .resize({ width: tile, height: tile, fit: "contain", background: { r: 236, g: 236, b: 238, alpha: 1 } })
-    .toBuffer();
-  await sharp(extracted).avif({ quality: 50, effort: 4 }).toFile(path.join(thingOut, `${id}.avif`));
-  await sharp(extracted).webp({ quality: 72 }).toFile(path.join(thingOut, `${id}.webp`));
-  await sharp(extracted).jpeg({ quality: 76, mozjpeg: true }).toFile(path.join(thingOut, `${id}.jpg`));
+  const size = Math.round(side * w);
+  const left = Math.min(w - size, Math.max(0, Math.round(center[0] * w - size / 2)));
+  const top = Math.min(h - size, Math.max(0, Math.round(center[1] * h - size / 2)));
+  if (THUMB / size > 1.5) throw new Error(`${id}: crop of ${size}px would be upscaled more than 1.5x`);
+  const square = await sharp(buffer).extract({ left, top, width: size, height: size }).resize({ width: THUMB, height: THUMB, kernel: "lanczos3" }).toBuffer();
+  await sharp(square).avif({ quality: 52, effort: 4 }).toFile(path.join(thumbOut, `${id}.avif`));
+  await sharp(square).webp({ quality: 74 }).toFile(path.join(thumbOut, `${id}.webp`));
+  await sharp(square).jpeg({ quality: 78, mozjpeg: true }).toFile(path.join(thumbOut, `${id}.jpg`));
 }
 
 async function alignmentNote() {
@@ -128,16 +125,16 @@ async function alignmentNote() {
 }
 
 await mkdir(heroOut, { recursive: true });
-await mkdir(thingOut, { recursive: true });
+await mkdir(thumbOut, { recursive: true });
 await mkdir(proofOut, { recursive: true });
 
-const cropsOnly = process.argv.includes("--crops-only");
+const thumbsOnly = process.argv.includes("--thumbs-only");
 
 const wideAntesBuf = await masterWide("wide-antes.jpg").then((p) => p.png().toBuffer());
 const tallAntesBuf = await masterTall("tall-antes.png").then((p) => p.png().toBuffer());
 const tallEspejoBuf = await masterTall("tall-espejo.png").then((p) => p.png().toBuffer());
 
-if (!cropsOnly) {
+if (!thumbsOnly) {
   const wideEspejoBuf = await masterWide("wide-espejo.jpg").then((p) => p.png().toBuffer());
   await writeSet(sharp(wideAntesBuf), wideWidths, "wide-antes");
   await writeSet(sharp(wideEspejoBuf), wideWidths, "wide-espejo");
@@ -145,14 +142,14 @@ if (!cropsOnly) {
   await writeSet(sharp(tallEspejoBuf), tallWidths, "tall-espejo");
 }
 
-if (!cropsOnly) {
+if (!thumbsOnly) {
   await gridProof(wideAntesBuf, "grid-wide-antes.jpg");
   await gridProof(tallAntesBuf, "grid-tall-antes.jpg");
   await gridProof(tallEspejoBuf, "grid-tall-espejo.jpg");
 }
 
-for (const crop of crops) {
-  await cropThing(crop.id, crop.file, crop.box);
+for (const thumb of thumbs) {
+  await cropThumb(tallEspejoBuf, thumb);
 }
 
 const note = await alignmentNote();

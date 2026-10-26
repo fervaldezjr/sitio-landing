@@ -1,14 +1,19 @@
 ---
 import { site } from "../content/site";
+import { hashHref } from "../lib/paths";
 ---
 
 <footer class="footer">
-  <div class="footer-inner">
-    <p>{site.footer.ai}</p>
-    <p>
-      {site.footer.credit}
-      ·
-      <a href={site.footer.linkHref} rel="noopener noreferrer">{site.footer.linkLabel}</a>
-    </p>
+  <div class="wrap">
+    <div class="footer-grid">
+      <p class="footer-ai">{site.footer.ai}</p>
+      <p class="footer-credit">
+        {site.footer.credit}
+        <span aria-hidden="true">·</span>
+        <a href={site.footer.linkHref} rel="noopener noreferrer">{site.footer.linkLabel}</a>
+      </p>
+      <a class="footer-top" href={hashHref("top")}>{site.footer.top}</a>
+    </div>
+    <p class="wordmark" aria-hidden="true"><span data-fit="1">{site.footer.wordmark}</span></p>
   </div>
 </footer>

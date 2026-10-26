@@ -1,0 +1,22 @@
+---
+import { site } from "../content/site";
+import Folio from "./Folio.astro";
+import Title from "./Title.astro";
+
+interface Props {
+  n: number;
+}
+
+const { n } = Astro.props;
+const { idea } = site;
+---
+
+<section class="chapter" id={idea.id} aria-labelledby="idea-titulo">
+  <div class="wrap grid">
+    <Folio n={n} label={idea.label} />
+    <Title id="idea-titulo" heading={idea.title} />
+    <div class="idea-body" data-reveal-group>
+      {idea.body.map((paragraph) => <p class="lede">{paragraph}</p>)}
+    </div>
+  </div>
+</section>

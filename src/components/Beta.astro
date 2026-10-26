@@ -1,23 +1,35 @@
 ---
 import { site } from "../content/site";
+import Folio from "./Folio.astro";
+import Title from "./Title.astro";
+
+interface Props {
+  n: number;
+}
+
+const { n } = Astro.props;
+const { beta } = site;
 ---
 
-<section class="section" id={site.beta.id} aria-labelledby="beta-titulo">
-  <div class="section-inner">
-    <h2 id="beta-titulo">{site.beta.title}</h2>
-    <div class="beta-card">
-      <p>{site.beta.body}</p>
+<section class="chapter" id={beta.id} aria-labelledby="beta-titulo">
+  <div class="wrap grid">
+    <Folio n={n} label={beta.label} />
+    <Title id="beta-titulo" heading={beta.title} />
+    <div class="beta" data-reveal>
+      <p class="lede">{beta.body}</p>
       <form class="beta-form" data-beta novalidate>
-        <label for="correo">{site.beta.label}</label>
-        <input id="correo" name="email" type="email" inputmode="email" autocomplete="email" placeholder={site.beta.placeholder} />
-        <button class="button" type="submit">{site.beta.button}</button>
+        <label for="correo">{beta.field}</label>
+        <div class="beta-row">
+          <input id="correo" name="email" type="email" inputmode="email" autocomplete="email" placeholder={beta.placeholder} />
+          <button class="button" type="submit">{beta.button}</button>
+        </div>
         <p class="form-status" id="beta-status" role="status" data-beta-status></p>
       </form>
     </div>
   </div>
 </section>
 
-<script define:vars={{ betaStatus: site.beta.status }}>
+<script define:vars={{ betaStatus: beta.status }}>
   const form = document.querySelector("[data-beta]");
   const note = document.querySelector("[data-beta-status]");
   form?.addEventListener("submit", (event) => {

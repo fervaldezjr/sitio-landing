@@ -3,9 +3,12 @@ import { site } from "../content/site";
 import { hashHref } from "../lib/paths";
 ---
 
-<div class="nav-wrap">
-  <nav class="pill-nav" aria-label={site.nav.label}>
-    <a class="brand" href={hashHref("top")}>{site.nav.brand}</a>
-    {site.nav.links.map((link) => <a href={hashHref(link.href)}>{link.label}</a>)}
-  </nav>
-</div>
+<header class="masthead">
+  <div class="masthead-inner">
+    <a class="masthead-brand" href={hashHref("top")}>{site.nav.brand}</a>
+    <nav class="masthead-nav" aria-label={site.nav.label}>
+      {site.nav.links.map((link) => <a href={hashHref(link.href)}>{link.label}</a>)}
+    </nav>
+    <a class="masthead-cta" href={hashHref(site.nav.cta.href)}>{site.nav.cta.label}</a>
+  </div>
+</header>
