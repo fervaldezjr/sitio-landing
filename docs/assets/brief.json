@@ -17,13 +17,33 @@
   },
   "assets": [
     {
+      "id": "tall-pair",
+      "block": "A · producto",
+      "priority": 1,
+      "status": "have",
+      "purpose": "La pantalla del móvil en el escenario: el escritorio frente al mar, antes y espejo generado con IA, a pantalla completa.",
+      "used_in": [
+        "home / escenario"
+      ],
+      "deliverable": {
+        "format": "avif + webp + jpg",
+        "width": 864,
+        "height": 1152,
+        "aspect": "3:4, recortado a la pantalla con object-fit (42 % centro)"
+      },
+      "constraints": [
+        "Ancho nativo de 864 px, sin ampliar.",
+        "Los recuadros de detección (Story.astro) están medidos sobre esta foto con ese object-position: si cambia, se vuelven a medir."
+      ],
+      "source_file": "media/source/tall-antes.png + media/source/tall-espejo.png"
+    },
+    {
       "id": "frame-pair",
       "block": "A · producto",
       "priority": 1,
       "status": "have",
-      "purpose": "La foto dentro del móvil del escenario (tarjeta 4:3) y el barrido en móvil.",
+      "purpose": "El barrido en móvil (4:3 centrado).",
       "used_in": [
-        "home / escenario",
         "home / compruébalo tú (móvil)"
       ],
       "deliverable": {

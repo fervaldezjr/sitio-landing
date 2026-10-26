@@ -4,9 +4,11 @@
 
 ## Regla
 
-El par antes/espejo se compone, no se genera: `scripts/compose-pair.mjs` lee `docs/assets/scene.json`, toma la foto base real (`media/source/base/escritorio.jpg`, Pexels, 3466×5199) y le añade objetos recortados (`media/source/objects/` para el antes, `media/source/products/` para el espejo) a su tamaño real según la profundidad, con sombra de contacto, sombra proyectada lejos de la ventana, reajuste de luz y un poco de suavizado. Saca dos recortes de la misma composición: 16:9 (`wide-*`, escritorio) y 4:3 (`frame-*`, el móvil y el barrido en móvil). Como comparten la base, casan por construcción.
+El par antes/espejo se compone, no se genera: `scripts/compose-pair.mjs` lee `docs/assets/scene.json`, toma la foto base real (`media/source/base/escritorio.jpg`, Pexels, 3466×5199) y le añade objetos recortados (`media/source/objects/` para el antes, `media/source/products/` para el espejo) a su tamaño real según la profundidad, con sombra de contacto, sombra proyectada lejos de la ventana, reajuste de luz y un poco de suavizado. Saca dos recortes de la misma composición: 16:9 (`wide-*`, el barrido en escritorio) y 4:3 (`frame-*`, el barrido en móvil). Como comparten la base, casan por construcción.
 
-Después, `scripts/optimize-images.mjs` aplica el revelado común (saturación 0.86) y sirve el 16:9 hasta 2560 px y el 4:3 hasta 1440, en AVIF, WebP y JPG, con `srcset`.
+El móvil del escenario no usa esa composición: lleva el par vertical del escritorio frente al mar (`media/source/tall-*.png`, 864×1152, antes y espejo generado con IA), servido a su ancho nativo. Los recuadros de detección de `Story.astro` están medidos sobre esa foto.
+
+Después, `scripts/optimize-images.mjs` aplica el revelado común (saturación 0.86) y sirve el 16:9 hasta 2560 px, el 4:3 hasta 1440 y el vertical hasta 864, en AVIF, WebP y JPG, con `srcset`.
 
 Las fotos de producto (`media/source/products/*.png`) son fotos de Unsplash recortadas con la segmentación de macOS (Vision, `VNGenerateForegroundInstanceMaskRequest`). El script recorta el borde transparente y las sirve a 720 px como máximo en AVIF, WebP y PNG, con alfa. La sombra la pone el CSS, igual para todas. Cada una tiene su crédito en `docs/assets/credits.json`.
 

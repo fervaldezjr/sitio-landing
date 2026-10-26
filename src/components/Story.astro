@@ -8,17 +8,28 @@ const site = copyFor(Astro.currentLocale);
 /*
  * The first screen is a pinned stage (docs/identity.md, dial 5): the phone stays in the middle
  * and its screen changes with the scroll, in the order the app is used. story.ts drives it.
- * Without JavaScript, or with reduced motion, it is a still: the mirror, its card and the steps as a list.
+ * The phone shows the desk by the sea, full screen (tall-*); the composed pair (wide-*, frame-*)
+ * is only for the wipe further down. Without JavaScript, or with reduced motion, it is a still.
  */
 const { story } = site;
 const { phone } = story;
 /* the three objects the mirror adds; the same ones the proposals section shows */
 const products = site.proposals.items;
-const frame = [480, 720, 960, 1440];
+const tall = [432, 648, 864];
 
 function srcset(name: string, ext: string): string {
-  return frame.map((width) => `${publicUrl(`media/hero/${name}-${width}.${ext}`)} ${width}w`).join(", ");
+  return tall.map((width) => `${publicUrl(`media/hero/${name}-${width}.${ext}`)} ${width}w`).join(", ");
 }
+
+/* Where the detection boxes sit on the screen while the mirror is generated: fractions of the screen,
+   measured on tall-antes with the screen's object-position (42 % centre). Same order as story.detected. */
+const boxes = [
+  { left: 0, top: 0.465, width: 0.17, height: 0.085 },
+  { left: 0.215, top: 0.49, width: 0.12, height: 0.085 },
+  { left: 0.745, top: 0.44, width: 0.085, height: 0.12 },
+  { left: 0.4, top: 0.63, width: 0.22, height: 0.17 },
+  { left: 0.655, top: 0.605, width: 0.2, height: 0.065 },
+];
 
 function product(id: string, ext: string): string {
   return publicUrl(`media/products/${id}.${ext}`);
@@ -49,30 +60,58 @@ const sizes = "(min-width: 761px) 320px, 52vw";
       </ol>
     </div>
 
+    <div class="phone-glow" aria-hidden="true" data-phone-glow>
+      <img src={publicUrl("media/hero/tall-antes-432.jpg")} alt="" width="432" height="576" decoding="async" />
+      <img src={publicUrl("media/hero/tall-espejo-432.jpg")} alt="" width="432" height="576" decoding="async" data-glow-espejo />
+    </div>
+
+    <ul class="story-hints" aria-hidden="true" data-story-hints>
+      {
+        story.hints.map((hint, index) => (
+          <li class={`story-hint story-hint-${index + 1}`}>
+            <span>
+              <i class="hint-icon" data-icon={phone.rows[index].icon} />
+              {hint}
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+
     <div class="phone" data-phone>
       <div class="phone-screen">
-        <p class="screen-header" aria-hidden="true">{site.nav.brand}</p>
-        <div class="screen-photo">
-          <picture class="screen-layer screen-antes">
-            <source type="image/avif" sizes={sizes} srcset={srcset("frame-antes", "avif")} />
-            <source type="image/webp" sizes={sizes} srcset={srcset("frame-antes", "webp")} />
-            <img src={publicUrl("media/hero/frame-antes-720.jpg")} srcset={srcset("frame-antes", "jpg")} sizes={sizes} alt={story.antesAlt} width="1440" height="1080" fetchpriority="high" decoding="async" />
-          </picture>
-          <picture class="screen-layer screen-espejo" data-screen-espejo>
-            <source type="image/avif" sizes={sizes} srcset={srcset("frame-espejo", "avif")} />
-            <source type="image/webp" sizes={sizes} srcset={srcset("frame-espejo", "webp")} />
-            <img src={publicUrl("media/hero/frame-espejo-720.jpg")} srcset={srcset("frame-espejo", "jpg")} sizes={sizes} alt={story.espejoAlt} width="1440" height="1080" decoding="async" />
-          </picture>
-          <span class="screen-edge" data-screen-edge aria-hidden="true"></span>
-          <span class="screen-scan" data-screen-scan aria-hidden="true"></span>
-          <span class="screen-frame" data-screen-camera aria-hidden="true"></span>
-          <p class="screen-pill screen-pill-left" data-screen-antes>{phone.antes}</p>
-          <p class="screen-pill screen-pill-right" data-screen-espejo-pill>{phone.espejo}</p>
-          <p class="screen-pill screen-status" data-screen-status>{phone.status}</p>
-        </div>
-        <span class="screen-shutter" data-screen-camera aria-hidden="true"><span></span></span>
-        <span class="screen-skeleton" data-screen-skeleton aria-hidden="true"><span></span><span></span><span></span></span>
+        <picture class="screen-layer screen-antes">
+          <source type="image/avif" sizes={sizes} srcset={srcset("tall-antes", "avif")} />
+          <source type="image/webp" sizes={sizes} srcset={srcset("tall-antes", "webp")} />
+          <img src={publicUrl("media/hero/tall-antes-648.jpg")} srcset={srcset("tall-antes", "jpg")} sizes={sizes} alt={story.antesAlt} width="864" height="1152" fetchpriority="high" decoding="async" />
+        </picture>
+        <picture class="screen-layer screen-espejo" data-screen-espejo>
+          <source type="image/avif" sizes={sizes} srcset={srcset("tall-espejo", "avif")} />
+          <source type="image/webp" sizes={sizes} srcset={srcset("tall-espejo", "webp")} />
+          <img src={publicUrl("media/hero/tall-espejo-648.jpg")} srcset={srcset("tall-espejo", "jpg")} sizes={sizes} alt={story.espejoAlt} width="864" height="1152" decoding="async" />
+        </picture>
+        <span class="screen-edge" data-screen-edge aria-hidden="true"></span>
+        <span class="screen-scan" data-screen-scan aria-hidden="true"></span>
+        <ul class="screen-boxes" aria-hidden="true" data-screen-boxes>
+          {
+            boxes.map((box, index) => (
+              <li style={`left: ${box.left * 100}%; top: ${box.top * 100}%; width: ${box.width * 100}%; height: ${box.height * 100}%`}>
+                <span>{story.detected[index]}</span>
+              </li>
+            ))
+          }
+        </ul>
         <span class="screen-flash" data-screen-flash aria-hidden="true"></span>
+
+        <div class="screen-camera" data-screen-camera aria-hidden="true">
+          <span class="screen-frame"></span>
+          <span class="screen-shutter"><span></span></span>
+        </div>
+
+        <p class="screen-pill screen-pill-left" data-screen-antes>{phone.antes}</p>
+        <p class="screen-pill screen-pill-right" data-screen-espejo-pill>{phone.espejo}</p>
+        <p class="screen-pill screen-status" data-screen-status>{phone.status}</p>
+        <span class="screen-skeleton" data-screen-skeleton aria-hidden="true"><span></span><span></span><span></span></span>
 
         <div class="screen-card" data-screen-card>
           <div class="screen-card-head">

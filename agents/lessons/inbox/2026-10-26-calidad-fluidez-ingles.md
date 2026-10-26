@@ -16,6 +16,8 @@ Fernando vio que los iconos de la tarjeta se salían de su círculo, que la foto
 4. Una escena de escritorio es horizontal: recortarla en vertical para el móvil deja casi toda la pantalla en pared.
 5. Al componer: Vision deja la sombra del estudio como alfa bajo; `sharp` hace `trim` antes que `extract` en la misma cadena; `joinChannel` puede dejar el alfa como banda extra y salen cajas negras; y si se dibuja por `y`, una bandeja delante tapa la taza que va encima.
 6. El badge español de Apple (tools.applemarketingtools.com) no resolvía desde la sesión.
+7. Fernando quería la foto nueva solo en el barrido: en el móvil, la foto del mar a pantalla completa llenaba la pantalla; el 4:3 con interfaz clara dejaba el móvil vacío.
+8. El botón de la beta tenía `transition: transform` (su pulsación) y la entrada de GSAP lo dejaba 24 px abajo, encima de los badges.
 
 ## Arreglo
 
@@ -25,6 +27,8 @@ Fernando vio que los iconos de la tarjeta se salían de su círculo, que la foto
 4. En el móvil, la foto 4:3 como tarjeta a lo ancho y la interfaz de la app debajo; en el barrido en móvil, el 4:3 centrado.
 5. Limpiar el alfa en crudo, materializar buffers entre `extract` y `trim`, y `z` para lo que descansa sobre otro objeto.
 6. Badges oficiales en inglés para los dos.
+7. El móvil vuelve al par vertical del mar (`tall-*`) con recuadros de detección, halo, píldoras flotantes e inclinación hacia el puntero; la composición queda solo para el barrido.
+8. `clearProps: "transform"` al terminar la entrada.
 
 ## Evidencia
 

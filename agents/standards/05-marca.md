@@ -27,7 +27,7 @@
 
 ## Material
 
-- Una materia: el producto. El móvil y su interfaz clara se dibujan en CSS; dentro va la foto 4:3. El barrido a pantalla completa es el 16:9 (en móvil, el 4:3).
+- Una materia: el producto. El móvil y su interfaz se dibujan en CSS; dentro va la foto del escritorio frente al mar a pantalla completa. El barrido a pantalla completa es el par compuesto, 16:9 (en móvil, 4:3).
 - El par antes/espejo se compone con `scripts/compose-pair.mjs` sobre una foto real; no se sustituye por una ampliación ni por una imagen generada sin decirlo.
 - Las propuestas son fotos de producto de Unsplash, sin fondo (Vision), sobre `#F7F7F7`, con la misma sombra del CSS. Cada fichero, su crédito en `docs/assets/credits.json`. La página dice que son de ejemplo.
 - Badges de App Store y Google Play: los oficiales, **sin tocar** (ni color, ni proporción, ni texto). Mientras `site.stores.*.href` sea `null`, salen bajo «Próximamente en» y no son enlaces. El aviso de marcas va en el pie.

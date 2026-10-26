@@ -20,7 +20,11 @@ export function initStory(): void {
   const intro = q("[data-story-intro]");
   const steps = qa("[data-story-step]");
   const phone = q("[data-phone]");
-  const camera = qa("[data-screen-camera]");
+  const camera = q("[data-screen-camera]");
+  const hints = qa("[data-story-hints] li");
+  const boxes = qa("[data-screen-boxes] li");
+  const glow = q("[data-phone-glow]");
+  const glowEspejo = q("[data-glow-espejo]");
   const flash = q("[data-screen-flash]");
   const status = q("[data-screen-status]");
   const scan = q("[data-screen-scan]");
@@ -36,7 +40,7 @@ export function initStory(): void {
   const removed = qa("[data-story-removed] li");
   const products = qa("[data-story-products] li");
   const progress = qa("[data-story-progress] li");
-  if (!intro || !phone || !camera.length || !flash || !status || !scan || !espejo || !edge || !card || !sheet) return;
+  if (!intro || !phone || !camera || !flash || !status || !scan || !espejo || !edge || !card || !sheet) return;
 
   const mobile = window.matchMedia("(max-width: 760px)").matches;
   const show = { autoAlpha: 1, y: 0, duration: 0.5, ease: "power3.out" };
@@ -63,6 +67,7 @@ export function initStory(): void {
 
   // 0 · the intro leaves; on a phone the device rises into place
   timeline.to(intro, { autoAlpha: 0, y: -40, duration: 0.8, ease: "power2.in" }, 0.1);
+  if (hints.length) timeline.to(hints, { autoAlpha: 0, scale: 0.92, duration: 0.5, ease: "power2.in", stagger: 0.08 }, 0.2);
   if (mobile) timeline.to(phone, { y: 0, duration: 1, ease: "power2.out" }, 0);
   timeline.to(steps[0], show, at[0]);
 
@@ -79,11 +84,14 @@ export function initStory(): void {
     .to(status, { autoAlpha: 1, y: 0, duration: 0.3, ease: "power3.out" }, 2.1)
     .to(skeleton, { autoAlpha: 1, duration: 0.3 }, 2.1)
     .fromTo(scan, { autoAlpha: 1, yPercent: -100 }, { yPercent: 1000, duration: 1.2, ease: "none" }, 2.3)
+    .fromTo(boxes, { autoAlpha: 0, scale: 0.86 }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: "power3.out", stagger: 0.16 }, 2.5)
+    .to(boxes, { autoAlpha: 0, duration: 0.25, stagger: 0.04 }, 3.45)
     .to(scan, { autoAlpha: 0, duration: 0.2 }, 3.4)
     .to(status, { autoAlpha: 0, duration: 0.25 }, 3.5)
     .to(edge, { autoAlpha: 1, duration: 0.1 }, 3.5)
     .to(espejo, { clipPath: "inset(0% 0% 0% 0%)", duration: 1, ease: "power2.inOut" }, 3.55)
     .to(edge, { left: "0%", duration: 1, ease: "power2.inOut" }, 3.55)
+    .to(glowEspejo, { opacity: 1, duration: 1, ease: "power2.inOut" }, 3.55)
     .to(edge, { autoAlpha: 0, duration: 0.2 }, 4.5)
     .to(antesPill, { autoAlpha: 0, duration: 0.3 }, 3.6)
     .to(espejoPill, { autoAlpha: 1, duration: 0.3 }, 4.3);
@@ -118,6 +126,38 @@ export function initStory(): void {
   timeline.to(steps[3], hide, at[4] - 0.35).to(steps[4], show, at[4]);
   if (add && added) timeline.to(add, { autoAlpha: 0, y: -8, duration: 0.25 }, 8.6).fromTo(added, { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: 0.3 }, 8.75);
   timeline.to({}, { duration: 0.9 }, 9.1);
+
+  /* On a desk with a mouse, the phone leans a little towards the pointer and the halo and the
+     floating pills drift the other way: depth, without touching what the scroll animates. */
+  if (!mobile && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    gsap.set(phone, { transformPerspective: 1400 });
+    const turnX = gsap.quickTo(phone, "rotationY", { duration: 0.8, ease: "power3.out" });
+    const turnY = gsap.quickTo(phone, "rotationX", { duration: 0.8, ease: "power3.out" });
+    const drift = [...(glow ? [{ node: glow, depth: -18 }] : []), ...hints.map((node, i) => ({ node, depth: 10 + i * 6 }))].map(({ node, depth }) => ({
+      x: gsap.quickTo(node, "x", { duration: 1, ease: "power3.out" }),
+      y: gsap.quickTo(node, "y", { duration: 1, ease: "power3.out" }),
+      depth,
+    }));
+    const stage = story.querySelector<HTMLElement>("[data-story-stage]");
+    stage?.addEventListener("pointermove", (event) => {
+      const nx = event.clientX / window.innerWidth - 0.5;
+      const ny = event.clientY / window.innerHeight - 0.5;
+      turnX(nx * 8);
+      turnY(-ny * 6);
+      drift.forEach(({ x, y, depth }) => {
+        x(nx * depth);
+        y(ny * depth);
+      });
+    });
+    stage?.addEventListener("pointerleave", () => {
+      turnX(0);
+      turnY(0);
+      drift.forEach(({ x, y }) => {
+        x(0);
+        y(0);
+      });
+    });
+  }
 
   /* Where each removed thing drifts to: out of the phone towards the empty side (the right on a
      wide screen, both sides on a phone), measured from the phone so it works at any size. */

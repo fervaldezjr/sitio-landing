@@ -76,8 +76,9 @@ const samples = [
   ["wide espejo pill", "public/media/hero/wide-espejo-1280.jpg", [0.7, 0.01, 0.28, 0.08], 0.62, white],
   ["wide card", "public/media/hero/wide-espejo-1280.jpg", [0.62, 0.06, 0.34, 0.42], 0.66, hexToRgb("#ececec")],
   ["wide bar", "public/media/hero/wide-antes-1280.jpg", [0.01, 0.84, 0.4, 0.12], 0.66, white],
-  ["phone pills", "public/media/hero/frame-antes-960.jpg", [0.02, 0.02, 0.96, 0.14], 0.62, white],
-  ["phone status", "public/media/hero/frame-antes-960.jpg", [0.3, 0.42, 0.4, 0.14], 0.66, white],
+  ["phone pills", "public/media/hero/tall-antes-864.jpg", [0.12, 0.12, 0.62, 0.1], 0.62, white],
+  ["phone status", "public/media/hero/tall-antes-864.jpg", [0.25, 0.42, 0.5, 0.12], 0.66, white],
+  ["phone card", "public/media/hero/tall-espejo-864.jpg", [0.14, 0.6, 0.62, 0.38], 0.66, hexToRgb("#ececec")],
   ["frame antes pill", "public/media/hero/frame-antes-960.jpg", [0.01, 0.01, 0.3, 0.1], 0.62, white],
   ["frame bar", "public/media/hero/frame-antes-960.jpg", [0.02, 0.86, 0.96, 0.12], 0.66, white],
 ];
