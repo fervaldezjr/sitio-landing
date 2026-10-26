@@ -1,96 +1,104 @@
 # Identidad · Sitio
 
-La produce la skill brand-identity (26 oct 2026). Es el contrato visual de la landing: cuando algo dude a mitad de construcción, se decide mirando aquí. Cada dial lleva su valor y una frase de por qué encaja con lo que el sitio cuenta. `identity-check.mjs` cuenta los seis distintos de la última fila de `brand-identity/identity-log.md` (Weisfeld, 2026-10-10).
+La produce la skill brand-identity (26 oct 2026, segunda versión). Es el contrato visual de la landing: cuando algo dude a mitad de construcción, se decide mirando aquí. Cada dial lleva su valor y una frase de por qué encaja con lo que el sitio cuenta.
 
-La idea que lo ordena todo: **la landing es una revista de interiores que publica un reportaje sobre la app**. La app conserva su interfaz (cristal, píldoras, hoja inferior); la página que la rodea habla con la voz de la revista (serif fina, rúbricas, reglas de 1 px, mucho aire).
+La idea que lo ordena todo: **el producto se demuestra, no se describe**. La primera pantalla es un escenario fijo: el móvil en el centro hace la foto, genera el espejo y lo reparte en lo que sobra, lo que falta y lo que se queda, mientras haces scroll. Todo lo demás es blanco, una sola grotesca y mucho aire.
+
+La primera versión (revista de interiores con Boska, folios y reglas) se descartó el mismo día: la serif fina con cursiva gris y una página que solo «aparece» se leían como plantilla. Esta versión sale de cinco referencias medidas (tabla al final).
 
 ## Posicionamiento
 
 - **Qué es:** una app móvil que, con una foto de un espacio o una superficie, genera un espejo ordenado del mismo encuadre, dice qué sobra, qué falta y qué se queda, y propone objetos que puedes cambiar, guardar y añadir a tus listas.
 - **Para quién:** quien mira su escritorio, su encimera o su entrada y quiere verlo en orden antes de mover nada. En cinco segundos decide si quiere probarla (por defecto).
-- **Tono, tres palabras:** sereno, cuidado, preciso.
-- **Anti-tono, tres palabras que NO:** ruidoso, técnico, barato.
+- **Tono, tres palabras:** limpio, seguro, preciso.
+- **Anti-tono, tres palabras que NO:** decorativo, técnico, barato.
 - **La petición:** apuntarse a la beta.
-
-Respuestas del descubrimiento: 1, 3, 6, 7 y 8 vienen de Fernando (revista de interiores, minimalista, «muy clin», sensación de sitio caro; se mantienen las reglas de color; fuera la minúscula en todo; app de producto, sin persona). 2, 4, 5 y 10 van por defecto. 9: las únicas cifras comprobables son las del espejo aprobado (quitar 13, añadir 3, portátil fijado).
 
 ## Los seis diales
 
 | dial | valor | por qué |
 |---|---|---|
-| 1 · Tipografía | display: Boska 300 y 300 cursiva (Fontshare) / texto: Switzer 400 y 500 / rótulos: Switzer 500 a 13 px en redonda con cifras tabulares · sin fontsource: las dos por el CDN de Fontshare | Boska es la serif alta y fina de las revistas de interiores; su cursiva hace de segunda voz. Switzer ya era la fuente del sistema de la app y sigue en el cuerpo y en la interfaz. Las dos son ITF FFL, que no deja subir los ficheros a un repo público. |
-| 2 · Campo y color | fondo: lienzo de galería `#f7f7f7` / superficie `#ffffff` / tinta `#1b1b1b` / segunda voz `#5e5e5e` / regla `#c8c8c8` / acento: ninguno · una sola banda de tinta `#1b1b1b` para privacidad | Son los tokens de la app y Fernando pidió mantenerlos. Neutros y sin acento: el color lo pone la foto, como en una revista de interiores donde la página es blanca y el espacio fotografiado manda. |
-| 3 · Materia visual | fotografía de interiores a sangre con un solo revelado suave (saturación 0.86): el par antes/espejo del escritorio frente al mar, sin stock ni recortes | Es el producto: una foto real y su espejo. Las fotos se ven enteras, como una doble página, y los objetos se señalan con números sobre la foto en vez de recortes ampliados. |
-| 4 · Wordmark y escala | «Sitio» en Boska 300, una línea a sangre en el pie (`data-fit` 1.0), y pequeño en la barra y en el hero | La cabecera de revista: el nombre grande una sola vez, al cerrar, como la mancheta de la contraportada. Arriba manda la foto. |
-| 5 · Firma de movimiento | barrido con clip-path (wipe): el antes se vuelve espejo con el scroll; las fotos se destapan con clip-path de abajo arriba; titulares que entran línea a línea con máscara; scroll suave con Lenis a 0.1; ease `cubic-bezier(0.22, 1, 0.36, 1)` entre 0.9 y 1.2 s | El barrido es el gesto del producto y ya estaba hecho. Todo lo demás lo repite: una cortina que sube. Las líneas, no las palabras, porque una revista se lee sereno. |
-| 6 · Rótulos y retícula | folio de revista: numeración de sección `01` en Switzer + rúbrica en redonda sobre una regla de 1 px a sangre, sin antetítulo encima del titular; retícula de 12 columnas, titular en 2+8 y cuerpo en 7+4 | Es como se ordena una revista: la sección se reconoce por el folio, no por tarjetas. Las reglas finas sustituyen a las sombras de la versión anterior. Las versalitas espaciadas encima del titular son marca de plantilla (motion-site, «Lo que no hacemos»), por eso el folio va en redonda y en su propia línea. |
+| 1 · Tipografía | display: Switzer 400 grande y apretada / texto: Switzer 400 / rótulos: Switzer 500 a 13 px · sin fontsource: Fontshare | Cuatro de las cinco referencias usan una grotesca neutra en regular (Suisse Intl, Inter Display, Geist, Aktiv Grotesk). Switzer es la fuente de la app: la marca y el producto hablan igual. Una sola familia. |
+| 2 · Campo y color | fondo: blanco `#ffffff` / piezas sobre lienzo `#f7f7f7` y `#ececee` / tinta `#1b1b1b` / segunda voz `#5e5e5e` / acento: ninguno · una sección de tinta `#1b1b1b` para las propuestas | Blanco puro como see-for-yourself y AAT; los grises de la app hacen de peana para objetos y fotos. Sin acento, como pidió Fernando: el color lo ponen las fotos. |
+| 3 · Materia visual | el producto en un móvil + objetos recortados sobre peana gris + la foto a sangre: el par antes/espejo y fotos de producto de stock para las propuestas | La app se ve funcionando. Los objetos propuestos son fotos de producto (Pexels y Unsplash, licencia libre), recortadas y puestas sobre el mismo gris, como un catálogo. |
+| 4 · Wordmark y escala | humilde: «Sitio» pequeño en la píldora de navegación y al pie; la fuerza va a los titulares | El titular grande ya ocupa la pantalla; un wordmark gigante competiría con él. Así lo hacen see-for-yourself y AAT. |
+| 5 · Firma de movimiento | escenario fijo con scroll: el móvil se queda en el centro y la pantalla cambia por pasos (foto, generando, barrido, tarjeta del espejo, propuestas); después, apariciones cortas; Lenis 0.1; ease `power3.out` | Es el gesto de la referencia más cercana (see-for-yourself, una primera sección de 6.750 px fija mientras cambia). Cuenta la app en el orden en que se usa. |
+| 6 · Rótulos y retícula | sin rótulos: solo el titular, márgenes muy grandes; números `01 02 03` solo en los pasos; retícula de 12 columnas | La sección se reconoce por el espacio y la escala, no por etiquetas. Menos piezas, más caro. |
 
-## Tokens (copiados a `:root` de `src/styles/global.css`)
+## Tokens (en `:root` de `src/styles/global.css`)
 
-    --bg: #f7f7f7;
-    --card: #ffffff;
+    --bg: #ffffff;
+    --card: #f7f7f7;     /* peana de objetos y fotos */
     --tile: #ececee;
     --fg: #1b1b1b;
     --fg-2: #5e5e5e;
     --fg-3: #6a6a6a;
-    --line: #c8c8c8;
+    --line: #ececee;     /* reglas decorativas */
     /* sin acento */
-    --band: #1b1b1b;      /* la banda de privacidad */
+    --band: #1b1b1b;     /* sección de propuestas */
     --band-fg: #ffffff;
     --band-fg-2: #b4b4b4;
-    --band-line: #3a3a3a;
-    --display: "Boska";   /* titulares y wordmark */
-    --sans: "Switzer";    /* cuerpo, rótulos e interfaz de la app */
-    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --display: "Switzer";
+    --sans: "Switzer";
+    --ease: cubic-bezier(0.33, 1, 0.68, 1);   /* power3.out */
     --topbar-blend: normal;
-    --grain-blend: none;  /* sin grano: la página es limpia */
-    --topbar-bg: var(--bg);
-    --topbar-line: var(--line);
+    --grain-blend: none;
+    --topbar-bg: rgba(16, 16, 16, 0.62);      /* la píldora es cristal de la app */
+    --topbar-line: transparent;
 
-Los tokens de cristal (`--glass-strong` 0.62, `--glass-sheet` 0.66), las curvas de la app (easeInOutSine en el barrido, easeOutQuint 320 ms en hojas, easeOutCubic 200 ms en píldoras) y `ink.400 #8f8f92` (solo bordes) no cambian: son de la app y viven en `design/tokens.json`.
+Los tokens de cristal (`--glass-strong` 0.62, `--glass-sheet` 0.66), las curvas de la app y `ink.400 #8f8f92` (solo bordes) no cambian: viven en `design/tokens.json`.
+
+El contrato corto para cualquier agente es `agents/standards/05-marca.md`, y `scripts/check-brand.mjs` hace cumplir la fuente, la paleta, el cristal, los badges, los créditos y las dependencias. Si un valor de aquí cambia, cambian los tres a la vez.
 
 ## Escala
 
 | papel | escritorio (1440) | móvil (390) | ajuste |
 |---|---|---|---|
-| titular de sección | Boska 300, 88 px | 44 px | tracking -2 %, interlineado 1.0 |
-| titular medio | Boska 300, 56 px | 34 px | -1.5 %, 1.05 |
-| entradilla | Switzer 400, 21 px | 18 px | -0.5 %, 1.45 |
-| cuerpo | Switzer 400, 17 px | 16 px | 0, 1.55 |
-| rúbrica y folio | Switzer 500, 13 px | 13 px | 0, cifras tabulares |
+| titular del escenario | 104 px | 46 px | 400, tracking -4.5 %, interlineado 0.96 |
+| titular de sección | 72 px | 38 px | 400, -4 %, 1.0 |
+| titular medio | 44 px | 30 px | 400, -3 %, 1.08 |
+| leyenda del escenario | 28 px | 20 px | 400, -2 %, 1.2 |
+| cuerpo | 17 px | 16 px | 400, -0.5 %, 1.5 |
+| interfaz y rótulos | 13–15 px | 13–15 px | 500, 0 |
 
 ## Ajustes que salen de los diales
 
-- `signature`: wipe (dial 5). Lo implementa `src/scripts/hero.ts` (el barrido del hero) y `src/scripts/motion.ts` (el resto).
+- `signature`: escenario fijo (dial 5), en `src/scripts/story.ts`. El barrido a pantalla completa sigue en `src/scripts/compare.ts` como sección interactiva («Compruébalo tú»).
 - `heroVariant`: media (dial 3).
-- Fuentes: `https://api.fontshare.com/v2/css?f[]=boska@300,301&display=swap` y `…f[]=switzer@400,500,600&display=swap`, una petición por familia: con las dos en la misma URL el CDN devolvió solo la primera.
+- Fuente: `https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap`.
 
-Contraste comprobado con `brand-identity/scripts/contrast.mjs`: tinta 16.08 y segunda voz 6.05 sobre `#f7f7f7`; regla 1.56; sobre la banda, blanco 17.22, segunda voz 8.31 y borde 1.51.
+Contraste comprobado con `brand-identity/scripts/contrast.mjs`: tinta 17.22 y segunda voz 6.48 sobre blanco; 16.08 y 6.05 sobre `#f7f7f7`; sobre la banda, blanco 17.22 y segunda voz 8.31.
 
 ## Wordmark
 
-- Texto exacto: «Sitio», con mayúscula inicial: es un nombre propio y la página ya no va en minúscula. Propuesta para revisar en el PR.
-- Tratamiento: una línea a sangre en el pie; pequeño (Boska 300 a 24–28 px) en la barra de navegación y en la barra del hero.
-- Proporciones: pie `data-fit="1"` con tope de alto; el hero no lleva fit.
+- Texto exacto: «Sitio», con mayúscula inicial.
+- Tratamiento: humilde. Switzer 600 a 15 px en la píldora de navegación y al pie.
+- Proporciones: sin `data-fit`.
 
 ## Cabecera
 
-- La barra de navegación aparece después del hero y se queda fija arriba: «Sitio» a la izquierda, secciones en versalitas a la derecha, fondo de lienzo con regla de 1 px. El hero no tiene cabecera: la foto ocupa la pantalla.
-- Enlace principal: «Apúntate a la beta» → `#beta`, en el hero (píldora de cristal, escritorio) y en la barra.
+- Una píldora de cristal de la app, centrada arriba y fija: «Sitio», cuatro secciones y «Apúntate a la beta» en blanco. En móvil, solo la marca y la llamada.
 - Sin símbolo tras la marca.
 
 ## Material
 
-- Materia única: fotografía de interiores con un mismo revelado suave (saturación 0.86, igual en el par para que el barrido siga casando).
-- Piezas: ver `docs/assets/brief.json`.
-- Retratos: no hay; la web es de producto. Ver `docs/assets/portrait-brief.json`.
+- Materia: el producto. El móvil se dibuja en CSS; dentro van el par 3:4 y la interfaz de la app (cristal, píldoras, tarjeta del espejo). Los objetos propuestos son fotos de producto de stock recortadas con la segmentación de macOS (Vision) y puestas sobre `#f7f7f7`.
+- Badges de App Store y Google Play: los oficiales, sin alterar, en la entrada del escenario y en la beta. Mientras la app no esté publicada, bajo «Próximamente en» y sin enlace (`site.stores`). Van en inglés porque la versión española de Apple no se pudo descargar desde la sesión; cambiarlos es sustituir `media/source/badges/` y regenerar.
+- Piezas y créditos: `docs/assets/brief.json` y `docs/assets/credits.json`.
+- Retratos: no hay; la web es de producto.
 
 ## Referencias medidas
 
+Medidas con `brand-identity/scripts/recon.mjs` el 26 oct 2026; el material está en `reference/`, fuera de git.
+
 | url | qué se aprendió (ritmo, proporciones) | qué NO se copia |
 |---|---|---|
-| ninguna (por defecto) | La dirección viene de la descripción de Fernando: revista de interiores, página blanca, foto a sangre, mucho margen. | colores, tipografía, tiempos, textos |
+| see-for-yourself.com | 28 pantallas; la primera sección, 6.750 px fija con el móvil en el centro y la escena cambiando por pasos; titulares de 80 a 160 px con interlineado 1.0 y texto de interfaz de 12 a 16 px, casi sin tamaños intermedios; una sola sección oscura | su azul, Inter Display y Neue Montreal, sus renders 3D, sus textos y sus cifras («150k+») |
+| aat-architecten.be | blanco, una grotesca en regular, titulares que entran línea a línea, la foto llega después; cinco pantallas | Suisse Intl, su logotipo, sus fotos |
+| bybang.co/about | tipografía pequeña y densa en una columna lateral, el resto vacío | Geist, el grano, la composición |
+| tarqstudio.com | titulares en mayúsculas anchas a los dos extremos de la línea; fotos grandes a sangre con pie pequeño | Aktiv Grotesk, la serif cursiva, el marrón |
+| stanzza.design | ritmo calmado de secciones con mucho aire y FAQ en acordeón | Instrument Serif (marcada como «web de IA»), el crema, el manuscrito |
 
 ## Distinción
 
-Comparado con la última fila del registro (Weisfeld), `identity-check.mjs` da `OK (6 distintos)`. El dial 2 es el más cercano a ojo (fondo claro, tinta oscura), pero es neutro y sin acento frente al papel con índigo.
+Frente a la última fila del registro de la skill (Weisfeld), `identity-check.mjs` da `OK (5 distintos)`: coincide el wordmark humilde. Frente a la primera versión de Sitio, cambian cinco: tipografía, materia, wordmark, firma y rótulos.
