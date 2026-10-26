@@ -1,5 +1,7 @@
 ---
-import { site } from "../content/site";
+import { copyFor } from "../content/site";
+
+const site = copyFor(Astro.currentLocale);
 
 const { faq } = site;
 ---

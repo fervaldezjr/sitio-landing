@@ -12,6 +12,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
+/* the mobile address bar resizes the viewport while scrolling; re-measuring then is what jumps */
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 /** easeOutCubic, the same curve as the app's pills: cubic-bezier(0.33, 1, 0.68, 1). */
 const EASE = "power3.out";
@@ -93,6 +95,63 @@ function reveals(): void {
   });
 }
 
+/** Lazy images fade in once decoded instead of painting in pieces. */
+function images(): void {
+  $$<HTMLImageElement>('img[loading="lazy"]').forEach((image) => {
+    if (image.complete && image.naturalWidth) return;
+    image.classList.add("is-waiting");
+    const ready = () => {
+      image.classList.add("is-ready");
+      image.classList.remove("is-waiting");
+    };
+    image.addEventListener("load", () => void (image.decode?.() ?? Promise.resolve()).catch(() => undefined).then(ready), { once: true });
+    image.addEventListener("error", ready, { once: true });
+  });
+}
+
+/**
+ * First load: a short white screen with the wordmark until the fonts and the stage's images are
+ * decoded (2.5 s at most), then the intro enters. Nothing on the stage paints half-loaded.
+ */
+async function preload(): Promise<void> {
+  const overlay = document.querySelector<HTMLElement>("[data-preload]");
+  if (!overlay) return;
+  if (reduce) {
+    overlay.remove();
+    return;
+  }
+  lenis?.stop();
+  const bar = overlay.querySelector<HTMLElement>("[data-preload-bar]");
+  const pictures = $$<HTMLImageElement>("[data-story] img");
+  const total = pictures.length + 1;
+  let done = 0;
+  const tick = () => {
+    done += 1;
+    if (bar) bar.style.transform = `scaleX(${done / total})`;
+  };
+  const loaded = (image: HTMLImageElement) =>
+    (image.complete
+      ? Promise.resolve()
+      : new Promise<void>((resolve) => {
+          image.addEventListener("load", () => resolve(), { once: true });
+          image.addEventListener("error", () => resolve(), { once: true });
+        })
+    )
+      .then(() => image.decode?.())
+      .catch(() => undefined)
+      .then(tick);
+  await Promise.race([
+    Promise.all([(document.fonts?.ready ?? Promise.resolve()).then(tick), ...pictures.map(loaded)]),
+    new Promise((resolve) => setTimeout(resolve, 2500)),
+  ]);
+  gsap.to(overlay, { autoAlpha: 0, duration: 0.5, ease: "power2.out", onComplete: () => overlay.remove() });
+  const intro = $$("[data-story-intro] > *");
+  if (intro.length) gsap.from(intro, { y: 24, autoAlpha: 0, duration: 0.9, ease: EASE, stagger: 0.08, delay: 0.15 });
+  const phone = document.querySelector("[data-phone]");
+  if (phone) gsap.from(phone, { autoAlpha: 0, duration: 0.9, ease: EASE, delay: 0.3 });
+  lenis?.start();
+}
+
 function faq(): void {
   $$<HTMLDetailsElement>(".qa").forEach((item) => item.addEventListener("toggle", () => ScrollTrigger.refresh()));
 }
@@ -101,6 +160,8 @@ function boot(): void {
   smoothScroll();
   anchors();
   faq();
+  images();
+  void preload();
   const start = () => {
     lines();
     reveals();

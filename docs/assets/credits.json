@@ -12,26 +12,6 @@
       "fetched": "2026-10-26"
     },
     {
-      "file": "media/source/products/bandeja-2.png",
-      "published": "public/media/products/bandeja-2.*",
-      "source": "https://unsplash.com/photos/an-oval-wooden-tray-surrounded-by-vibrant-red-carnations-lJbcapa3D9s",
-      "site": "unsplash",
-      "license": "https://unsplash.com/license",
-      "photographer": null,
-      "treatment": "recortado con Vision (VNGenerateForegroundInstanceMaskRequest) sobre la foto original; sin otro retoque",
-      "fetched": "2026-10-26"
-    },
-    {
-      "file": "media/source/products/bandeja-3.png",
-      "published": "public/media/products/bandeja-3.*",
-      "source": "https://unsplash.com/photos/two-long-oval-wooden-serving-trays-on-a-white-background-MzJ6pzgLtC0",
-      "site": "unsplash",
-      "license": "https://unsplash.com/license",
-      "photographer": null,
-      "treatment": "recortado con Vision (VNGenerateForegroundInstanceMaskRequest) sobre la foto original; sin otro retoque",
-      "fetched": "2026-10-26"
-    },
-    {
       "file": "media/source/products/taza-1.png",
       "published": "public/media/products/taza-1.*",
       "source": "https://unsplash.com/photos/a-white-cup-sitting-on-top-of-a-wooden-table-mF6CE_mBXLI",
@@ -42,49 +22,9 @@
       "fetched": "2026-10-26"
     },
     {
-      "file": "media/source/products/taza-2.png",
-      "published": "public/media/products/taza-2.*",
-      "source": "https://unsplash.com/photos/white-ceramic-mug-nDd3dIkkOLo",
-      "site": "unsplash",
-      "license": "https://unsplash.com/license",
-      "photographer": null,
-      "treatment": "recortado con Vision (VNGenerateForegroundInstanceMaskRequest) sobre la foto original; sin otro retoque",
-      "fetched": "2026-10-26"
-    },
-    {
-      "file": "media/source/products/taza-3.png",
-      "published": "public/media/products/taza-3.*",
-      "source": "https://unsplash.com/photos/a-small-cup-on-a-table-zezjhEcHN2w",
-      "site": "unsplash",
-      "license": "https://unsplash.com/license",
-      "photographer": null,
-      "treatment": "recortado con Vision (VNGenerateForegroundInstanceMaskRequest) sobre la foto original; sin otro retoque",
-      "fetched": "2026-10-26"
-    },
-    {
-      "file": "media/source/products/libreta-1.png",
-      "published": "public/media/products/libreta-1.*",
-      "source": "https://unsplash.com/photos/notebook-and-pen-on-white-IZj7vckPGiw",
-      "site": "unsplash",
-      "license": "https://unsplash.com/license",
-      "photographer": null,
-      "treatment": "recortado con Vision (VNGenerateForegroundInstanceMaskRequest) sobre la foto original; sin otro retoque",
-      "fetched": "2026-10-26"
-    },
-    {
       "file": "media/source/products/libreta-2.png",
       "published": "public/media/products/libreta-2.*",
       "source": "https://unsplash.com/photos/white-notebook-with-pen-on-top-1ixT36dfuSQ",
-      "site": "unsplash",
-      "license": "https://unsplash.com/license",
-      "photographer": null,
-      "treatment": "recortado con Vision (VNGenerateForegroundInstanceMaskRequest) sobre la foto original; sin otro retoque",
-      "fetched": "2026-10-26"
-    },
-    {
-      "file": "media/source/products/libreta-3.png",
-      "published": "public/media/products/libreta-3.*",
-      "source": "https://unsplash.com/photos/white-spiral-notebook-on-brown-wooden-table-dgVSuJu58C0",
       "site": "unsplash",
       "license": "https://unsplash.com/license",
       "photographer": null,
@@ -109,6 +49,126 @@
       "license": "https://partnermarketinghub.withgoogle.com/brands/google-play/visual-identity/badge-guidelines/",
       "photographer": null,
       "treatment": "solo se recorta el margen transparente; el badge no se modifica",
+      "fetched": "2026-10-26"
+    },
+    {
+      "file": "media/source/objects/papeles.png",
+      "published": "public/media/hero/* (compuesto en la foto antes)",
+      "source": "https://unsplash.com/photos/stack-of-papers-V29UWcALNko",
+      "site": "unsplash",
+      "license": "https://unsplash.com/license",
+      "photographer": null,
+      "treatment": "recortado con Vision y compuesto en la foto del escritorio (scripts/compose-pair.mjs)",
+      "fetched": "2026-10-26"
+    },
+    {
+      "file": "media/source/objects/vasos.png",
+      "published": "public/media/hero/* (compuesto en la foto antes)",
+      "source": "https://unsplash.com/photos/coffee-cups-with-lids-GRLShsf9KMQ",
+      "site": "unsplash",
+      "license": "https://unsplash.com/license",
+      "photographer": null,
+      "treatment": "recortado con Vision y compuesto en la foto del escritorio (scripts/compose-pair.mjs)",
+      "fetched": "2026-10-26"
+    },
+    {
+      "file": "media/source/objects/vaso.png",
+      "published": "public/media/hero/* (compuesto en la foto antes)",
+      "source": "https://unsplash.com/photos/brown-and-black-paper-cup-P4JxJuVGX5A",
+      "site": "unsplash",
+      "license": "https://unsplash.com/license",
+      "photographer": null,
+      "treatment": "recortado con Vision y compuesto en la foto del escritorio (scripts/compose-pair.mjs)",
+      "fetched": "2026-10-26"
+    },
+    {
+      "file": "media/source/objects/botella.png",
+      "published": "public/media/hero/* (compuesto en la foto antes)",
+      "source": "https://unsplash.com/photos/green-bottle-on-white-table-reEySFadyJQ",
+      "site": "unsplash",
+      "license": "https://unsplash.com/license",
+      "photographer": null,
+      "treatment": "recortado con Vision y compuesto en la foto del escritorio (scripts/compose-pair.mjs)",
+      "fetched": "2026-10-26"
+    },
+    {
+      "file": "media/source/objects/auriculares.png",
+      "published": "public/media/hero/* (compuesto en la foto antes)",
+      "source": "https://unsplash.com/photos/black-wireless-headphones-on-white-desk-P7KF3cTRKcE",
+      "site": "unsplash",
+      "license": "https://unsplash.com/license",
+      "photographer": null,
+      "treatment": "recortado con Vision y compuesto en la foto del escritorio (scripts/compose-pair.mjs)",
+      "fetched": "2026-10-26"
+    },
+    {
+      "file": "media/source/objects/mochila.png",
+      "published": "public/media/hero/* (compuesto en la foto antes)",
+      "source": "https://unsplash.com/photos/white-and-black-leather-handbag-VDow9qDDMKc",
+      "site": "unsplash",
+      "license": "https://unsplash.com/license",
+      "photographer": null,
+      "treatment": "recortado con Vision y compuesto en la foto del escritorio (scripts/compose-pair.mjs)",
+      "fetched": "2026-10-26"
+    },
+    {
+      "file": "media/source/objects/cables.png",
+      "published": "public/media/hero/* (compuesto en la foto antes)",
+      "source": "https://unsplash.com/photos/white-usb-cable-on-white-table-115YGe1M28I",
+      "site": "unsplash",
+      "license": "https://unsplash.com/license",
+      "photographer": null,
+      "treatment": "recortado con Vision y compuesto en la foto del escritorio (scripts/compose-pair.mjs)",
+      "fetched": "2026-10-26"
+    },
+    {
+      "file": "media/source/base/escritorio.jpg",
+      "published": "public/media/hero/* (base del par antes/espejo)",
+      "source": "https://www.pexels.com/photo/laptop-and-plant-in-vase-8250971/",
+      "site": "pexels",
+      "license": "https://www.pexels.com/license/",
+      "photographer": null,
+      "treatment": "base del par: se le añaden los objetos (scripts/compose-pair.mjs), se recorta a 16:9 y 3:4 y lleva el revelado común",
+      "fetched": "2026-10-26"
+    },
+    {
+      "file": "media/source/objects/bola-1.png",
+      "published": "public/media/hero/* (compuesto en la foto antes)",
+      "source": "https://unsplash.com/photos/white-paper-on-white-floor-tiles-SPuHHjbSso8",
+      "site": "unsplash",
+      "license": "https://unsplash.com/license",
+      "photographer": null,
+      "treatment": "una de las tres bolas de la misma foto, separada por componentes del canal alfa; recortada con Vision y compuesta en la foto antes",
+      "fetched": "2026-10-26"
+    },
+    {
+      "file": "media/source/objects/bola-2.png",
+      "published": "public/media/hero/* (compuesto en la foto antes)",
+      "source": "https://unsplash.com/photos/white-paper-on-white-floor-tiles-SPuHHjbSso8",
+      "site": "unsplash",
+      "license": "https://unsplash.com/license",
+      "photographer": null,
+      "treatment": "una de las tres bolas de la misma foto, separada por componentes del canal alfa; recortada con Vision y compuesta en la foto antes",
+      "fetched": "2026-10-26"
+    },
+    {
+      "file": "media/source/objects/bola-3.png",
+      "published": "public/media/hero/* (compuesto en la foto antes)",
+      "source": "https://unsplash.com/photos/white-paper-on-white-floor-tiles-SPuHHjbSso8",
+      "site": "unsplash",
+      "license": "https://unsplash.com/license",
+      "photographer": null,
+      "treatment": "una de las tres bolas de la misma foto, separada por componentes del canal alfa; recortada con Vision y compuesta en la foto antes",
+      "fetched": "2026-10-26"
+    },
+    {
+      "file": "media/source/objects/libros-gris.png",
+      "published": "public/media/hero/* (compuesto en la foto antes)",
+      "source": "https://unsplash.com/photos/a-stack-of-books-sitting-on-top-of-a-white-table-08aIKKAQu0M",
+      "site": "unsplash",
+      "license": "https://unsplash.com/license",
+      "photographer": null,
+      "treatment": "recortado con Vision y compuesto en la foto del escritorio (scripts/compose-pair.mjs)",
       "fetched": "2026-10-26"
     }
   ]

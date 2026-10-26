@@ -1,9 +1,11 @@
 ---
-import { site } from "../content/site";
+import { copyFor } from "../content/site";
 import { hashHref, publicUrl } from "../lib/paths";
 
+const site = copyFor(Astro.currentLocale);
+
 const { footer } = site;
-const still = ["bandeja-1", "taza-1", "libreta-1"];
+const still = ["bandeja-1", "taza-1", "libreta-2"];
 const product = (id: string, ext: string) => publicUrl(`media/products/${id}.${ext}`);
 ---
 

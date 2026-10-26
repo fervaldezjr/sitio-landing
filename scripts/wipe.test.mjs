@@ -77,8 +77,11 @@ test("the wipe markup and type scale cannot drift back", async () => {
   assert.match(rule(".handle"), /translate\(-50%, -50%\)/);
   assert.equal(rule(".handle").includes("margin: -22px"), false);
   assert.match(rule(".pill"), /font-size:\s*clamp\(14px,/);
-  assert.match(rule(".mirror-row strong"), /font-size:\s*clamp\(16px,/);
-  assert.match(rule(".mirror-row span"), /font-size:\s*clamp\(16px,/);
+  assert.match(rule(".mirror-row p strong"), /font-size:\s*clamp\(16px,/);
+  assert.match(rule(".mirror-row p span"), /font-size:\s*clamp\(16px,/);
+  /* the icon is a span too: the text rule must not reach it, or the glyph leaves its circle */
+  assert.equal(/\.mirror-row span\s*\{/.test(css), false);
+  assert.equal(/\.screen-row span\s*\{/.test(css), false);
 
   assert.match(hero, /data-wipe-stroke/);
   assert.match(hero, /viewBox="0 0 100 100"/);

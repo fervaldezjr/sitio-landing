@@ -4,18 +4,22 @@
 
 ## Regla
 
-Las fotos del espacio llevan un mismo revelado suave (saturación 0.86, `GRADE` en `scripts/optimize-images.mjs`), igual para los dos fotogramas de cada par. El par 16:9 se sirve como máximo a 1920 px (barrido a pantalla completa); el par 3:4, a su ancho nativo, 864 (la pantalla del móvil y el barrido en móvil). Cada uno lleva AVIF, WebP y JPG, con `srcset`.
+El par antes/espejo se compone, no se genera: `scripts/compose-pair.mjs` lee `docs/assets/scene.json`, toma la foto base real (`media/source/base/escritorio.jpg`, Pexels, 3466×5199) y le añade objetos recortados (`media/source/objects/` para el antes, `media/source/products/` para el espejo) a su tamaño real según la profundidad, con sombra de contacto, sombra proyectada lejos de la ventana, reajuste de luz y un poco de suavizado. Saca dos recortes de la misma composición: 16:9 (`wide-*`, escritorio) y 4:3 (`frame-*`, el móvil y el barrido en móvil). Como comparten la base, casan por construcción.
+
+Después, `scripts/optimize-images.mjs` aplica el revelado común (saturación 0.86) y sirve el 16:9 hasta 2560 px y el 4:3 hasta 1440, en AVIF, WebP y JPG, con `srcset`.
 
 Las fotos de producto (`media/source/products/*.png`) son fotos de Unsplash recortadas con la segmentación de macOS (Vision, `VNGenerateForegroundInstanceMaskRequest`). El script recorta el borde transparente y las sirve a 720 px como máximo en AVIF, WebP y PNG, con alfa. La sombra la pone el CSS, igual para todas. Cada una tiene su crédito en `docs/assets/credits.json`.
 
 ## Por qué
 
-Los JPEG de 2400 px son una ampliación blanda y aquí no hay un reescalador neuronal libre, así que no se inventa detalle por encima de 1920. El mar de los dos encuadres 16:9 coincide (diferencia media 0 en el tercio superior): el barrido solo funciona si se usan emparejados y con el mismo revelado. Los objetos recortados de nuestras fotos salían blandos a tamaño grande; las fotos de producto de stock son nítidas y, sin fondo, se leen como un catálogo.
+El par anterior era una ampliación blanda de 2400 px y se veía mal a pantalla completa. Una foto real de 3466 px más objetos recortados da nitidez de verdad y deja elegir qué sobra y qué falta. Una escena horizontal recortada en vertical es casi todo pared, por eso el móvil usa el 4:3.
 
 ## Cómo
 
-Regenerar con `npm run images` (o `node scripts/optimize-images.mjs --products-only` para las de producto). Para cambiar una foto de producto: sustituir el PNG en `media/source/products/` con el mismo nombre, actualizar su fila de `credits.json` y regenerar. Evitar fotos con logotipos o texto.
+Para cambiar la escena: editar `docs/assets/scene.json` (x, y, cm, squash, turn, z) y ejecutar `node scripts/compose-pair.mjs --preview` para mirarla en `media/proof/`, luego `node scripts/compose-pair.mjs` y `npm run images`. Para cambiar una foto de producto: sustituir el PNG con el mismo nombre, actualizar su fila de `credits.json` y regenerar. Evitar fotos con logotipos o texto, y cualquier objeto sin crédito.
+
+Trampas: el recorte de Vision conserva la sombra del estudio como un borde de alfa bajo (se limpia en `clean()`); `sharp` aplica `trim` antes que `extract` en la misma cadena (hay que materializar el buffer entre medias); reconstruir el alfa con `joinChannel` puede dejarlo como banda extra (se trabaja en crudo); y el orden de dibujo es de atrás adelante por `y`, así que algo que descansa sobre otro objeto lleva `z`.
 
 ## Cómo se comprueba
 
-`scripts/check-links.mjs` exige que cada URL del `srcset` y de las fotos de producto exista en `dist/`. No debe aparecer un derivado de más de 1920 px de ancho. El script de imágenes imprime la diferencia del par: tiene que seguir en 0.00.
+`scripts/check-links.mjs` exige que cada URL del `srcset` y de las fotos de producto exista en `dist/`. No debe aparecer un derivado de más de 1920 px de ancho. El script de imágenes imprime la diferencia del par en la pared: tiene que quedar por debajo de 0.1 (ruido de compresión).

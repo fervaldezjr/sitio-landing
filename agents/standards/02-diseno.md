@@ -21,7 +21,8 @@ Cuatro de las cinco referencias usan una grotesca neutra en regular y fondo blan
 
 - Titulares en Switzer 400, grandes y apretados: de 40 a 92 px, tracking -4 a -4.5 %, interlineado 0.96 a 1.0. `Title.astro` pinta las dos voces (`lead` en tinta, `rest` en gris).
 - Interfaz y rótulos en 500 a 13–15 px. Casi sin tamaños intermedios: o es titular o es interfaz.
-- El móvil se dibuja en CSS (`Story.astro`). Dentro, las medidas van en `cqw` (la pantalla es un contenedor) para que la interfaz escale con el móvil.
+- El móvil se dibuja en CSS (`Story.astro`) con la interfaz clara de la app: cabecera «Sitio», la foto como tarjeta 4:3 a lo ancho, *skeleton* mientras genera, tarjeta del espejo y lista. Las medidas van en `cqw` (la pantalla es un contenedor) para que la interfaz escale con el móvil. La foto no se recorta en vertical: la escena es horizontal.
+- El barrido a pantalla completa usa el 16:9 en escritorio; en móvil, el 4:3 centrado en la pantalla oscura y sin la tarjeta (ya está en el móvil del escenario).
 - Los objetos van sin fondo, con `filter: drop-shadow(...)`, sobre `#F7F7F7` con radio de 20–22 px.
 
 Curvas, sin rebote:
@@ -33,10 +34,13 @@ Curvas, sin rebote:
 Movimiento:
 
 - `src/scripts/story.ts`: una línea de tiempo de GSAP con `scrub` sobre `.story` (640vh). El estado inicial de cada pieza está en CSS bajo `html.motion`, así la primera pintura coincide con el inicio de la línea de tiempo.
-- `src/scripts/motion.ts`: Lenis (`lerp: 0.1`), enlaces internos que se deslizan, titulares `data-lines` que entran línea a línea, `data-reveal` y `data-reveal-group`.
+- `src/scripts/motion.ts`: pantalla de carga breve (hasta que fuentes e imágenes del escenario están decodificadas, 2,5 s como mucho), Lenis (`lerp: 0.1`), enlaces internos que se deslizan, titulares `data-lines` que entran línea a línea, `data-reveal` y `data-reveal-group`, e imágenes perezosas que aparecen ya decodificadas.
 - `html.motion` lo pone un script en línea en `<head>` si no hay `prefers-reduced-motion`. Sin él (sin JavaScript o con movimiento reducido) el escenario es una imagen fija: el espejo con su tarjeta y las propuestas al lado.
 
 Trampas ya vistas:
+
+- Lo que parpadea al hacer scroll: imágenes perezosas que llegan tarde (las del barrido van `eager` con `fetchpriority="low"`), cuatro `backdrop-filter` apilados sobre una foto en movimiento (quedan dos), y en móvil la barra de direcciones cambiando `100dvh` (se usa `100svh` y `ScrollTrigger.config({ ignoreMobileResize: true })`).
+- Una regla para el texto de una fila (`.mirror-row span`) también alcanza al icono si el icono es otro `span`, y lo saca de su círculo: el texto va con `p span`.
 
 - Si el CSS pone `transform: translateY(…)` en algo que GSAP anima con `yPercent`, GSAP lee el `translateY` como píxeles y los suma: la hoja de la lista no subía. En el `fromTo`, pon `y: 0` explícito.
 - No pongas `transition: transform` en un elemento que anima GSAP: al recalcular, GSAP lee el valor a medio camino y se queda ahí.

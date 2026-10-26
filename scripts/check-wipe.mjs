@@ -179,8 +179,8 @@ async function record(page, failures, label) {
       dxAtHeight: hx - xAtHeight,
       yT,
       pill: px(".pill"),
-      strong: px(".mirror-row strong"),
-      detail: px(".mirror-row span"),
+      strong: px(".mirror-row p strong"),
+      detail: px(".mirror-row p span"),
       width: window.innerWidth,
     };
   });

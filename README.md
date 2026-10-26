@@ -31,15 +31,15 @@ El producto se demuestra: la primera pantalla es un escenario fijo en el que el 
 
 ## Secciones
 
-Escenario con el móvil · frase · Compruébalo tú (barrido con tirador) · Cómo funciona · Propuestas · Privacidad · Preguntas · Beta · pie.
+Escenario con el móvil · frase · Compruébalo tú (barrido con tirador) · Cómo funciona · Propuestas · Privacidad · Preguntas · Beta · pie. En español (`/`) y en inglés (`/en/`).
 
 ## Contenido
 
-Todos los textos visibles están en `src/content/site.ts`, con mayúscula inicial. Las únicas cifras son las del espejo aprobado (quitar 13, añadir 3, portátil fijado); `scripts/lint-repo.mjs` rechaza cualquier otra.
+Todos los textos visibles están en `src/content/site.ts`, en español e inglés con la misma forma, y con mayúscula inicial. Las únicas cifras son las del espejo aprobado (quitar 13, añadir 3, portátil fijado); `scripts/lint-repo.mjs` rechaza cualquier otra.
 
 ## Imágenes
 
-`npm run images` regenera AVIF, WebP y JPG desde `media/source/` con el mismo revelado para todas, y las fotos de producto sin fondo (AVIF, WebP y PNG con alfa). El par de escritorio se sirve como máximo a 1920 px: el JPEG de 2400 está ampliado y aquí no hay un reescalador neuronal. El par de móvil conserva sus 864 px. Las fotos de producto son de Unsplash, recortadas con la segmentación de macOS; sus créditos están en `docs/assets/credits.json`.
+El par antes/espejo es una composición: `node scripts/compose-pair.mjs` toma la foto base de Pexels y le añade los objetos de `docs/assets/scene.json` (recortes de Unsplash), y saca un 16:9 y un 4:3 de la misma composición. `npm run images` aplica el revelado común y genera AVIF, WebP y JPG (16:9 hasta 2560 px, 4:3 hasta 1440) y las fotos de producto sin fondo. Todos los créditos están en `docs/assets/credits.json`.
 
 ## Tiendas
 

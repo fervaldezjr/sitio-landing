@@ -7,7 +7,7 @@
     "foreground": "#1b1b1b",
     "secondary_text": "#5e5e5e",
     "tile": "#f7f7f7",
-    "rule": "El color lo ponen las fotos; la interfaz es neutra. Los objetos van sin fondo sobre #f7f7f7 con la misma sombra suave. Las fotos llevan el mismo revelado (saturación 0.86); los dos fotogramas de un par, exactamente el mismo."
+    "rule": "El color lo ponen las fotos; la interfaz es neutra. Los objetos van sin fondo sobre #f7f7f7 con la misma sombra suave. El par antes/espejo lleva el mismo revelado (saturación 0.86) y sale de una sola composición, así que casa por construcción."
   },
   "global_style": {
     "look": "El producto funcionando: un móvil dibujado en CSS con la interfaz de la app, objetos de catálogo recortados y la foto del espacio a sangre.",
@@ -17,21 +17,25 @@
   },
   "assets": [
     {
-      "id": "tall-pair",
+      "id": "frame-pair",
       "block": "A · producto",
       "priority": 1,
       "status": "have",
-      "purpose": "La pantalla del móvil en el escenario: la foto, el barrido y el espejo.",
+      "purpose": "La foto dentro del móvil del escenario (tarjeta 4:3) y el barrido en móvil.",
       "used_in": [
-        "home / escenario"
+        "home / escenario",
+        "home / compruébalo tú (móvil)"
       ],
       "deliverable": {
         "format": "avif + webp + jpg",
-        "width": 864,
-        "height": 1152,
-        "aspect": "3:4, recortado a la pantalla con object-fit"
+        "width": 1440,
+        "height": 1080,
+        "aspect": "4:3"
       },
-      "source_file": "media/source/tall-antes.png + media/source/tall-espejo.png"
+      "source_file": "media/source/frame-antes.jpg + media/source/frame-espejo.jpg (salen de scripts/compose-pair.mjs)",
+      "constraints": [
+        "Recorte 4:3 de la composición (scene.json · crops.frame): la escena es horizontal, un vertical sería casi todo pared."
+      ]
     },
     {
       "id": "wide-pair",
@@ -44,25 +48,48 @@
       ],
       "deliverable": {
         "format": "avif + webp + jpg",
-        "width": 1920,
-        "height": 1080,
+        "width": 2560,
+        "height": 1440,
         "aspect": "16:9"
       },
       "constraints": [
-        "Tope de 1920 px: el original de 2400 es una ampliación."
+        "Recorte 16:9 de la composición (scene.json · crops.wide).",
+        "Foto base real de 3466 px: se sirve hasta 2560 sin ampliar."
       ],
-      "source_file": "media/source/wide-antes.jpg + media/source/wide-espejo.jpg"
+      "source_file": "media/source/wide-antes.jpg + media/source/wide-espejo.jpg (salen de scripts/compose-pair.mjs)"
+    },
+    {
+      "id": "scene",
+      "block": "A · producto",
+      "priority": 1,
+      "status": "have-stock",
+      "purpose": "La composición del par: foto base (Pexels) + objetos recortados (Unsplash) que sobran en el antes y faltan en el espejo.",
+      "used_in": [
+        "home / escenario",
+        "home / compruébalo tú"
+      ],
+      "deliverable": {
+        "format": "docs/assets/scene.json → scripts/compose-pair.mjs",
+        "notes": "x, y en píxeles de la base; cm reales; la escala crece hacia la cámara (scene.depth)"
+      },
+      "constraints": [
+        "El antes lleva exactamente 13 cosas y el espejo las 3 que se añaden: lo dice la tarjeta.",
+        "El portátil y la jarra son de la base: se quedan en los dos.",
+        "Pantalla del portátil apagada (scene.patches): nada legible."
+      ],
+      "source_file": "media/source/base/escritorio.jpg + media/source/objects/*.png"
     },
     {
       "id": "products",
       "block": "A · stock",
       "priority": 1,
       "status": "have-stock",
-      "purpose": "Las propuestas: tres bandejas de madera, tres tazas y tres libretas, sin fondo.",
+      "purpose": "Las propuestas: bandeja de madera, taza y libreta, sin fondo. También son lo que el espejo añade.",
       "used_in": [
         "home / escenario (fichas y lista del móvil)",
         "home / propuestas",
-        "home / pie"
+        "home / pie",
+        "composición del espejo"
       ],
       "deliverable": {
         "format": "avif + webp + png con alfa",

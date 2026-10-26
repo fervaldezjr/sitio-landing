@@ -1,7 +1,9 @@
 ---
-import { site } from "../content/site";
+import { copyFor } from "../content/site";
 import { hashHref, publicUrl } from "../lib/paths";
 import StoreBadges from "./StoreBadges.astro";
+
+const site = copyFor(Astro.currentLocale);
 
 /*
  * The first screen is a pinned stage (docs/identity.md, dial 5): the phone stays in the middle
@@ -10,17 +12,19 @@ import StoreBadges from "./StoreBadges.astro";
  */
 const { story } = site;
 const { phone } = story;
-const tall = [432, 648, 864];
+/* the three objects the mirror adds; the same ones the proposals section shows */
+const products = site.proposals.items;
+const frame = [480, 720, 960, 1440];
 
 function srcset(name: string, ext: string): string {
-  return tall.map((width) => `${publicUrl(`media/hero/${name}-${width}.${ext}`)} ${width}w`).join(", ");
+  return frame.map((width) => `${publicUrl(`media/hero/${name}-${width}.${ext}`)} ${width}w`).join(", ");
 }
 
 function product(id: string, ext: string): string {
   return publicUrl(`media/products/${id}.${ext}`);
 }
 
-const sizes = "(min-width: 761px) 320px, 62vw";
+const sizes = "(min-width: 761px) 320px, 52vw";
 ---
 
 <section class="story" id="top" aria-labelledby="story-title" data-story>
@@ -47,28 +51,28 @@ const sizes = "(min-width: 761px) 320px, 62vw";
 
     <div class="phone" data-phone>
       <div class="phone-screen">
-        <picture class="screen-layer screen-antes">
-          <source type="image/avif" sizes={sizes} srcset={srcset("tall-antes", "avif")} />
-          <source type="image/webp" sizes={sizes} srcset={srcset("tall-antes", "webp")} />
-          <img src={publicUrl("media/hero/tall-antes-648.jpg")} srcset={srcset("tall-antes", "jpg")} sizes={sizes} alt={story.antesAlt} width="864" height="1152" fetchpriority="high" decoding="async" />
-        </picture>
-        <picture class="screen-layer screen-espejo" data-screen-espejo>
-          <source type="image/avif" sizes={sizes} srcset={srcset("tall-espejo", "avif")} />
-          <source type="image/webp" sizes={sizes} srcset={srcset("tall-espejo", "webp")} />
-          <img src={publicUrl("media/hero/tall-espejo-648.jpg")} srcset={srcset("tall-espejo", "jpg")} sizes={sizes} alt={story.espejoAlt} width="864" height="1152" decoding="async" />
-        </picture>
-        <span class="screen-edge" data-screen-edge aria-hidden="true"></span>
-        <span class="screen-scan" data-screen-scan aria-hidden="true"></span>
-        <span class="screen-flash" data-screen-flash aria-hidden="true"></span>
-
-        <div class="screen-camera" data-screen-camera aria-hidden="true">
-          <span class="screen-frame"></span>
-          <span class="screen-shutter"><span></span></span>
+        <p class="screen-header" aria-hidden="true">{site.nav.brand}</p>
+        <div class="screen-photo">
+          <picture class="screen-layer screen-antes">
+            <source type="image/avif" sizes={sizes} srcset={srcset("frame-antes", "avif")} />
+            <source type="image/webp" sizes={sizes} srcset={srcset("frame-antes", "webp")} />
+            <img src={publicUrl("media/hero/frame-antes-720.jpg")} srcset={srcset("frame-antes", "jpg")} sizes={sizes} alt={story.antesAlt} width="1440" height="1080" fetchpriority="high" decoding="async" />
+          </picture>
+          <picture class="screen-layer screen-espejo" data-screen-espejo>
+            <source type="image/avif" sizes={sizes} srcset={srcset("frame-espejo", "avif")} />
+            <source type="image/webp" sizes={sizes} srcset={srcset("frame-espejo", "webp")} />
+            <img src={publicUrl("media/hero/frame-espejo-720.jpg")} srcset={srcset("frame-espejo", "jpg")} sizes={sizes} alt={story.espejoAlt} width="1440" height="1080" decoding="async" />
+          </picture>
+          <span class="screen-edge" data-screen-edge aria-hidden="true"></span>
+          <span class="screen-scan" data-screen-scan aria-hidden="true"></span>
+          <span class="screen-frame" data-screen-camera aria-hidden="true"></span>
+          <p class="screen-pill screen-pill-left" data-screen-antes>{phone.antes}</p>
+          <p class="screen-pill screen-pill-right" data-screen-espejo-pill>{phone.espejo}</p>
+          <p class="screen-pill screen-status" data-screen-status>{phone.status}</p>
         </div>
-
-        <p class="screen-pill screen-pill-left" data-screen-antes>{phone.antes}</p>
-        <p class="screen-pill screen-pill-right" data-screen-espejo-pill>{phone.espejo}</p>
-        <p class="screen-pill screen-status" data-screen-status>{phone.status}</p>
+        <span class="screen-shutter" data-screen-camera aria-hidden="true"><span></span></span>
+        <span class="screen-skeleton" data-screen-skeleton aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="screen-flash" data-screen-flash aria-hidden="true"></span>
 
         <div class="screen-card" data-screen-card>
           <div class="screen-card-head">
@@ -111,14 +115,14 @@ const sizes = "(min-width: 761px) 320px, 62vw";
           <p class="screen-sheet-meta">{phone.listMeta}</p>
           <ul class="screen-list">
             {
-              story.products.map((item, index) => (
+              products.map((item) => (
                 <li class="screen-list-row">
                   <picture>
                     <source srcset={product(item.id, "avif")} type="image/avif" />
                     <source srcset={product(item.id, "webp")} type="image/webp" />
-                    <img src={product(item.id, "png")} alt="" width="96" height="96" loading="lazy" decoding="async" />
+                    <img src={product(item.id, "png")} alt="" width="96" height="96" decoding="async" />
                   </picture>
-                  <span>{phone.listItems[index]}</span>
+                  <span>{item.name}</span>
                   <span class="screen-plus" aria-hidden="true" />
                 </li>
               ))
@@ -139,13 +143,13 @@ const sizes = "(min-width: 761px) 320px, 62vw";
 
     <ul class="story-products" data-story-products>
       {
-        story.products.map((item) => (
+        products.map((item) => (
           <li class="product-tile">
             <span class="product-name">{item.name}</span>
             <picture>
               <source srcset={product(item.id, "avif")} type="image/avif" />
               <source srcset={product(item.id, "webp")} type="image/webp" />
-              <img src={product(item.id, "png")} alt="" width="320" height="320" loading="lazy" decoding="async" />
+              <img src={product(item.id, "png")} alt="" width="320" height="320" decoding="async" />
             </picture>
             <span class="product-plus" aria-hidden="true" />
           </li>

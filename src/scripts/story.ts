@@ -20,7 +20,7 @@ export function initStory(): void {
   const intro = q("[data-story-intro]");
   const steps = qa("[data-story-step]");
   const phone = q("[data-phone]");
-  const camera = q("[data-screen-camera]");
+  const camera = qa("[data-screen-camera]");
   const flash = q("[data-screen-flash]");
   const status = q("[data-screen-status]");
   const scan = q("[data-screen-scan]");
@@ -29,13 +29,14 @@ export function initStory(): void {
   const antesPill = q("[data-screen-antes]");
   const espejoPill = q("[data-screen-espejo-pill]");
   const card = q("[data-screen-card]");
+  const skeleton = q("[data-screen-skeleton]");
   const sheet = q("[data-screen-sheet]");
   const add = q("[data-screen-button-add]");
   const added = q("[data-screen-button-added]");
   const removed = qa("[data-story-removed] li");
   const products = qa("[data-story-products] li");
   const progress = qa("[data-story-progress] li");
-  if (!intro || !phone || !camera || !flash || !status || !scan || !espejo || !edge || !card || !sheet) return;
+  if (!intro || !phone || !camera.length || !flash || !status || !scan || !espejo || !edge || !card || !sheet) return;
 
   const mobile = window.matchMedia("(max-width: 760px)").matches;
   const show = { autoAlpha: 1, y: 0, duration: 0.5, ease: "power3.out" };
@@ -76,6 +77,7 @@ export function initStory(): void {
     .to(steps[0], hide, at[1] - 0.35)
     .to(steps[1], show, at[1])
     .to(status, { autoAlpha: 1, y: 0, duration: 0.3, ease: "power3.out" }, 2.1)
+    .to(skeleton, { autoAlpha: 1, duration: 0.3 }, 2.1)
     .fromTo(scan, { autoAlpha: 1, yPercent: -100 }, { yPercent: 1000, duration: 1.2, ease: "none" }, 2.3)
     .to(scan, { autoAlpha: 0, duration: 0.2 }, 3.4)
     .to(status, { autoAlpha: 0, duration: 0.25 }, 3.5)
@@ -90,6 +92,7 @@ export function initStory(): void {
   timeline
     .to(steps[1], hide, at[2] - 0.35)
     .to(steps[2], show, at[2])
+    .to(skeleton, { autoAlpha: 0, duration: 0.25 }, 4.6)
     .fromTo(card, { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power3.out" }, 4.7);
   removed.forEach((chip, i) => {
     const start = 4.8 + i * 0.12;

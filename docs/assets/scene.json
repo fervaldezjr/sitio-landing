@@ -1,0 +1,198 @@
+{
+  "$note": "Escena del par antes/espejo (scripts/compose-pair.mjs). x, y: centro de la base del objeto (en las hojas, su centro) en píxeles de la foto base; cm: ancho real; squash: aplastamiento de lo que está tumbado (la hoja de la foto da 0.40); turn: giro en el plano de la mesa; flat: la sombra es toda su huella; z: orden de dibujo si algo descansa sobre otro objeto. El espejo es la base + lo que se añade (bandeja, taza, libreta); el antes, la base + 13 cosas que sobran (tres hojas, dos bolas de papel, tres vasos, botella, libros, auriculares, mochila y cables). El portátil está en la base: se queda. crops: el 16:9 (barrido en escritorio) y el 4:3 (foto dentro del móvil y barrido en móvil) salen de la misma composición.",
+  "base": "media/source/base/escritorio.jpg",
+  "depth": {
+    "back": {
+      "y": 4150,
+      "pxPerCm": 26
+    },
+    "front": {
+      "y": 5199,
+      "pxPerCm": 36
+    }
+  },
+  "light": {
+    "contact": 0.72,
+    "cast": 0.22,
+    "occlusion": 0.55,
+    "dx": 36
+  },
+  "tone": {
+    "brightness": 0.97,
+    "saturation": 0.9,
+    "warm": 0.035
+  },
+  "relight": {
+    "right": "#d6cfc4",
+    "bottom": "#ebe5dc",
+    "contrast": 0.92,
+    "soften": 0.7
+  },
+  "patches": [
+    {
+      "points": [
+        [
+          1777,
+          3911
+        ],
+        [
+          2635,
+          3909
+        ],
+        [
+          2637,
+          4441
+        ],
+        [
+          1783,
+          4441
+        ]
+      ],
+      "from": "#25282e",
+      "to": "#0d0e11",
+      "sheen": 0.07
+    }
+  ],
+  "espejo": [
+    {
+      "file": "media/source/products/bandeja-1.png",
+      "x": 640,
+      "y": 4985,
+      "cm": 26,
+      "squash": 0.45,
+      "rotate": -2,
+      "flat": true
+    },
+    {
+      "file": "media/source/products/taza-1.png",
+      "x": 590,
+      "y": 4925,
+      "cm": 8.5,
+      "shadowWidth": 0.8,
+      "z": 5000,
+      "shadow": 0.8
+    },
+    {
+      "file": "media/source/products/libreta-2.png",
+      "x": 1470,
+      "y": 5050,
+      "cm": 17,
+      "squash": 0.42,
+      "rotate": -4,
+      "flat": true,
+      "turn": -90
+    }
+  ],
+  "antes": [
+    {
+      "file": "media/source/objects/libros-gris.png",
+      "x": 330,
+      "y": 4440,
+      "cm": 22
+    },
+    {
+      "file": "media/source/objects/vaso.png",
+      "x": 1460,
+      "y": 4575,
+      "cm": 9
+    },
+    {
+      "file": "media/source/objects/botella.png",
+      "x": 2930,
+      "y": 4370,
+      "cm": 7
+    },
+    {
+      "file": "media/source/objects/mochila.png",
+      "x": 3250,
+      "y": 4600,
+      "cm": 34
+    },
+    {
+      "kind": "sheet",
+      "x": 960,
+      "y": 4790,
+      "cm": [
+        21,
+        29.7
+      ],
+      "turn": -8,
+      "lines": 16
+    },
+    {
+      "file": "media/source/objects/bola-3.png",
+      "x": 1250,
+      "y": 4730,
+      "cm": 7,
+      "tone": {
+        "warm": 0.09
+      }
+    },
+    {
+      "file": "media/source/objects/auriculares.png",
+      "x": 610,
+      "y": 4885,
+      "cm": 16,
+      "shadowWidth": 0.7,
+      "shadowDepth": 0.1,
+      "shadow": 0.9
+    },
+    {
+      "kind": "sheet",
+      "x": 1620,
+      "y": 4950,
+      "cm": [
+        21,
+        29.7
+      ],
+      "turn": 12,
+      "lines": 14
+    },
+    {
+      "file": "media/source/objects/vasos.png",
+      "x": 2990,
+      "y": 4995,
+      "cm": 18
+    },
+    {
+      "kind": "sheet",
+      "x": 2480,
+      "y": 5085,
+      "cm": [
+        21,
+        29.7
+      ],
+      "turn": 6,
+      "lines": 18
+    },
+    {
+      "file": "media/source/objects/bola-2.png",
+      "x": 2140,
+      "y": 5135,
+      "cm": 7.5,
+      "tone": {
+        "warm": 0.09
+      }
+    },
+    {
+      "file": "media/source/objects/cables.png",
+      "x": 3130,
+      "y": 5165,
+      "cm": 11
+    }
+  ],
+  "crops": {
+    "wide": {
+      "left": 0,
+      "top": 3200,
+      "width": 3466,
+      "height": 1950
+    },
+    "frame": {
+      "left": 0,
+      "top": 2599,
+      "width": 3466,
+      "height": 2600
+    }
+  }
+}

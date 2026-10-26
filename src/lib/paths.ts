@@ -5,7 +5,7 @@ export function publicUrl(file: string): string {
   return clean ? `${base}/${clean}` : `${base}/`;
 }
 
+/** An in-page anchor. Bare, so it works on every language's page. */
 export function hashHref(hash: string): string {
-  const id = hash.startsWith("#") ? hash : `#${hash}`;
-  return `${publicUrl("")}${id}`;
+  return hash.startsWith("#") ? hash : `#${hash}`;
 }

@@ -1,9 +1,12 @@
 ---
-import { site } from "../content/site";
+import { copyFor } from "../content/site";
 import { publicUrl } from "../lib/paths";
 
-const wide = [640, 960, 1280, 1920];
-const tall = [432, 648, 864];
+const site = copyFor(Astro.currentLocale);
+
+const wide = [640, 960, 1280, 1920, 2560];
+/* the 4:3 frame on phones: the desk is a wide scene, a portrait crop would be mostly wall */
+const frame = [480, 720, 960, 1440];
 
 function srcset(name: string, widths: number[], ext: string): string {
   return widths.map((width) => `${publicUrl(`media/hero/${name}-${width}.${ext}`)} ${width}w`).join(", ");
@@ -18,32 +21,34 @@ const rows = compare.rows;
     <div class="hero-stage" data-hero-stage>
       <p class="sr-only">{site.compare.comparison}</p>
       <picture class="frame antes">
-        <source media="(max-width: 760px)" type="image/avif" sizes="100vw" srcset={srcset("tall-antes", tall, "avif")} />
-        <source media="(max-width: 760px)" type="image/webp" sizes="100vw" srcset={srcset("tall-antes", tall, "webp")} />
-        <source media="(max-width: 760px)" sizes="100vw" srcset={srcset("tall-antes", tall, "jpg")} />
+        <source media="(max-width: 760px)" type="image/avif" sizes="100vw" srcset={srcset("frame-antes", frame, "avif")} />
+        <source media="(max-width: 760px)" type="image/webp" sizes="100vw" srcset={srcset("frame-antes", frame, "webp")} />
+        <source media="(max-width: 760px)" sizes="100vw" srcset={srcset("frame-antes", frame, "jpg")} />
         <source media="(min-width: 761px)" type="image/avif" sizes="100vw" srcset={srcset("wide-antes", wide, "avif")} />
         <source media="(min-width: 761px)" type="image/webp" sizes="100vw" srcset={srcset("wide-antes", wide, "webp")} />
         <img
           src={publicUrl("media/hero/wide-antes-1280.jpg")}
           alt={site.compare.antesAlt}
-          width="1920"
-          height="1080"
-          loading="lazy"
+          width="2560"
+          height="1440"
+          loading="eager"
+          fetchpriority="low"
           decoding="async"
         />
       </picture>
       <picture class="frame espejo" data-espejo>
-        <source media="(max-width: 760px)" type="image/avif" sizes="100vw" srcset={srcset("tall-espejo", tall, "avif")} />
-        <source media="(max-width: 760px)" type="image/webp" sizes="100vw" srcset={srcset("tall-espejo", tall, "webp")} />
-        <source media="(max-width: 760px)" sizes="100vw" srcset={srcset("tall-espejo", tall, "jpg")} />
+        <source media="(max-width: 760px)" type="image/avif" sizes="100vw" srcset={srcset("frame-espejo", frame, "avif")} />
+        <source media="(max-width: 760px)" type="image/webp" sizes="100vw" srcset={srcset("frame-espejo", frame, "webp")} />
+        <source media="(max-width: 760px)" sizes="100vw" srcset={srcset("frame-espejo", frame, "jpg")} />
         <source media="(min-width: 761px)" type="image/avif" sizes="100vw" srcset={srcset("wide-espejo", wide, "avif")} />
         <source media="(min-width: 761px)" type="image/webp" sizes="100vw" srcset={srcset("wide-espejo", wide, "webp")} />
         <img
           src={publicUrl("media/hero/wide-espejo-1280.jpg")}
           alt=""
-          width="1920"
-          height="1080"
-          loading="lazy"
+          width="2560"
+          height="1440"
+          loading="eager"
+          fetchpriority="low"
           decoding="async"
         />
       </picture>

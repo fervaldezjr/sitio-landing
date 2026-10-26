@@ -1,6 +1,8 @@
 ---
-import { site } from "../content/site";
+import { copyFor } from "../content/site";
 import Title from "./Title.astro";
+
+const site = copyFor(Astro.currentLocale);
 ---
 
 <section class="section statement" aria-labelledby="statement-titulo">

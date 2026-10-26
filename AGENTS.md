@@ -6,10 +6,11 @@ Claude, Cursor, Grok, Codex o el que sea: lee esto entero antes de tocar nada. L
 
 1. **Verificar antes de decir «hecho»:** `bash scripts/verify.sh` en verde y di el resultado. No borres ni te saltes un paso para que pase.
 2. **Marca:** lee [`agents/standards/05-marca.md`](agents/standards/05-marca.md). Switzer sola desde Fontshare, fondo blanco, paleta de la app sin acento, cristal ≥ 0.62, sin mayúsculas por CSS, sin cursivas, sin otra dependencia que `gsap` y `lenis`. `scripts/check-brand.mjs` lo comprueba.
-3. **Copy:** todo el texto visible en `src/content/site.ts`, en español y con mayúscula inicial. Solo las cifras del espejo aprobado (quitar 13, añadir 3, portátil fijado). Nada de precios, testimonios, fechas ni usuarios.
+3. **Copy:** todo el texto visible en `src/content/site.ts`, en español (`/`) y en inglés (`/en/`), con mayúscula inicial. Un texto nuevo va en los dos idiomas. Solo las cifras del espejo aprobado (quitar 13, añadir 3, portátil fijado). Nada de precios, testimonios, fechas ni usuarios.
 4. **Badges de tienda:** los oficiales, sin tocar, y sin enlace hasta que la app esté publicada.
 5. **Pregunta antes de:** añadir una dependencia, publicar fuera de GitHub Pages, recoger correos o añadir un backend, cambiar la identidad.
-6. **Nunca:** secretos, `.env`, datos personales, ficheros de fuente, material de terceros sin crédito.
+6. **Imágenes:** el par antes/espejo se compone con `scripts/compose-pair.mjs` desde `docs/assets/scene.json`; el antes tiene 13 cosas y el espejo 3, como dice la tarjeta.
+7. **Nunca:** secretos, `.env`, datos personales, ficheros de fuente, material de terceros sin crédito.
 
 ## Dónde está cada cosa
 
