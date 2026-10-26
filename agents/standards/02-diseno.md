@@ -1,54 +1,47 @@
 # Diseño
 
-> Leer cuando: tocas CSS, movimiento, cristal o tipografía. El porqué de cada decisión está en `docs/identity.md`.
+> Leer cuando: tocas CSS, movimiento, cristal o tipografía. El porqué de cada decisión y las referencias medidas están en `docs/identity.md`.
 
 ## Regla
 
-La página tiene dos voces. **La app** conserva su interfaz: cristal, píldoras, hoja inferior y Switzer, con los tokens de `design/tokens.json`. **La página que la rodea** habla como una revista de interiores: Boska fina en los titulares, folios sobre reglas de 1 px, retícula de 12 columnas y mucho margen. No se mezclan: un botón de la revista es rectangular y en tinta; una píldora de cristal es de la app.
+El producto se demuestra. La primera pantalla es un escenario fijo: el móvil en el centro hace la foto, genera el espejo, lo barre, enseña su tarjeta y acaba en la lista con las propuestas mientras haces scroll. El resto es blanco, una sola grotesca (Switzer) y mucho aire. Sin rótulos de sección: la sección se reconoce por el titular y el espacio.
 
-Lienzo `#F7F7F7`, tinta `#1B1B1B`, superficie blanca, segunda voz `#5E5E5E`, reglas `#C8C8C8`. Sin color de acento. Una sola banda de tinta (`#1B1B1B`, texto blanco y segunda voz `#B4B4B4`) para privacidad. El texto sobre la foto va en cristal de alfa ≥ 0.62 (`glass.alpha.strong`); la tarjeta, la barra, la píldora de la beta y los números de «Mis cosas» usan 0.66.
+Fondo blanco `#FFFFFF`; las piezas (objetos, campo del correo) van sobre `#F7F7F7`; tinta `#1B1B1B`; segunda voz `#5E5E5E`. Sin color de acento. Una sola banda de tinta (`#1B1B1B`, blanco y `#B4B4B4`) para las propuestas. Todo lo que es interfaz de la app (la píldora de navegación, el móvil, el barrido) usa el cristal de `design/tokens.json`: alfa ≥ 0.62 para texto sobre foto, 0.66 en tarjetas y estados.
 
 ## Por qué
 
-Por debajo de 0.62 el blanco no llega a 4.5:1 sobre la mesa clara. `#8F8F92` (`ink.400`) se queda en 3.2:1 y solo vale para el asa y bordes. Una segunda materia, un acento o una sombra por sección es lo que hace que una página parezca barata.
+Cuatro de las cinco referencias usan una grotesca neutra en regular y fondo blanco; la más cercana (see-for-yourself) cuenta el producto con el móvil fijo mientras cambia la escena. La primera versión (serif fina, folios, una foto repetida) se leía como plantilla. Por debajo de 0.62 el blanco no llega a 4.5:1 sobre la mesa clara; `#8F8F92` (`ink.400`) se queda en 3.2:1 y solo vale para el asa y bordes.
 
 ## Cómo
 
-Fuentes, una petición por familia (con las dos en la misma URL el CDN devuelve solo la primera):
-
 ```css
-/* https://api.fontshare.com/v2/css?f[]=boska@300,301,400&display=swap */
 /* https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap */
---font-display: "Boska", "Iowan Old Style", Georgia, serif; /* titulares, wordmark, índice, preguntas */
---font-body: "Switzer", system-ui, sans-serif;               /* cuerpo, folios, botones */
---font-app: "Switzer", system-ui, sans-serif;                /* todo lo que es interfaz de la app */
+--font: "Switzer", system-ui, sans-serif;
 ```
 
-- Titular a dos voces con `Title.astro`: `lead` en tinta, `rest` en cursiva gris. Boska 300, de 44 a 88 px, tracking -2 %, interlineado 1.0.
-- Cada sección empieza con `Folio.astro`: número de dos cifras y nombre en Switzer 500 a 13 px, en redonda, sobre una regla. Nada de antetítulos en versalitas.
-- Retícula: titulares de la columna 3 a la 11; en móvil, todo a ancho completo.
+- Titulares en Switzer 400, grandes y apretados: de 40 a 92 px, tracking -4 a -4.5 %, interlineado 0.96 a 1.0. `Title.astro` pinta las dos voces (`lead` en tinta, `rest` en gris).
+- Interfaz y rótulos en 500 a 13–15 px. Casi sin tamaños intermedios: o es titular o es interfaz.
+- El móvil se dibuja en CSS (`Story.astro`). Dentro, las medidas van en `cqw` (la pantalla es un contenedor) para que la interfaz escale con el móvil.
+- Los objetos van sin fondo, con `filter: drop-shadow(...)`, sobre `#F7F7F7` con radio de 20–22 px.
 
 Curvas, sin rebote:
 
-- barrido del hero: `cubic-bezier(0.37, 0, 0.63, 1)` (easeInOutSine), lo dirige el scroll (`src/scripts/hero.ts`)
-- entradas de la página y hojas: easeOutQuint, `cubic-bezier(0.22, 1, 0.36, 1)` (`power4.out` en GSAP); hojas en 320 ms
-- píldoras y estados: `cubic-bezier(0.33, 1, 0.68, 1)` (easeOutCubic), 200 ms
+- página: easeOutCubic, `cubic-bezier(0.33, 1, 0.68, 1)` (`power3.out` en GSAP)
+- barrido a pantalla completa: easeInOutSine, `cubic-bezier(0.37, 0, 0.63, 1)`, lo dirige el scroll (`src/scripts/compare.ts`)
+- hojas de la app: easeOutQuint, 320 ms
 
-Movimiento de la página (`src/scripts/motion.ts`, GSAP + Lenis):
+Movimiento:
 
-- Lenis con `lerp: 0.1`; los enlaces internos se deslizan y paran bajo la barra fija. Con la hoja abierta, Lenis se para (evento `sitio:scroll-lock`).
-- `data-lines`: el titular entra línea a línea tras una máscara (SplitText, 1.1 s, 0.09 entre líneas). El cuerpo no se anima letra a letra.
-- `data-unveil`: las fotos y la tarjeta de la app se destapan de abajo arriba con `clip-path`, el mismo gesto que el barrido.
-- `data-reveal` y `data-reveal-group`: aparecen 24 px desde abajo, una vez.
-- `data-fit`: el wordmark del pie ocupa el ancho, con tope del 75 % del alto de la ventana.
+- `src/scripts/story.ts`: una línea de tiempo de GSAP con `scrub` sobre `.story` (640vh). El estado inicial de cada pieza está en CSS bajo `html.motion`, así la primera pintura coincide con el inicio de la línea de tiempo.
+- `src/scripts/motion.ts`: Lenis (`lerp: 0.1`), enlaces internos que se deslizan, titulares `data-lines` que entran línea a línea, `data-reveal` y `data-reveal-group`.
+- `html.motion` lo pone un script en línea en `<head>` si no hay `prefers-reduced-motion`. Sin él (sin JavaScript o con movimiento reducido) el escenario es una imagen fija: el espejo con su tarjeta y las propuestas al lado.
 
 Trampas ya vistas:
 
-- No pongas `transition: transform` en un elemento que anima GSAP: al recalcular, GSAP lee el valor a medio camino y se queda ahí (los números de «Mis cosas» se quedaron a escala 0.6). Por eso `.spot` lleva la transición de hover y `.spot-dot` la entrada.
-- Sin JavaScript todo se ve. Con JavaScript, un titular sin partir está oculto como mucho 2.5 s (red de seguridad en CSS).
-
-Con `prefers-reduced-motion`: sin Lenis, sin entradas, el barrido no sigue el scroll y las hojas pasan a un fundido de 150 ms.
+- Si el CSS pone `transform: translateY(…)` en algo que GSAP anima con `yPercent`, GSAP lee el `translateY` como píxeles y los suma: la hoja de la lista no subía. En el `fromTo`, pon `y: 0` explícito.
+- No pongas `transition: transform` en un elemento que anima GSAP: al recalcular, GSAP lee el valor a medio camino y se queda ahí.
+- Algo que se mueve desde un punto y está centrado con `translate(-50%, -50%)` va en dos elementos: el exterior lo mueve GSAP, el interior se centra.
 
 ## Cómo se comprueba
 
-`scripts/check-contrast.mjs`, `scripts/check-wipe.mjs` y capturas de escritorio y de móvil haciendo scroll de verdad (las entradas solo se disparan al pasar por ellas).
+`scripts/check-contrast.mjs`, `scripts/check-wipe.mjs` y capturas del escenario en varios puntos de su recorrido, en escritorio y en móvil.

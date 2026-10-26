@@ -15,7 +15,7 @@ npm run dev
 
 El `base` es `/sitio-landing/`. En local la página queda en `http://127.0.0.1:4321/sitio-landing/`.
 
-Verificar lint, tests, build, barrido, enlaces y contraste:
+Verificar lint, marca, tests, build, barrido, enlaces y contraste:
 
 ```bash
 bash scripts/verify.sh
@@ -23,15 +23,15 @@ bash scripts/verify.sh
 
 ## Identidad
 
-La página se lee como una revista de interiores que publica un reportaje sobre la app. `docs/identity.md` fija los seis diales (tipografía, campo y color, materia, wordmark, firma de movimiento y rótulos) con el porqué de cada uno; `docs/content.md`, las secciones y lo que existe de verdad; `docs/assets/brief.json`, el material.
+El producto se demuestra: la primera pantalla es un escenario fijo en el que el móvil hace la foto, genera el espejo, lo barre y acaba en la lista con las propuestas mientras haces scroll. `docs/identity.md` fija los seis diales con el porqué de cada uno y las cinco webs de referencia medidas; `docs/content.md`, las secciones y lo que existe de verdad; `docs/assets/brief.json`, el material.
 
-- Titulares en Boska y cuerpo en Switzer, las dos por el CDN de Fontshare. La licencia ITF FFL no permite subir los ficheros de fuente a un repo público.
-- Los colores son los de la app (`design/tokens.json`), sin acento.
-- Movimiento con GSAP (ScrollTrigger y SplitText) y Lenis en `src/scripts/motion.ts`; el barrido del hero, en `src/scripts/hero.ts`.
+- Una sola grotesca, Switzer, por el CDN de Fontshare. La licencia ITF FFL no permite subir los ficheros de fuente a un repo público.
+- Los colores son los de la app (`design/tokens.json`), sin acento, sobre fondo blanco.
+- Movimiento con GSAP (ScrollTrigger y SplitText) y Lenis: el escenario en `src/scripts/story.ts`, el barrido a pantalla completa en `src/scripts/compare.ts` y el resto en `src/scripts/motion.ts`.
 
 ## Secciones
 
-Hero con el barrido de antes a espejo · 01 La idea · 02 Cómo funciona · 03 Mis cosas (la foto y su espejo con cada objeto numerado) · 04 Tus listas · 05 Cualquier superficie · 06 Privacidad · 07 Preguntas · 08 Beta · pie con el wordmark.
+Escenario con el móvil · frase · Compruébalo tú (barrido con tirador) · Cómo funciona · Propuestas · Privacidad · Preguntas · Beta · pie.
 
 ## Contenido
 
@@ -39,7 +39,11 @@ Todos los textos visibles están en `src/content/site.ts`, con mayúscula inicia
 
 ## Imágenes
 
-`npm run images` regenera AVIF, WebP y JPG desde `media/source/`, con el mismo revelado suave para todas, y las miniaturas cuadradas de «Tus listas». El par de escritorio se sirve como máximo a 1920 px: el JPEG de 2400 está ampliado y aquí no hay un reescalador neuronal. El par de móvil conserva sus 864 px.
+`npm run images` regenera AVIF, WebP y JPG desde `media/source/` con el mismo revelado para todas, y las fotos de producto sin fondo (AVIF, WebP y PNG con alfa). El par de escritorio se sirve como máximo a 1920 px: el JPEG de 2400 está ampliado y aquí no hay un reescalador neuronal. El par de móvil conserva sus 864 px. Las fotos de producto son de Unsplash, recortadas con la segmentación de macOS; sus créditos están en `docs/assets/credits.json`.
+
+## Tiendas
+
+Los badges oficiales de App Store y Google Play están en la entrada y en la beta, sin alterar. Mientras la app no esté publicada salen bajo «Próximamente en» y no enlazan a nada: al publicarla, basta con poner las URL en `site.stores` de `src/content/site.ts`.
 
 ## Beta
 
@@ -47,4 +51,4 @@ El formulario no tiene backend. Al enviarlo no sale nada del navegador: se muest
 
 ## Agentes
 
-La fuente es `agents/AGENTS.md`. `CLAUDE.md` y `.cursor/rules/agentes.mdc` apuntan a ella. Lo aprendido en cada sesión va a `agents/lessons/inbox/` para que el siguiente agente lo lea.
+`AGENTS.md` (raíz) es el resumen que lee cualquier agente: Claude, Cursor, Grok o Codex. La fuente larga es `agents/AGENTS.md`; `CLAUDE.md` y `.cursor/rules/agentes.mdc` apuntan a ella. La marca está en `agents/standards/05-marca.md` y la comprueba `scripts/check-brand.mjs` dentro de `verify.sh`. Lo aprendido en cada sesión va a `agents/lessons/inbox/` para que el siguiente agente lo lea.

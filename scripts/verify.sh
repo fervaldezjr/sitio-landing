@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
-# One command: lint, tests, build, links, contrast.
+# One command: lint, brand, tests, build, wipe, links, contrast.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 export ASTRO_TELEMETRY_DISABLED=1
 
 echo "== lint =="
 npm run lint
+
+echo "== brand =="
+node scripts/check-brand.mjs
 
 echo "== test =="
 npm test

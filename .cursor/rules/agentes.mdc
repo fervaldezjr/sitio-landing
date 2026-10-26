@@ -3,7 +3,7 @@ description: Fuente de instrucciones para agentes de sitio-landing
 alwaysApply: true
 ---
 
-La fuente es `agents/AGENTS.md`. Léela antes de cambiar nada, y después solo el estándar que indique `agents/INDEX.md`.
+La fuente es `agents/AGENTS.md` (resumen en `AGENTS.md` de la raíz). Léela antes de cambiar nada, después `agents/standards/05-marca.md` y el estándar que indique `agents/INDEX.md`.
 
 Lee `agents/lessons/inbox/` al empezar. Es la bandeja del bucle de aprendizaje: no es un estándar hasta que una persona lo apruebe, pero el siguiente agente tiene que conocer lo ya visto.
 
