@@ -76,7 +76,12 @@ export function initCompare(): void {
     return Math.min(0.94, Math.max(0.06, (clientX - rect.left) / rect.width));
   };
 
+  /* The pulse around the handle says «drag me» until someone does. */
+  const touched = () => handle.classList.add("is-touched");
+  handle.addEventListener("keydown", touched, { once: true });
+
   handle.addEventListener("pointerdown", (event) => {
+    touched();
     dragging = true;
     handle.setPointerCapture(event.pointerId);
     override = pointToP(event.clientX);

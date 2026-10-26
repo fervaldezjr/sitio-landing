@@ -1,17 +1,20 @@
 ---
-import { site } from "../content/site";
+import { getAbsoluteLocaleUrl } from "astro:i18n";
+import { copyFor } from "../content/site";
 import { publicUrl } from "../lib/paths";
 import "../styles/global.css";
 
+const site = copyFor(Astro.currentLocale);
 const font = "https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap";
 const title = site.meta.title;
 const description = site.meta.description;
-const canonical = new URL(publicUrl(""), Astro.site).href;
+const canonical = getAbsoluteLocaleUrl(site.meta.lang);
+const alternates = (["es", "en"] as const).map((lang) => ({ lang, href: getAbsoluteLocaleUrl(lang) }));
 const image = new URL(publicUrl("media/hero/wide-espejo-1280.jpg"), Astro.site).href;
 ---
 
 <!doctype html>
-<html lang={site.meta.locale}>
+<html lang={site.meta.lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -22,21 +25,27 @@ const image = new URL(publicUrl("media/hero/wide-espejo-1280.jpg"), Astro.site).
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {alternates.map((alternate) => <link rel="alternate" hreflang={alternate.lang} href={alternate.href} />)}
+    <link rel="alternate" hreflang="x-default" href={alternates[0].href} />
     <meta name="theme-color" content="#ffffff" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={image} />
-    <meta property="og:locale" content="es" />
+    <meta property="og:locale" content={site.meta.ogLocale} />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href={publicUrl("favicon.svg")} type="image/svg+xml" />
     <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
     <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
     <link rel="stylesheet" href={font} />
-    <link rel="preload" as="image" href={publicUrl("media/hero/tall-antes-648.avif")} type="image/avif" fetchpriority="high" />
+    <link rel="preload" as="image" href={publicUrl("media/hero/frame-antes-720.avif")} type="image/avif" fetchpriority="high" />
   </head>
   <body>
+    <div class="preload" aria-hidden="true" data-preload>
+      <span class="preload-mark">{site.nav.brand}</span>
+      <span class="preload-bar"><span data-preload-bar></span></span>
+    </div>
     <a class="skip" href="#contenido">{site.meta.skip}</a>
     <slot />
     <script>

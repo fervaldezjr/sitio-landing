@@ -1,8 +1,9 @@
 ---
-import { site } from "../content/site";
+import { copyFor } from "../content/site";
 import { publicUrl } from "../lib/paths";
 import Title from "./Title.astro";
 
+const site = copyFor(Astro.currentLocale);
 const { proposals } = site;
 const product = (id: string, ext: string) => publicUrl(`media/products/${id}.${ext}`);
 ---
@@ -10,30 +11,22 @@ const product = (id: string, ext: string) => publicUrl(`media/products/${id}.${e
 <section class="section band" id={proposals.id} aria-labelledby="propuestas-titulo">
   <div class="wrap">
     <Title id="propuestas-titulo" heading={proposals.title} />
-    <div class="proposals">
+    <ul class="proposal-tiles" data-reveal-group>
       {
-        proposals.groups.map((group) => (
-          <div class="proposal-group">
-            <h3 class="proposal-name">{group.name}</h3>
-            <ul class="proposal-tiles" data-reveal-group>
-              {group.items.map((item) => (
-                <li class="proposal-tile">
-                  <picture>
-                    <source srcset={product(item.id, "avif")} type="image/avif" />
-                    <source srcset={product(item.id, "webp")} type="image/webp" />
-                    <img src={product(item.id, "png")} alt={item.alt} width="720" height="720" loading="lazy" decoding="async" />
-                  </picture>
-                  <span class="proposal-actions" aria-hidden="true">
-                    <span class="proposal-action">{proposals.save}</span>
-                    <span class="proposal-action proposal-action-add">{proposals.add}</span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
+        proposals.items.map((item) => (
+          <li class="proposal">
+            <span class="proposal-tile">
+              <picture>
+                <source srcset={product(item.id, "avif")} type="image/avif" />
+                <source srcset={product(item.id, "webp")} type="image/webp" />
+                <img src={product(item.id, "png")} alt={item.alt} width="720" height="720" loading="lazy" decoding="async" />
+              </picture>
+            </span>
+            <span class="proposal-name">{item.name}</span>
+          </li>
         ))
       }
-    </div>
+    </ul>
     <p class="band-note">{proposals.note}</p>
   </div>
 </section>

@@ -1,7 +1,9 @@
 ---
-import { site } from "../content/site";
+import { copyFor } from "../content/site";
 import StoreBadges from "./StoreBadges.astro";
 import Title from "./Title.astro";
+
+const site = copyFor(Astro.currentLocale);
 
 const { beta } = site;
 ---

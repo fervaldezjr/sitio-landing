@@ -1,8 +1,8 @@
 /**
  * Builds the photo srcsets and the product cutouts from media/source.
- * Wide masters are capped at 1920px: the 2400px JPEGs are an upscale and look soft.
- * No neural rescaler is available in this environment, so we downsample with
- * lanczos3 and a light unsharp. We do not invent detail above the source.
+ * The pair comes from scripts/compose-pair.mjs on a real 3466 px photo, so the wide frame is
+ * served up to 2560 px and the 4:3 frame (inside the phone, and the wipe on phones) up to 1440 px,
+ * downsampled with lanczos3 only.
  * Every master gets the same soft grade (GRADE), so a pair still matches for the wipe.
  */
 import { copyFile, mkdir, readdir, writeFile } from "node:fs/promises";
@@ -18,28 +18,23 @@ const badgeOut = path.join(root, "public/media/badges");
 const productOut = path.join(root, "public/media/products");
 const proofOut = path.join(root, "media/proof");
 
-const wideWidths = [640, 960, 1280, 1920];
-const tallWidths = [432, 648, 864];
+const wideWidths = [640, 960, 1280, 1920, 2560];
+const frameWidths = [480, 720, 960, 1440];
 /** The site's one grade (docs/identity.md, dial 3): slightly less saturated, same for every frame. */
 const GRADE = { saturation: 0.86 };
 
 async function masterWide(name) {
-  const input = path.join(source, name);
-  const meta = await sharp(input).rotate().metadata();
-  if (!meta.width || !meta.height) throw new Error(`no size for ${name}`);
-  return sharp(input)
+  return sharp(path.join(source, name))
     .rotate()
-    .resize({ width: 1920, height: Math.round((meta.height / meta.width) * 1920), kernel: "lanczos3", fit: "fill" })
-    .sharpen({ sigma: 0.6, m1: 0.4, m2: 0.25 })
+    .resize({ width: wideWidths.at(-1), kernel: "lanczos3" })
     .modulate(GRADE)
     .toColorspace("srgb");
 }
 
-async function masterTall(name) {
+async function masterFrame(name) {
   return sharp(path.join(source, name))
     .rotate()
-    .resize({ width: 864, kernel: "lanczos3" })
-    .sharpen({ sigma: 0.4, m1: 0.3, m2: 0.2 })
+    .resize({ width: frameWidths.at(-1), kernel: "lanczos3" })
     .modulate(GRADE)
     .toColorspace("srgb");
 }
@@ -116,7 +111,8 @@ async function alignmentNote() {
   }
   let sum = 0;
   let n = 0;
-  const horizon = Math.round(height * 0.32);
+  /* the wall above the desk: nothing is added there, so the pair must match exactly */
+  const horizon = Math.round(height * 0.15);
   for (let y = 0; y < horizon; y += 4) {
     for (let x = 0; x < width; x += 8) {
       const i = (y * width + x) * channels;
@@ -124,7 +120,7 @@ async function alignmentNote() {
       n += 3;
     }
   }
-  return `mean abs diff in the top 32% (sea and frame): ${(sum / n).toFixed(2)} / 255`;
+  return `mean abs diff on the wall (top 15%): ${(sum / n).toFixed(2)} / 255`;
 }
 
 await mkdir(heroOut, { recursive: true });
@@ -135,21 +131,21 @@ await mkdir(proofOut, { recursive: true });
 const productsOnly = process.argv.includes("--products-only");
 
 const wideAntesBuf = await masterWide("wide-antes.jpg").then((p) => p.png().toBuffer());
-const tallAntesBuf = await masterTall("tall-antes.png").then((p) => p.png().toBuffer());
-const tallEspejoBuf = await masterTall("tall-espejo.png").then((p) => p.png().toBuffer());
+const frameAntesBuf = await masterFrame("frame-antes.jpg").then((p) => p.png().toBuffer());
+const frameEspejoBuf = await masterFrame("frame-espejo.jpg").then((p) => p.png().toBuffer());
 
 if (!productsOnly) {
   const wideEspejoBuf = await masterWide("wide-espejo.jpg").then((p) => p.png().toBuffer());
   await writeSet(sharp(wideAntesBuf), wideWidths, "wide-antes");
   await writeSet(sharp(wideEspejoBuf), wideWidths, "wide-espejo");
-  await writeSet(sharp(tallAntesBuf), tallWidths, "tall-antes");
-  await writeSet(sharp(tallEspejoBuf), tallWidths, "tall-espejo");
+  await writeSet(sharp(frameAntesBuf), frameWidths, "frame-antes");
+  await writeSet(sharp(frameEspejoBuf), frameWidths, "frame-espejo");
 }
 
 if (!productsOnly) {
   await gridProof(wideAntesBuf, "grid-wide-antes.jpg");
-  await gridProof(tallAntesBuf, "grid-tall-antes.jpg");
-  await gridProof(tallEspejoBuf, "grid-tall-espejo.jpg");
+  await gridProof(frameAntesBuf, "grid-frame-antes.jpg");
+  await gridProof(frameEspejoBuf, "grid-frame-espejo.jpg");
 }
 
 for (const file of (await readdir(productSource)).filter((name) => name.endsWith(".png"))) {

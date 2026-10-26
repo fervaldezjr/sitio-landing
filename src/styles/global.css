@@ -159,6 +159,63 @@ a {
   transform: scale(0.97);
 }
 
+/* ---------- first load: a short white screen until the stage is ready ---------- */
+
+.preload {
+  display: none;
+}
+
+html.motion .preload {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  /* if the script never arrives, the screen goes away on its own */
+  animation: preload-out 0.4s ease 4s forwards;
+}
+
+.preload-mark {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.preload-bar {
+  position: absolute;
+  left: calc(50% - 60px);
+  top: calc(50% + 26px);
+  width: 120px;
+  height: 2px;
+  overflow: hidden;
+  background: var(--tile);
+}
+
+.preload-bar span {
+  display: block;
+  height: 100%;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 300ms var(--ease-cubic);
+}
+
+@keyframes preload-out {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* lazy images appear once decoded, never half-painted (motion.ts adds and removes the class) */
+img.is-waiting {
+  opacity: 0;
+}
+
+img.is-ready {
+  transition: opacity 500ms var(--ease-cubic);
+}
+
 /* ---------- navigation: a glass pill of the app ---------- */
 
 .nav {
@@ -227,8 +284,27 @@ a {
   outline-color: var(--on-glass);
 }
 
+.nav-lang {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: var(--radius-full);
+  color: var(--on-glass-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: background-color var(--dur-pill) var(--ease-cubic), color var(--dur-pill) var(--ease-cubic);
+}
+
+.nav-lang:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--on-glass);
+}
+
 .nav-cta {
-  margin-left: 6px;
+  margin-left: 2px;
   background: var(--surface);
   color: var(--ink);
 }
@@ -271,7 +347,8 @@ a {
 .story-stage {
   position: relative;
   height: 100vh;
-  height: 100dvh;
+  /* the small viewport: the stage does not jump when the mobile address bar hides */
+  height: 100svh;
   min-height: 640px;
   overflow: hidden;
   background: var(--bg);
@@ -396,10 +473,37 @@ html.motion .story-step {
   height: 100%;
   overflow: hidden;
   border-radius: calc(var(--phone-w) * 0.13);
-  background: #101010;
+  /* the app's own canvas, with the photo as a card on it */
+  background: var(--canvas);
+  --photo-top: 13%;
   font-family: var(--font);
   container-type: inline-size;
   color: var(--on-glass);
+}
+
+/* the photo sits at full width like in a real app: the desk is a wide scene, a full-screen
+   portrait crop would be mostly wall */
+.screen-header {
+  position: absolute;
+  top: 7.4%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 4.6cqw;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.screen-photo {
+  position: absolute;
+  z-index: 1;
+  left: 4%;
+  right: 4%;
+  top: var(--photo-top);
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 5cqw;
+  background: var(--tile);
 }
 
 .screen-layer,
@@ -412,7 +516,6 @@ html.motion .story-step {
 
 .screen-layer img {
   object-fit: cover;
-  object-position: 42% center;
 }
 
 html.motion .screen-espejo {
@@ -454,15 +557,10 @@ html.motion .screen-espejo {
   visibility: hidden;
 }
 
-.screen-camera {
-  position: absolute;
-  z-index: 3;
-  inset: 0;
-}
-
 .screen-frame {
   position: absolute;
-  inset: 22% 9% 26%;
+  z-index: 3;
+  inset: 12% 7%;
   --c: rgba(255, 255, 255, 0.85);
   --l: 7cqw;
   background:
@@ -478,12 +576,13 @@ html.motion .screen-espejo {
 
 .screen-shutter {
   position: absolute;
-  bottom: 7%;
+  z-index: 3;
+  bottom: 8%;
   left: calc(50% - 9cqw);
   width: 18cqw;
   height: 18cqw;
   border-radius: var(--radius-full);
-  border: 3px solid #fff;
+  border: 3px solid var(--ink);
   display: grid;
   place-items: center;
 }
@@ -492,10 +591,49 @@ html.motion .screen-espejo {
   width: 13.5cqw;
   height: 13.5cqw;
   border-radius: var(--radius-full);
-  background: #fff;
+  background: var(--ink);
 }
 
-html:not(.motion) .screen-camera,
+/* the card's place while the mirror is generated: the app's own loading state */
+.screen-skeleton {
+  position: absolute;
+  z-index: 3;
+  left: 4%;
+  right: 4%;
+  top: calc(var(--photo-top) + 69cqw + 5cqw);
+  display: grid;
+  gap: 3cqw;
+  padding: 5.4cqw;
+  border-radius: 6.5cqw;
+  background: var(--surface);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.screen-skeleton span {
+  height: 3.6cqw;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, var(--tile) 0%, #f7f7f7 50%, var(--tile) 100%);
+  background-size: 200% 100%;
+  animation: skeleton-shine 1.4s linear infinite;
+}
+
+.screen-skeleton span:nth-child(1) {
+  width: 46%;
+  height: 4.6cqw;
+}
+
+.screen-skeleton span:nth-child(3) {
+  width: 72%;
+}
+
+@keyframes skeleton-shine {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+html:not(.motion) [data-screen-camera],
 html:not(.motion) .screen-pill-left {
   display: none;
 }
@@ -503,7 +641,7 @@ html:not(.motion) .screen-pill-left {
 .screen-pill {
   position: absolute;
   z-index: 4;
-  top: 15%;
+  top: 5%;
   padding: 1.8cqw 3.8cqw;
   border-radius: var(--radius-full);
   background: rgba(var(--glass-tint), var(--glass-strong));
@@ -517,11 +655,11 @@ html:not(.motion) .screen-pill-left {
 }
 
 .screen-pill-left {
-  left: 5%;
+  left: 4%;
 }
 
 .screen-pill-right {
-  right: 5%;
+  right: 4%;
 }
 
 html.motion .screen-pill-right {
@@ -530,7 +668,7 @@ html.motion .screen-pill-right {
 }
 
 .screen-status {
-  top: 46%;
+  top: 42%;
   left: 0;
   right: 0;
   width: max-content;
@@ -546,7 +684,8 @@ html.motion .screen-pill-right {
   z-index: 4;
   left: 4%;
   right: 4%;
-  bottom: 4%;
+  /* under the photo: its top plus its 4:3 height (75 % of 92 % of the screen width) */
+  top: calc(var(--photo-top) + 69cqw + 5cqw);
   padding: 5.4cqw;
   border-radius: 6.5cqw;
   background: rgba(var(--glass-tint), var(--glass-sheet));
@@ -607,14 +746,14 @@ html.motion .screen-card {
   height: 3.8cqw;
 }
 
-.screen-row strong {
+.screen-row p strong {
   display: block;
   font-size: 4.4cqw;
   line-height: 1.25;
   font-weight: 600;
 }
 
-.screen-row span {
+.screen-row p span {
   display: block;
   font-size: 3.8cqw;
   line-height: 1.3;
@@ -919,11 +1058,15 @@ html.js [data-lines]:not(.is-split) {
   scroll-margin-top: 0;
 }
 
+.hero-runway {
+  background: #101010;
+}
+
 .hero {
   position: sticky;
   top: 0;
   height: 100vh;
-  height: 100dvh;
+  height: 100svh;
   background: #101010;
 }
 
@@ -984,14 +1127,10 @@ html.js [data-lines]:not(.is-split) {
   --in: 38%;
 }
 
-.gradual span:nth-child(3) {
-  --b: 12px;
-  --in: 58%;
-}
-
+/* only two layers: four stacked backdrop-filters over a moving photo cost frames and flicker */
+.gradual span:nth-child(3),
 .gradual span:nth-child(4) {
-  --b: 20px;
-  --in: 76%;
+  display: none;
 }
 
 .wipe-line {
@@ -1040,6 +1179,31 @@ html.js [data-lines]:not(.is-split) {
   width: 22px;
   height: 22px;
   display: block;
+}
+
+.handle::after {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  opacity: 0;
+  pointer-events: none;
+}
+
+html.motion .handle:not(.is-touched)::after {
+  animation: handle-hint 2.4s var(--ease-cubic) infinite;
+}
+
+@keyframes handle-hint {
+  0% {
+    opacity: 0.9;
+    transform: scale(0.92);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
 }
 
 .pill,
@@ -1134,7 +1298,7 @@ html.js [data-lines]:not(.is-split) {
   display: block;
 }
 
-.mirror-row strong {
+.mirror-row p strong {
   display: block;
   font-size: clamp(16px, 0.8rem + 0.55vw, 22px);
   line-height: 1.25;
@@ -1142,7 +1306,7 @@ html.js [data-lines]:not(.is-split) {
   letter-spacing: -0.1px;
 }
 
-.mirror-row span {
+.mirror-row p span {
   display: block;
   margin-top: 2px;
   font-size: clamp(16px, 0.75rem + 0.5vw, 20px);
@@ -1224,36 +1388,21 @@ html.js [data-lines]:not(.is-split) {
   outline-color: var(--band-fg);
 }
 
-.proposals {
-  margin-top: clamp(64px, 8vw, 128px);
-  display: grid;
-  gap: 56px;
-}
-
-.proposal-group {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: var(--gap);
-  row-gap: 20px;
-}
-
-.proposal-name {
-  grid-column: 1 / 4;
-  font-size: clamp(20px, 1.6vw, 24px);
-  line-height: 1.2;
-  font-weight: 400;
-  letter-spacing: -0.02em;
-}
-
 .proposal-tiles {
-  grid-column: 4 / -1;
+  margin-top: clamp(64px, 8vw, 128px);
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--gap);
 }
 
+.proposal {
+  display: grid;
+  gap: 16px;
+}
+
 .proposal-tile {
   position: relative;
+  display: block;
   aspect-ratio: 1;
   border-radius: var(--radius-lg);
   background: var(--card);
@@ -1262,7 +1411,7 @@ html.js [data-lines]:not(.is-split) {
 
 .proposal-tile picture {
   position: absolute;
-  inset: 14% 14% 22%;
+  inset: 18% 14%;
 }
 
 .proposal-tile img {
@@ -1273,33 +1422,13 @@ html.js [data-lines]:not(.is-split) {
   transition: transform 600ms var(--ease-cubic);
 }
 
-.proposal-tile:hover img {
+.proposal:hover .proposal-tile img {
   transform: translateY(-6px);
 }
 
-.proposal-actions {
-  position: absolute;
-  left: 14px;
-  right: 14px;
-  bottom: 14px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 6px;
-}
-
-.proposal-action {
-  padding: 6px 12px;
-  border-radius: var(--radius-full);
-  background: var(--surface);
-  color: var(--ink);
-  font-size: 13px;
-  line-height: 18px;
-  font-weight: 500;
-}
-
-.proposal-action-add {
-  background: var(--ink);
-  color: var(--surface);
+.proposal-name {
+  font-size: clamp(17px, 1.3vw, 20px);
+  letter-spacing: -0.015em;
 }
 
 .band-note {
@@ -1492,7 +1621,7 @@ html.js [data-lines]:not(.is-split) {
   width: 24%;
 }
 
-.footer-libreta-1 {
+.footer-libreta-2 {
   right: 0;
   bottom: 0;
   width: 46%;
@@ -1684,35 +1813,46 @@ html.js [data-lines]:not(.is-split) {
     left: 20px;
   }
 
+  /* on phones the wipe is a 4:3 photo in the middle of the dark screen; the card lives in the phone above */
+  .hero {
+    display: grid;
+    align-content: center;
+  }
+
   .hero-stage {
-    --split-top: 0.46;
-    --split-bottom: 0.34;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    --split-top: 0.56;
+    --split-bottom: 0.44;
   }
 
   .frame img {
-    object-position: 38% center;
+    object-position: center;
   }
 
   .glass-card {
-    top: auto;
-    bottom: calc(76px + env(safe-area-inset-bottom));
-    left: 16px;
-    right: 16px;
-    width: auto;
-  }
-
-  .sitio-bar {
-    right: 16px;
-    justify-content: flex-start;
-  }
-
-  .gradual span:nth-child(3),
-  .gradual span:nth-child(4) {
     display: none;
   }
 
-  .proposal-name,
-  .proposal-tiles,
+  .pill {
+    top: 10px;
+  }
+
+  .pill-antes {
+    left: 10px;
+  }
+
+  .pill-espejo {
+    right: 10px;
+  }
+
+  .sitio-bar {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    justify-content: flex-start;
+  }
+
   .faq-grid > .title,
   .faq,
   .footer-title,
@@ -1727,11 +1867,12 @@ html.js [data-lines]:not(.is-split) {
   }
 
   .proposal-tiles {
-    gap: 8px;
+    grid-template-columns: 1fr;
+    gap: 32px;
   }
 
-  .proposal-actions {
-    display: none;
+  .proposal-tile {
+    aspect-ratio: 4 / 3;
   }
 
   .footer-still {

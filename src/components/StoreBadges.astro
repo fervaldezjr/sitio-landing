@@ -1,6 +1,8 @@
 ---
-import { site } from "../content/site";
+import { copyFor } from "../content/site";
 import { publicUrl } from "../lib/paths";
+
+const site = copyFor(Astro.currentLocale);
 
 /*
  * The official App Store and Google Play badges, untouched (docs/assets/credits.json). Until

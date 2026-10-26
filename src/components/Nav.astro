@@ -1,6 +1,9 @@
 ---
-import { site } from "../content/site";
+import { copyFor } from "../content/site";
+import { getRelativeLocaleUrl } from "astro:i18n";
 import { hashHref } from "../lib/paths";
+
+const site = copyFor(Astro.currentLocale);
 ---
 
 <header class="nav">
@@ -9,6 +12,7 @@ import { hashHref } from "../lib/paths";
     <span class="nav-links">
       {site.nav.links.map((link) => <a href={hashHref(link.href)}>{link.label}</a>)}
     </span>
+    <a class="nav-lang" href={getRelativeLocaleUrl(site.nav.language.to)} hreflang={site.nav.language.to} lang={site.nav.language.to} aria-label={site.nav.language.label}>{site.nav.language.short}</a>
     <a class="nav-cta" href={hashHref(site.nav.cta.href)}>{site.nav.cta.label}</a>
   </nav>
 </header>
