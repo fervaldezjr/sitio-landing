@@ -1,0 +1,70 @@
+{
+  "$note": "Brief de material de la landing de Sitio. Una entrada por pieza. Estados: have, code, pending. La materia es una sola: fotografía de interiores con un mismo revelado (docs/identity.md, dial 3).",
+  "project": "Sitio · landing",
+  "date": "2026-10-26",
+  "palette": {
+    "background": "#f7f7f7",
+    "foreground": "#1b1b1b",
+    "secondary_text": "#5e5e5e",
+    "border": "#c8c8c8",
+    "rule": "El color lo pone la foto; la interfaz es neutra. Todas las fotos pasan por el mismo revelado en scripts/optimize-images.mjs (saturación 0.86). Los dos fotogramas de un par reciben exactamente el mismo ajuste, o el barrido deja de casar."
+  },
+  "global_style": {
+    "look": "Fotografía de interiores a sangre, luz natural de ventana, un espacio real y su espejo ordenado, con el mismo encuadre.",
+    "prompt_suffix": "editorial interior photography, natural window light, calm and uncluttered composition, eye-level camera, 35mm lens, soft shadows, realistic materials, no text, no watermark",
+    "negative_prompt": "people, faces, readable screens, logos, brand names, text, neon colors, heavy contrast, fisheye, illustration, 3d render look, oversaturated",
+    "consistency_rule": "Cada espacio llega en par: la foto tal cual y su espejo con el mismo encuadre. La diferencia media del tercio superior del par debe ser casi cero (scripts/optimize-images.mjs la imprime)."
+  },
+  "assets": [
+    {
+      "id": "hero-wide-pair",
+      "block": "A · producto",
+      "priority": 1,
+      "status": "have",
+      "purpose": "Barrido del hero en escritorio.",
+      "used_in": ["home / hero"],
+      "deliverable": { "format": "avif + webp + jpg", "width": 1920, "height": 1080, "aspect": "16:9" },
+      "constraints": ["Tope de 1920 px: el original de 2400 es una ampliación.", "Mismo revelado en los dos fotogramas."],
+      "source_file": "media/source/wide-antes.jpg + media/source/wide-espejo.jpg"
+    },
+    {
+      "id": "tall-pair",
+      "block": "A · producto",
+      "priority": 1,
+      "status": "have",
+      "purpose": "Barrido del hero en móvil y doble página de «Mis cosas» con los objetos numerados sobre la foto.",
+      "used_in": ["home / hero (móvil)", "home / mis cosas"],
+      "deliverable": { "format": "avif + webp + jpg", "width": 864, "height": 1152, "aspect": "3:4" },
+      "constraints": ["Ancho nativo de 864 px.", "Las coordenadas de los números viven en src/content/site.ts; si cambia el encuadre, se vuelven a medir."],
+      "source_file": "media/source/tall-antes.png + media/source/tall-espejo.png"
+    },
+    {
+      "id": "list-thumbs",
+      "block": "D · lo hace el código",
+      "priority": 2,
+      "status": "code",
+      "purpose": "Miniaturas cuadradas de lo que se añade (bandeja, taza, libreta) para el ejemplo de lista.",
+      "used_in": ["home / tus listas"],
+      "deliverable": { "format": "avif + webp + jpg", "width": 192, "height": 192, "aspect": "1:1" },
+      "constraints": ["Recortadas del espejo 3:4 a su resolución, sin ampliar más de 1.5x y sin bandas de relleno."]
+    },
+    {
+      "id": "more-spaces",
+      "block": "A · producto",
+      "priority": 3,
+      "status": "pending",
+      "purpose": "Otros pares antes/espejo (encimera, estantería, entrada) para enseñar más de un espacio.",
+      "used_in": ["home / cualquier superficie (hoy solo texto)"],
+      "deliverable": { "format": "jpg o png", "width": 2400, "height": 1800, "aspect": "4:3 o 3:4" },
+      "constraints": ["Generados con la propia app sobre fotos reales, con el espejo etiquetado como generado con IA.", "Sin caras, menores ni pantallas legibles."],
+      "notes": "Los consigue Fernando con la app. Hasta entonces la sección no enseña fotos de espacios que no existen."
+    },
+    {
+      "id": "fonts-favicon-og",
+      "block": "D · lo hace el código",
+      "priority": 0,
+      "status": "code",
+      "purpose": "Boska y Switzer por el CDN de Fontshare; el favicon SVG que ya había (cuadrado de tinta con un punto de lienzo); imagen OG = el espejo 16:9 a 1280."
+    }
+  ]
+}

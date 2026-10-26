@@ -1,0 +1,7 @@
+{
+  "$note": "La landing de Sitio es de producto: no lleva retratos. Si un día hay una sección sobre quién lo hace, este fichero se rellena con la plantilla de brand-identity/templates/portrait-brief.json.",
+  "person": null,
+  "status": "no aplica",
+  "reason": "La materia única es la fotografía de interiores (docs/identity.md, dial 3). Un retrato sería una segunda materia.",
+  "if_needed": "Luz de ventana lateral, el mismo revelado suave que las fotos de espacios, la persona trabajando en un espacio ya ordenado, sin pantallas legibles."
+}
