@@ -16,6 +16,7 @@ La primera construcción de la landing tuvo cuatro rodeos que el siguiente agent
 4. Sharp rechaza un `composite` encadenado con `resize` en el mismo pipeline aunque los metadatos digan el mismo tamaño. Hay que materializar el buffer antes.
 5. `#ECECEC` sobre cristal 0.62 compuesto con blanco puro queda justo por encima de 4.5:1. La tarjeta, que lleva texto secundario, usa alfa 0.66.
 6. En Astro 7 `import.meta.env.BASE_URL` no lleva barra final (`/sitio-landing`). Concatenar `base + "media/..."` produce `/sitio-landingmedia/...`. Hay que insertar la barra. Un `new URL("media/...", canonical)` sin barra final en el canonical sustituye el último segmento y se come el nombre del repo.
+7. Astro 7.4 exige Node `>=22.23.4`. `actions/setup-node` con `node-version: 22` instaló 22.23.3 y el build murió al instante. El workflow fija `22.23.4`.
 
 ## Arreglo
 
