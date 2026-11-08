@@ -149,7 +149,7 @@ const es = {
       { q: "¿Qué pasa con las fotos que comparto?", a: "Antes de compartir se difuminan automáticamente caras, menores y pantallas. Sin eso, no se comparte." },
       {
         q: "¿Cuándo puedo probarla?",
-        a: "Sitio está en construcción y se cuenta en público en @ferlogs_. Todavía no hay lista de beta: el formulario de abajo no envía ni guarda nada.",
+        a: "Sitio está en construcción y se cuenta en público en @ferlogs. Todavía no hay lista de beta: el formulario de abajo no envía ni guarda nada.",
       },
     ],
   },
@@ -167,8 +167,8 @@ const es = {
     brand: "Sitio",
     ai: "El espejo del móvil es un ejemplo generado con IA a partir de una foto del mismo encuadre. El de «Compruébalo tú» es una composición: una foto de Pexels con objetos de Unsplash recortados encima. En la app, el espejo se genera con IA y se etiqueta siempre. Las propuestas son fotos de Unsplash.",
     credit: "Build in public",
-    linkLabel: "@ferlogs_",
-    linkHref: "https://x.com/ferlogs_",
+    linkLabel: "@ferlogs",
+    linkHref: "https://x.com/ferlogs",
     top: "Volver arriba",
   },
 };
@@ -297,7 +297,7 @@ const en: Copy = {
       { q: "What happens to the photos I share?", a: "Before you share, faces, children and screens are blurred automatically. Without that, nothing gets shared." },
       {
         q: "When can I try it?",
-        a: "Sitio is being built in public on @ferlogs_. There's no beta list yet: the form below doesn't send or store anything.",
+        a: "Sitio is being built in public on @ferlogs. There's no beta list yet: the form below doesn't send or store anything.",
       },
     ],
   },
@@ -315,8 +315,8 @@ const en: Copy = {
     brand: "Sitio",
     ai: "The mirror on the phone is an example generated with AI from a photo of the same frame. The one in “Try it” is a composite: a Pexels photo with Unsplash objects cut out and placed on top. In the app, the mirror is generated with AI and always labeled. The suggestions are Unsplash photos.",
     credit: "Build in public",
-    linkLabel: "@ferlogs_",
-    linkHref: "https://x.com/ferlogs_",
+    linkLabel: "@ferlogs",
+    linkHref: "https://x.com/ferlogs",
     top: "Back to top",
   },
 };
