@@ -8,7 +8,7 @@ Inventario de lo que existe de verdad y lista de secciones de la home. Todo el c
 | --- | --- | --- | --- |
 | producto | Sitio, app móvil: foto de un espacio o una superficie → espejo ordenado del mismo encuadre, generado con IA; qué sobra (quitar), qué falta (añadir) y qué se queda (fijado); propuestas de objetos que se cambian, se guardan y se añaden a listas propias | descripción de Fernando, 26 oct 2026 | sí |
 | cifras comprobables | quitar 13, añadir 3, portátil fijado | la tarjeta del espejo aprobada | solo esas tres |
-| textos ya escritos | privacidad (difuminado de caras, menores y pantallas antes de compartir), aviso de IA, «build in public», @ferlogs_ | versión anterior de `site.ts` | sí, en mayúscula inicial |
+| textos ya escritos | privacidad (difuminado de caras, menores y pantallas antes de compartir), aviso de IA, «build in public», @ferlogs | versión anterior de `site.ts` | sí, en mayúscula inicial |
 | foto del móvil | el par vertical del escritorio frente al mar (antes y espejo generado con IA), 864×1152 | `media/source/tall-*.png` | sí, con el espejo etiquetado como generado con IA |
 | foto del barrido | una foto de Pexels (escritorio de madera, jarra con eucalipto, portátil) y objetos de Unsplash compuestos encima; 16:9 y 4:3 de la misma composición | `media/source/base/`, `media/source/objects/`, `docs/assets/scene.json` | sí, diciendo que es un ejemplo (pie y «Espejo · ejemplo» en el barrido) |
 | fotos de producto | tres fotos de Unsplash (bandeja de madera, taza, libreta), recortadas con Vision | `media/source/products/`, créditos en `docs/assets/credits.json` | sí, como ejemplo de propuestas, dicho en la página |

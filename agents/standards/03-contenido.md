@@ -36,7 +36,7 @@ Los pasos del escenario (`story.steps`) cuentan la app en el orden en que se usa
 
 La beta no tiene servidor. El botón no envía el correo: evita el submit y muestra el aviso del propio fichero de contenido. La pregunta «¿Cuándo puedo probarla?» lo dice también.
 
-El footer explica que el espejo de las fotos es un ejemplo generado con IA, que las propuestas son fotos de Unsplash, y enlaza a https://x.com/ferlogs_.
+El footer explica que el espejo de las fotos es un ejemplo generado con IA, que las propuestas son fotos de Unsplash, y enlaza a https://x.com/ferlogs.
 
 ## Cómo se comprueba
 
