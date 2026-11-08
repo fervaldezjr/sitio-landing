@@ -1,0 +1,43 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { copyFor } from "../content/site";
+import Title from "./Title.astro";
+
+const site = copyFor(Astro.currentLocale);
+const { privacyPage: page } = site;
+---
+
+<header class="nav">
+  <nav class="nav-pill" aria-label={site.nav.label}>
+    <a class="nav-brand" href={getRelativeLocaleUrl(site.meta.lang)}>{site.nav.brand}</a>
+    <span class="nav-links">
+      <a href={getRelativeLocaleUrl(site.meta.lang)}>{page.home}</a>
+    </span>
+    <a
+      class="nav-lang"
+      href={getRelativeLocaleUrl(page.language.to, page.language.path)}
+      hreflang={page.language.to}
+      lang={page.language.to}
+      aria-label={page.language.label}>{page.language.short}</a
+    >
+  </nav>
+</header>
+<main id="contenido" class="legal">
+  <div class="wrap legal-wrap">
+    <Title id="politica-titulo" heading={page.title} as="h1" class="title-legal" />
+    {
+      page.sections.map((section) => (
+        <section class="legal-section">
+          <h2 class="legal-heading">{section.title}</h2>
+          {section.body.map((paragraph) => (
+            <p class="legal-body">{paragraph}</p>
+          ))}
+        </section>
+      ))
+    }
+    <p class="legal-body legal-contact">
+      {page.contact.lead} <a href={page.contact.href} rel="noopener noreferrer">{page.contact.label}</a>.
+    </p>
+    <p class="legal-ai">{site.footer.ai}</p>
+  </div>
+</main>

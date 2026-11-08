@@ -137,6 +137,48 @@ const es = {
       lead: "Antes de compartir se difuminan automáticamente caras, menores y pantallas.",
       rest: "Sin eso, no se comparte.",
     } satisfies Heading,
+    more: { path: "privacidad", label: "Lee cómo trata Sitio tus fotos" },
+  },
+  /* /privacidad. What the PRD requires, without naming a provider or a contracted region: none is chosen. */
+  privacyPage: {
+    path: "privacidad",
+    meta: {
+      title: "Privacidad · Sitio",
+      description: "Qué hace Sitio con la foto de tu espacio: sin ubicación, sin entrenamiento y con difuminado antes de compartir.",
+    },
+    home: "Volver a Sitio",
+    language: { to: "en" as Locale, path: "privacy", short: "EN", label: "Read in English" },
+    title: { lead: "Tu foto es de tu casa.", rest: "Así la trata Sitio." } satisfies Heading,
+    sections: [
+      {
+        title: "Antes de salir del teléfono",
+        body: [
+          "Para crear el espejo, la foto sale del teléfono hacia un servicio en la nube. Antes de enviarla, la app quita en el propio teléfono la ubicación y los datos EXIF.",
+          "El proveedor que genera el espejo y la región donde se procesa todavía no están decididos, y no hay ninguna región contratada. Cuando lo estén, esta página lo dirá.",
+        ],
+      },
+      {
+        title: "Sin entrenamiento",
+        body: [
+          "Tus fotos no se usan para entrenar modelos. Sitio solo trabajará con un proveedor que se comprometa por contrato a no entrenar con ellas y a no conservarlas. Sin esa cláusula, no hay proveedor.",
+        ],
+      },
+      {
+        title: "Al compartir",
+        body: [
+          "Antes de compartir, la app difumina automáticamente caras, menores y pantallas encendidas. Si el difuminado no se aplica, no se comparte.",
+          "Lo que se comparte es una tarjeta con el antes y el espejo, marcada como generada con IA. No la foto original, ni su ubicación.",
+        ],
+      },
+      {
+        title: "Lo que se guarda",
+        body: [
+          "Los registros técnicos anotan qué operación se hizo, cuánto tardó, cuánto costó y si funcionó. No guardan tu foto, ni las instrucciones al modelo, ni la ubicación.",
+          "Esta versión no tiene cuenta ni guarda tus espacios. Cuando exista guardar, podrás borrar tus fotos, tus espejos y tu cuenta.",
+        ],
+      },
+    ],
+    contact: { lead: "Si tienes dudas, escribe a", label: "@ferlogs", href: "https://x.com/ferlogs" },
   },
   faq: {
     id: "preguntas",
@@ -285,6 +327,47 @@ const en: Copy = {
       lead: "Before you share, faces, children and screens are blurred automatically.",
       rest: "Without that, nothing gets shared.",
     },
+    more: { path: "privacy", label: "Read how Sitio handles your photos" },
+  },
+  privacyPage: {
+    path: "privacy",
+    meta: {
+      title: "Privacy · Sitio",
+      description: "What Sitio does with the photo of your space: no location, no training, and blurring before you share.",
+    },
+    home: "Back to Sitio",
+    language: { to: "es" as Locale, path: "privacidad", short: "ES", label: "Leer en español" },
+    title: { lead: "Your photo is of your home.", rest: "This is how Sitio treats it." },
+    sections: [
+      {
+        title: "Before it leaves your phone",
+        body: [
+          "To create the mirror, the photo leaves your phone for a cloud service. Before sending it, the app strips the location and the EXIF data on the phone itself.",
+          "The provider that generates the mirror and the region where it is processed are not decided yet, and no region is contracted. When they are, this page will say so.",
+        ],
+      },
+      {
+        title: "No training",
+        body: [
+          "Your photos are not used to train models. Sitio will only work with a provider that commits by contract not to train on them and not to keep them. Without that clause, there is no provider.",
+        ],
+      },
+      {
+        title: "When you share",
+        body: [
+          "Before you share, the app automatically blurs faces, children and switched-on screens. If the blur is not applied, nothing is shared.",
+          "What you share is a card with the before and the mirror, labelled as generated with AI. Not the original photo, and not its location.",
+        ],
+      },
+      {
+        title: "What is kept",
+        body: [
+          "Technical logs record which operation ran, how long it took, what it cost and whether it worked. They do not keep your photo, the instructions to the model or the location.",
+          "This version has no account and does not save your spaces. When saving exists, you will be able to delete your photos, your mirrors and your account.",
+        ],
+      },
+    ],
+    contact: { lead: "If you have questions, write to", label: "@ferlogs", href: "https://x.com/ferlogs" },
   },
   faq: {
     id: "preguntas",

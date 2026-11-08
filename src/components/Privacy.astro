@@ -1,4 +1,5 @@
 ---
+import { getRelativeLocaleUrl } from "astro:i18n";
 import { copyFor } from "../content/site";
 import Title from "./Title.astro";
 
@@ -8,5 +9,6 @@ const site = copyFor(Astro.currentLocale);
 <section class="section" id={site.privacy.id} aria-labelledby="privacidad-titulo">
   <div class="wrap">
     <Title id="privacidad-titulo" heading={site.privacy.title} class="title-privacy" />
+    <p class="privacy-more"><a href={getRelativeLocaleUrl(site.meta.lang, site.privacy.more.path)}>{site.privacy.more.label}</a></p>
   </div>
 </section>
