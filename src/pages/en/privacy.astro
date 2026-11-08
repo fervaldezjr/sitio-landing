@@ -1,0 +1,11 @@
+---
+import Base from "../../layouts/Base.astro";
+import PrivacyPolicy from "../../components/PrivacyPolicy.astro";
+import { copyFor } from "../../content/site";
+
+const page = copyFor(Astro.currentLocale).privacyPage;
+---
+
+<Base page={{ title: page.meta.title, description: page.meta.description, paths: { es: "privacidad", en: "privacy" } }}>
+  <PrivacyPolicy />
+</Base>

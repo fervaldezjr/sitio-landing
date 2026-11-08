@@ -1595,6 +1595,63 @@ html.motion .handle:not(.is-touched)::after {
   max-width: 19em;
 }
 
+.privacy-more {
+  margin-top: var(--gap);
+  font-size: 17px;
+  color: var(--fg-2);
+}
+
+.privacy-more a {
+  color: var(--fg);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* privacy page (/privacidad, /en/privacy) */
+
+.legal {
+  padding: clamp(136px, 15vw, 200px) 0 clamp(96px, 11vw, 160px);
+}
+
+.legal-wrap {
+  max-width: 46em;
+}
+
+.legal-section {
+  margin-top: clamp(40px, 5vw, 64px);
+}
+
+.legal-heading {
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+}
+
+.legal-body {
+  margin-top: 12px;
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--fg-2);
+}
+
+.legal-body a {
+  color: var(--fg);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.legal-contact {
+  margin-top: clamp(40px, 5vw, 64px);
+}
+
+.legal-ai {
+  margin-top: 24px;
+  font-size: 14px;
+  color: var(--fg-3);
+}
+
 /* faq */
 
 .faq-grid {
